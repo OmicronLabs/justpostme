@@ -1,8 +1,21 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+//@flow
 
-class App extends Component {
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+
+type Props = {};
+
+type State = {};
+
+class App extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super();
+    this.state = {
+      clicked: false
+    };
+  }
+
   render() {
     return (
       <div className="App">
