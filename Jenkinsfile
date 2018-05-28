@@ -2,8 +2,8 @@ pipeline {
   agent {
     docker {
       image 'node'
-      args '''--device-read-iops="/dev/sda1:300"
---device-write-iops="/dev/sda1:50"'''
+      args '''--device-read-iops="/dev/sda:300"
+--device-write-iops="/dev/sda:50"'''
     }
 
   }
