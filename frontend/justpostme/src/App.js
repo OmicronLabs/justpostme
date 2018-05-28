@@ -1,7 +1,6 @@
 //@flow
 
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
