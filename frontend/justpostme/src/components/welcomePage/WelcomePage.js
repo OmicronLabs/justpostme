@@ -4,17 +4,35 @@ import React, { Component } from "react";
 import styled, { CSS } from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+
 import { Link } from "react-router-dom";
+import "font-awesome/css/font-awesome.min.css";
 
-import background from "media/LoginBackground.svg";
-import logo from "media/logo-white.png";
+import background from "../../media/LoginBackground.svg";
+import logo from "../../media/logo-white.png";
 
-const LogoMono = styled.img`
-  transform: scale(0.7, 0.7);
+const LogoWhite = styled.img`
+  transform: scale(0.6, 0.6);
   max-width: 100%;
 `;
 
-const LogoHeader = styled.div`
+const HeaderLogoText = styled.h2`
+  top: 15px;
+  left: 96px;
+  position: absolute;
+  color: white;
+`;
+
+const HeaderTopRight = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  z-index: 3;
+  height: 100px;
+  display: inline;
+`;
+
+const HeaderTopLeft = styled.div`
   top: 0;
   left: 0;
   z-index: 3;
@@ -24,23 +42,48 @@ const LogoHeader = styled.div`
   display: inline;
 `;
 
-const WelcomeTitle = styled.h1`
-  text-align: center;
-  font-size: 2em;
-`;
-
-const StartButton = styled.a`
+const RoundButton = styled.a`
   text-decoration: none;
-  display: inline;
-  color: deepskyblue;
-  font-size: 1.3em;
+  display: inline-block;
   margin: 1em;
   padding: 0.25em 1em;
-  border: 2px solid deepskyblue;
+  border: 2px solid;
   border-radius: 30px;
+`;
+
+const StartButton = RoundButton.extend`
+  color: rgb(255, 87, 34);
+  font-size: 1.3em;
+  border-color: rgb(255, 87, 34);
   &:hover {
-    color: rgba(0, 191, 255, 0.8);
-    border: 2px solid rgba(0, 191, 255, 0.8);
+    color: rgba(255, 87, 34, 0.7);
+    border: 2px solid rgba(255, 87, 34, 0.7);
+  }
+`;
+
+const TopMenuButton = RoundButton.extend`
+  color: white;
+  border-color: white;
+  &:hover {
+    color: whitesmoke;
+    border: 2px solid whitesmoke;
+  }
+`;
+
+const SimpleFooter = styled.footer`
+  position: fixed;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  bottom: 0px;
+`;
+
+const FooterButton = styled.a`
+  text-decoration: none;
+  color: grey;
+  padding-bottom: 10px;
+  &:hover {
+    color: darkgray;
   }
 `;
 
@@ -77,7 +120,7 @@ const FrontDoorRelative = styled.div`
 `;
 
 const FrontDoorBackgroundTop = styled.div`
-  background: linear-gradient(to right, #649de8, #46d6e0);
+  background: linear-gradient(to right, #e91e63, #ff5722);
   position: absolute;
   width: 100%;
   left: 0;
@@ -111,9 +154,13 @@ const BackgroundShape = styled.img`
 const WelcomePage = () => (
   <FrontDoorRelative>
     <FrontDoorBackgroundTop>
-      <LogoHeader>
-        <LogoMono src={logo} />
-      </LogoHeader>
+      <HeaderTopLeft>
+        <LogoWhite src={logo} />
+        <HeaderLogoText>justpost.me</HeaderLogoText>
+      </HeaderTopLeft>
+      <HeaderTopRight>
+        <TopMenuButton href="#">About</TopMenuButton>
+      </HeaderTopRight>
     </FrontDoorBackgroundTop>
     <BackgroundShape src={background} className="" />
     <FrontDoorBackgroundBottom />
@@ -125,6 +172,14 @@ const WelcomePage = () => (
         </StartButton>
       </Box>
     </BoxWrapper>
+    <SimpleFooter>
+      <FooterButton
+        href="https://github.com/OmicronLabs/justpostme"
+        target="blank"
+      >
+        <i className="fa fa-github" /> view the source code
+      </FooterButton>
+    </SimpleFooter>
   </FrontDoorRelative>
 );
 
