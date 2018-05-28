@@ -4,23 +4,18 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { Provider } from "react-redux";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createStore } from "redux";
 
-const ActualApp = () => (
-  <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">Welcome to React</h1>
-    </header>
-    <p className="App-intro">
-      To get started, edit <code>src/App.js</code> and save to reload.
-    </p>
-  </div>
-);
+import MainPage from "./components/MainPage/MainPage";
 
 class App extends React.Component<void> {
   render() {
-    return <ActualApp />;
+    return (
+      <Router>
+        <Route component={() => <MainPage />} />
+      </Router>
+    );
   }
 }
 
