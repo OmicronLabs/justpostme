@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import registerServiceWorker from "./registerServiceWorker";
-import WelcomeBulma from "./Welcome-styled";
+import Welcome from "./components/WelcomePage";
 
-ReactDOM.render(<WelcomeBulma />, document.getElementById("root"));
+ReactDOM.render(<Welcome />, document.getElementById("root"));
 registerServiceWorker();
