@@ -11,7 +11,7 @@ pipeline {
     stage('Build') {
       steps {
         sh '''cd frontend/justpostme/
-npm install --verbose'''
+yarn install --verbose'''
       }
     }
   }
