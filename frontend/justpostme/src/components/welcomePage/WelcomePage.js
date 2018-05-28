@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import styled, { CSS } from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+import "font-awesome/css/font-awesome.min.css";
 
 import background from "media/LoginBackground.svg";
 import logo from "media/logo-white.png";
@@ -49,12 +50,12 @@ const RoundButton = styled.a`
 `;
 
 const StartButton = RoundButton.extend`
-  color: deepskyblue;
+  color: rgb(255, 87, 34);
   font-size: 1.3em;
-  border-color: deepskyblue;
+  border-color: rgb(255, 87, 34);
   &:hover {
-    color: rgba(0, 191, 255, 0.8);
-    border: 2px solid rgba(0, 191, 255, 0.8);
+    color: rgba(255, 87, 34, 0.7);
+    border: 2px solid rgba(255, 87, 34, 0.7);
   }
 `;
 
@@ -64,6 +65,23 @@ const TopMenuButton = RoundButton.extend`
   &:hover {
     color: whitesmoke;
     border: 2px solid whitesmoke;
+  }
+`;
+
+const SimpleFooter = styled.footer`
+  position: fixed;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  bottom: 0px;
+`;
+
+const FooterButton = styled.a`
+  text-decoration: none;
+  color: grey;
+  padding-bottom: 10px;
+  &:hover {
+    color: darkgray;
   }
 `;
 
@@ -100,7 +118,7 @@ const FrontDoorRelative = styled.div`
 `;
 
 const FrontDoorBackgroundTop = styled.div`
-  background: linear-gradient(to right, #649de8, #46d6e0);
+  background: linear-gradient(to right, #e91e63, #ff5722);
   position: absolute;
   width: 100%;
   left: 0;
@@ -150,6 +168,14 @@ const WelcomePage = () => (
         <StartButton href="#">Get started with Facebook</StartButton>
       </Box>
     </BoxWrapper>
+    <SimpleFooter>
+      <FooterButton
+        href="https://github.com/OmicronLabs/justpostme"
+        target="blank"
+      >
+        <i className="fa fa-github" /> view the source code
+      </FooterButton>
+    </SimpleFooter>
   </FrontDoorRelative>
 );
 
