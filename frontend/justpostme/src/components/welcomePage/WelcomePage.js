@@ -5,11 +5,12 @@ import styled, { CSS } from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 
-import background from "../media/LoginBackground.svg";
-import logo from "../media/logo-white.png";
+import background from "media/LoginBackground.svg";
+import logo from "media/logo-white.png";
 
 const LogoMono = styled.img`
-  transform: scale(0.3, 0.3);
+  transform: scale(0.7, 0.7);
+  max-width: 100%;
 `;
 
 const LogoHeader = styled.div`
