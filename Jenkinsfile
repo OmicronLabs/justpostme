@@ -17,7 +17,6 @@ yarn install'''
     stage('Build') {
       steps {
         sh '''cd frontend/justpostme
-cross-env NODE_PATH=src
 yarn run build'''
       }
     }
