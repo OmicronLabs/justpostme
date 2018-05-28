@@ -20,6 +20,16 @@ yarn install'''
 yarn run build'''
       }
     }
+    stage('Deploy') {
+      steps {
+        echo 'Deploying'
+      }
+    }
+    stage('Cleanup') {
+      steps {
+        cleanWs(cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true, cleanupMatrixParent: true, cleanWhenAborted: true, deleteDirs: true)
+      }
+    }
   }
   environment {
     ci = 'true'
