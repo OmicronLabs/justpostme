@@ -6,8 +6,9 @@ pipeline {
 
   }
   stages {
-    stage('error') {
+    stage('Build') {
       steps {
+        sh 'cd frontend/justpostme'
         sh 'npm install'
       }
     }
