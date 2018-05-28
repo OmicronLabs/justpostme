@@ -23,6 +23,7 @@ yarn run build'''
     stage('Deploy') {
       steps {
         echo 'Deploying'
+        archiveArtifacts '/build'
       }
     }
     stage('Cleanup') {
