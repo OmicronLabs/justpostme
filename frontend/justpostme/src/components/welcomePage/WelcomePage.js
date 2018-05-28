@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import styled, { CSS } from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+import { Link } from "react-router-dom";
 
 import background from "media/LoginBackground.svg";
 import logo from "media/logo-white.png";
@@ -119,7 +120,9 @@ const WelcomePage = () => (
     <BoxWrapper>
       <Box>
         <About>{AboutText}</About>
-        <StartButton href="#">Get started with Facebook</StartButton>
+        <StartButton>
+          <Link to={{ pathname: "/mainpage" }}>Get started with Facebook </Link>
+        </StartButton>
       </Box>
     </BoxWrapper>
   </FrontDoorRelative>
