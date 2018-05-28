@@ -8,8 +8,8 @@ import { createStore } from "redux";
 import { Link } from "react-router-dom";
 import "font-awesome/css/font-awesome.min.css";
 
-import background from "../../media/LoginBackground.svg";
-import logo from "../../media/logo-white.png";
+import background from "media/LoginBackground.svg";
+import logo from "media/logo-white.png";
 
 const LogoWhite = styled.img`
   transform: scale(0.6, 0.6);
@@ -52,6 +52,7 @@ const RoundButton = styled.a`
 `;
 
 const StartButton = RoundButton.extend`
+  text-decoration: none;
   color: rgb(255, 87, 34);
   font-size: 1.3em;
   border-color: rgb(255, 87, 34);
@@ -168,7 +169,12 @@ const WelcomePage = () => (
       <Box>
         <About>{AboutText}</About>
         <StartButton>
-          <Link to={{ pathname: "/mainpage" }}>Get started with Facebook </Link>
+          <Link
+            to={{ pathname: "/mainpage" }}
+            style={{ textDecoration: "none", color: "rgb(255, 87, 34)" }}
+          >
+            Get started with Facebook{" "}
+          </Link>
         </StartButton>
       </Box>
     </BoxWrapper>

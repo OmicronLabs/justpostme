@@ -1,8 +1,8 @@
 import React from "react";
 import { Redirect, Switch, withRouter, Route } from "react-router-dom";
 
-import MainPage from "./components/mainPage/MainPage";
-import WelcomePage from "./components/welcomePage/WelcomePage";
+import MainPage from "components/mainPage/MainPage";
+import WelcomePage from "components/welcomePage/WelcomePage";
 
 class Routes extends React.Component {
   render() {
