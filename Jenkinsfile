@@ -8,10 +8,15 @@ pipeline {
 
   }
   stages {
-    stage('Build') {
+    stage('Install') {
       steps {
         sh '''cd frontend/justpostme/
-yarn install --verbose'''
+yarn install'''
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'yarn run build'
       }
     }
   }
