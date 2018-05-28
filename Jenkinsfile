@@ -35,5 +35,6 @@ yarn run build'''
   environment {
     ci = 'true'
     npm_config_cache = 'npm-cache'
+    NODE_PATH = 'src/'
   }
 }
