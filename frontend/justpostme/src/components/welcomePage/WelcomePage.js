@@ -8,12 +8,28 @@ import { createStore } from "redux";
 import background from "media/LoginBackground.svg";
 import logo from "media/logo-white.png";
 
-const LogoMono = styled.img`
-  transform: scale(0.7, 0.7);
+const LogoWhite = styled.img`
+  transform: scale(0.6, 0.6);
   max-width: 100%;
 `;
 
-const LogoHeader = styled.div`
+const HeaderLogoText = styled.h2`
+  top: 15px;
+  left: 96px;
+  position: absolute;
+  color: white;
+`;
+
+const HeaderTopRight = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  z-index: 3;
+  height: 100px;
+  display: inline;
+`;
+
+const HeaderTopLeft = styled.div`
   top: 0;
   left: 0;
   z-index: 3;
@@ -23,23 +39,31 @@ const LogoHeader = styled.div`
   display: inline;
 `;
 
-const WelcomeTitle = styled.h1`
-  text-align: center;
-  font-size: 2em;
-`;
-
-const StartButton = styled.a`
+const RoundButton = styled.a`
   text-decoration: none;
-  display: inline;
-  color: deepskyblue;
-  font-size: 1.3em;
+  display: inline-block;
   margin: 1em;
   padding: 0.25em 1em;
-  border: 2px solid deepskyblue;
+  border: 2px solid;
   border-radius: 30px;
+`;
+
+const StartButton = RoundButton.extend`
+  color: deepskyblue;
+  font-size: 1.3em;
+  border-color: deepskyblue;
   &:hover {
     color: rgba(0, 191, 255, 0.8);
     border: 2px solid rgba(0, 191, 255, 0.8);
+  }
+`;
+
+const TopMenuButton = RoundButton.extend`
+  color: white;
+  border-color: white;
+  &:hover {
+    color: whitesmoke;
+    border: 2px solid whitesmoke;
   }
 `;
 
@@ -110,9 +134,13 @@ const BackgroundShape = styled.img`
 const WelcomePage = () => (
   <FrontDoorRelative>
     <FrontDoorBackgroundTop>
-      <LogoHeader>
-        <LogoMono src={logo} />
-      </LogoHeader>
+      <HeaderTopLeft>
+        <LogoWhite src={logo} />
+        <HeaderLogoText>justpost.me</HeaderLogoText>
+      </HeaderTopLeft>
+      <HeaderTopRight>
+        <TopMenuButton href="#">About</TopMenuButton>
+      </HeaderTopRight>
     </FrontDoorBackgroundTop>
     <BackgroundShape src={background} className="" />
     <FrontDoorBackgroundBottom />
