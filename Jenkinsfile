@@ -8,8 +8,8 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'cd frontend/justpostme'
-        sh 'npm install'
+        sh '''cd frontend/justpostme/
+npm install'''
       }
     }
   }
