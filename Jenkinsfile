@@ -23,7 +23,7 @@ yarn run build'''
     stage('Deploy') {
       steps {
         echo 'Deploying'
-        archiveArtifacts '/build'
+        archiveArtifacts 'frontend/justpostme/build/**/*.*'
       }
     }
     stage('Cleanup') {
