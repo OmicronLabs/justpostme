@@ -17,3 +17,24 @@ export const fetchUnManagedError = error => ({
   type: FETCH_UNMANAGED_ERROR,
   payload: { error }
 });
+
+export function fetchUnManagedPages() {
+  return dispatch => {
+    dispatch(fetchUnManagedBegin());
+    return fetch("here the fetch can happen")
+      .then(handleErrors)
+      .then(res => res.json())
+      .then(json => {
+        dispatch(fetchUnManagedSuccess(json.pages));
+        return json.products;
+      })
+      .catch(error => dispatch(fetchUnManagedError(error)));
+  };
+}
+
+function handleErrors(response) {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return response;
+}
