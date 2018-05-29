@@ -26,7 +26,7 @@ const DashboardSidebarWrapper = styled.div`
 `;
 
 type Props = {
-  children: Array<Object>
+  children: any
 };
 
 class DashboardPage extends React.Component<Props> {

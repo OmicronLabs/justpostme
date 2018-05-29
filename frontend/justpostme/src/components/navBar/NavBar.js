@@ -56,7 +56,9 @@ const NavBarLogoContainer = NavBarContainer.extend`
   justify-content: flex-start;
 `;
 
-class NavBar extends React.Component<void> {
+type Props = {};
+
+class NavBar extends React.Component<Props> {
   render() {
     return (
       <NavBarOuter>

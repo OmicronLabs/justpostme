@@ -7,8 +7,6 @@ import { Redirect, Switch, Route, Link } from "react-router-dom";
 import AddPagesSection from "./AddPagesSection";
 import MyPagesSection from "./MyPagesSection";
 
-type Page = {};
-
 type RouteType = {
   to: string,
   name: string
@@ -62,8 +60,8 @@ const RouteTabs = (props: RouteTabsProps) => (
 );
 
 type Props = {
-  managedPages: Array<Page>,
-  unmanagedPages: Array<Page>
+  managedPages: Array<any>,
+  unmanagedPages: Array<any>
 };
 
 const tabBarNavRoutes = [
