@@ -6,10 +6,6 @@ import { GeneratedCard, AddPageCard } from "./DashboardPageCard";
 import type { CardProps } from "./DashboardPageCard";
 import { Link } from "react-router-dom";
 
-type Props = {
-  pages: Array<CardProps>
-};
-
 const PagesDisplayWrapper = styled.div`
   margin-top: 30px;
   width: 1024px;
@@ -36,36 +32,61 @@ const EmptyPagesHeader = styled.h1`
 `;
 
 const EmptyPagesText = styled.h4`
+  text-align: center;
   font-size: 100%;
   width: 500px;
   max-width: 80%;
   color: lightgray;
 `;
 
-export const EmptyPagesDisplay = () => (
-  <EmptyPagesDisplayWrapper>
-    <EmptyPagesHeader>No pages to manage</EmptyPagesHeader>
-    <EmptyPagesText>
-      Looks like you have not added any managed pages yet. Add pages by clicking
-      the button below.
-    </EmptyPagesText>
-    <Link to="/dashboard/add">
-      <LargeThemedButton>Add a managed page</LargeThemedButton>
-    </Link>
-  </EmptyPagesDisplayWrapper>
-);
+type Props = {
+  pages: Array<CardProps>,
+  emptyHead: string,
+  emptyText: string,
+  createCard: boolean
+};
 
-export function PagesDisplay(props: Props) {
-  if (props.pages.length < 1) {
-    return <EmptyPagesDisplay />;
+type EmptyProps = {
+  head: string,
+  text: string,
+  createCard: boolean
+};
+
+export const EmptyPagesDisplay = (props: EmptyProps) => {
+  if (props.createCard) {
+    return (
+      <EmptyPagesDisplayWrapper>
+        <EmptyPagesHeader>{props.head}</EmptyPagesHeader>
+        <EmptyPagesText>{props.text}</EmptyPagesText>
+      </EmptyPagesDisplayWrapper>
+    );
   } else {
     return (
-      <PagesDisplayWrapper>
-        {props.pages.map(page => {
-          return <GeneratedCard card={page} />;
-        })}
-        <AddPageCard />
-      </PagesDisplayWrapper>
+      <EmptyPagesDisplayWrapper>
+        <EmptyPagesHeader>{props.head}</EmptyPagesHeader>
+        <EmptyPagesText>{props.text}</EmptyPagesText>
+        <Link to="/dashboard/add">
+          <LargeThemedButton>Add a managed page</LargeThemedButton>
+        </Link>
+      </EmptyPagesDisplayWrapper>
     );
   }
-}
+};
+
+export const PagesDisplay = (props: Props) => {
+  if (!props.pages || props.pages.length < 1) {
+    return (
+      <EmptyPagesDisplay
+        head={props.emptyHead}
+        text={props.emptyText}
+        createCard={props.createCard}
+      />
+    );
+  } else {
+    const components = props.pages.map(page => {
+      return <GeneratedCard card={page} />;
+    });
+    !props.createCard && components.push(<AddPageCard />);
+    return <PagesDisplayWrapper>{components}</PagesDisplayWrapper>;
+  }
+};

@@ -87,6 +87,8 @@ const tabBarNavRoutes = [
   { to: "/dashboard/add", name: "Add Pages", key: "add" }
 ];
 
+//TODO: not with empty list
+
 class ManagePages extends React.Component<Props> {
   render() {
     return (
@@ -96,9 +98,12 @@ class ManagePages extends React.Component<Props> {
           <Switch>
             <Route
               path={"/dashboard/managed"}
-              render={() => <MyPagesSection />}
+              render={() => <MyPagesSection pages={[]} />}
             />
-            <Route path={"/dashboard/add"} render={() => <AddPagesSection />} />
+            <Route
+              path={"/dashboard/add"}
+              render={() => <AddPagesSection pages={[]} />}
+            />
             <Redirect to={"/dashboard/managed"} />
             )} />
           </Switch>
