@@ -101,16 +101,18 @@ const WelcomePageBox = Box.extend`
   flex-direction: column;
 `;
 
-const responseFacebook = (response, history) => {
+const responseFacebook = (response, history, addUser) => {
   response &&
-    response.expiresIn &&
-    response.accessToken &&
     response.id &&
+    addUser(response.id, response.accessToken) &&
+    addUser(response.id, response.accessToken) &&
     history.push("/dashboard/managed");
 };
 
 type Props = {
-  history: Object
+  history: Object,
+  addUser: (userID: string, accessToken: string) => void,
+  addUserToServer: (userID: string, accessToken: string) => void
 };
 
 const Welcome = (props: Props) => {
@@ -132,7 +134,8 @@ const Welcome = (props: Props) => {
           <About>{AboutText}</About>
           <FacebookLogin
             appId="2207425962822702"
-            autoLoad={true}
+            //autoLoad={true}
+            size={"small"}
             fields="name,email,picture"
             scope="manage_pages, email, publish_pages"
             render={renderProps => (
@@ -140,7 +143,9 @@ const Welcome = (props: Props) => {
                 Get started with Facebook
               </LargeThemedButton>
             )}
-            callback={response => responseFacebook(response, props.history)}
+            callback={response =>
+              responseFacebook(response, props.history, props.addUser)
+            }
           />
         </WelcomePageBox>
       </BoxWrapper>
