@@ -12,7 +12,7 @@ import { RoundButton, TopMenuButton } from "../common/Buttons";
 
 import { Box, BoxWrapper } from "../common/Box";
 
-import { SimpleFooter, FooterButton } from "../common/Footer";
+import { SimpleFooter, FooterButton, GitHubFooter } from "../common/Footer";
 
 import background from "../../media/LoginBackground.svg";
 import logo from "../../media/logo-white.png";
@@ -125,12 +125,7 @@ const WelcomePage = () => (
       </Box>
     </BoxWrapper>
     <SimpleFooter>
-      <FooterButton
-        href="https://github.com/OmicronLabs/justpostme"
-        target="blank"
-      >
-        <i className="fa fa-github" /> view the source code
-      </FooterButton>
+      <GitHubFooter />
     </SimpleFooter>
   </FrontDoorRelative>
 );
