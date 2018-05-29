@@ -27,7 +27,7 @@ const Wrapper = styled.div`
 const RouteTabsWrapper = styled.div`
     width: 1024px;
     max-width: 85%;
-    height: 60px;
+    min-height: 60px;
     border-bottom: 1px solid gray;
     background white;
     display: flex;
@@ -37,6 +37,7 @@ const RouteTabsWrapper = styled.div`
 
 const TabButton = styled.div`
   width: 150px;
+  height: 60px;
   margin-right: 20px;
   display: flex;
   justify-content: center;
