@@ -3,12 +3,13 @@
 import React from "react";
 import styled, { CSS } from "styled-components";
 
+import navBarImage from "../../media/banner-bg.png";
+
 const NavBarOuter = styled.div`
   position: relative;
   width: 100%;
   height: 70px;
-  background-color: red;
-  background-image: url("../../media/navBarBackground.png");
+  background-image: url(${navBarImage});
   background-size: cover;
   display: flex;
   justify-content: center;

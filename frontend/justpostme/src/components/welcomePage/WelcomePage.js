@@ -8,8 +8,8 @@ import { createStore } from "redux";
 import { Link } from "react-router-dom";
 import "font-awesome/css/font-awesome.min.css";
 
-import background from "media/LoginBackground.svg";
-import logo from "media/logo-white.png";
+import background from "../../media/LoginBackground.svg";
+import logo from "../../media/logo-white.png";
 
 const LogoWhite = styled.img`
   transform: scale(0.6, 0.6);
