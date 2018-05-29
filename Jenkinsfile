@@ -21,8 +21,10 @@ yarn run build'''
       }
     }
     stage('Deploy') {
+      when {
+        branch 'master'
+      }
       steps {
-        echo 'Deploying'
         archiveArtifacts 'frontend/justpostme/build/**/*.*'
       }
     }
