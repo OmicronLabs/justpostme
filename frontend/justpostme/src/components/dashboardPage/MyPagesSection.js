@@ -6,9 +6,7 @@ type Props = {
   cards: Array<CardProps>
 };
 
-const emptyProps = {
-  pages: []
-};
+const emptyProps = { pages: [] };
 
 const MyPagesSection = (props: Props) => {
   return PagesDisplay(emptyProps);

@@ -2,7 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { LargeThemedButton } from "../common/Buttons";
-import { GeneratedCard } from "./DashboardPageCard";
+import { GeneratedCard, AddPageCard } from "./DashboardPageCard";
 import type { CardProps } from "./DashboardPageCard";
 import { Link } from "react-router-dom";
 
@@ -64,6 +64,7 @@ export function PagesDisplay(props: Props) {
         {props.pages.map(page => {
           return <GeneratedCard card={page} />;
         })}
+        <AddPageCard />
       </PagesDisplayWrapper>
     );
   }
