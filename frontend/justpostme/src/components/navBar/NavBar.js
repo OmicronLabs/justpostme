@@ -56,9 +56,44 @@ const NavBarLogoContainer = NavBarContainer.extend`
   justify-content: flex-start;
 `;
 
-type Props = {};
+type Props = {
+  userID: string,
+  accessToken: string
+};
 
 class NavBar extends React.Component<Props> {
+  // componentDidMount() {
+  //   if (document.getElementById("facebook-jssdk")) {
+  //     return;
+  //   }
+  //   this.setFbAsyncInit();
+  //   this.loadSdkAsynchronously();
+  // }
+
+  // setFbAsyncInit() {
+  //   window.fbAsyncInit = () => {
+  //     window.FB.init({
+  //       version: `v3.0`,
+  //       appId: "2207425962822702"
+  //     });
+  //   };
+  // }
+
+  // loadSdkAsynchronously() {
+  //   ((d, s, id) => {
+  //     const element = d.getElementsByTagName(s)[0];
+  //     const fjs = element;
+  //     let js = element;
+  //     if (d.getElementById(id)) {
+  //       return;
+  //     }
+  //     js = d.createElement(s);
+  //     js.id = id;
+  //     js.src = `https://connect.facebook.net/en_US/sdk.js`;
+  //     fjs.parentNode.insertBefore(js, fjs);
+  //   })(document, "script", "facebook-jssdk");
+  // }
+
   render() {
     return (
       <NavBarOuter>
@@ -70,7 +105,7 @@ class NavBar extends React.Component<Props> {
             </NavBarLogoContainer>
           </NavBarHomeButton>
           <NavBarContainer>
-            <TopMenuButton href="#">About</TopMenuButton>
+            <TopMenuButton onClick={() => {}}>About</TopMenuButton>
             <TopMenuButton href="#">Settings</TopMenuButton>
           </NavBarContainer>
         </NavBarInner>

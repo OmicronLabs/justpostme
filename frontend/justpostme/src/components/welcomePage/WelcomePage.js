@@ -4,10 +4,15 @@ import React, { Component } from "react";
 import styled, { CSS } from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
-import { RoundButton, TopMenuButton } from "../common/Buttons";
+import {
+  LargeThemedButton,
+  RoundButton,
+  TopMenuButton
+} from "../common/Buttons";
 
 import { Box, BoxWrapper } from "../common/Box";
 
@@ -45,17 +50,6 @@ const HeaderTopLeft = styled.div`
   width: 100px;
   position: absolute;
   display: inline;
-`;
-
-const StartButton = RoundButton.extend`
-  text-decoration: none;
-  color: rgb(255, 87, 34);
-  font-size: 1.3em;
-  border-color: rgb(255, 87, 34);
-  &:hover {
-    color: rgba(255, 87, 34, 0.7);
-    border: 2px solid rgba(255, 87, 34, 0.7);
-  }
 `;
 
 const AboutText =
@@ -107,42 +101,59 @@ const WelcomePageBox = Box.extend`
   flex-direction: column;
 `;
 
-const WelcomePage = () => (
-  <FrontDoorRelative>
-    <FrontDoorBackgroundTop>
-      <HeaderTopLeft>
-        <LogoWhite src={logo} />
-        <HeaderLogoText>justpost.me</HeaderLogoText>
-      </HeaderTopLeft>
-      <HeaderTopRight>
-        <TopMenuButton href="#">About</TopMenuButton>
-      </HeaderTopRight>
-    </FrontDoorBackgroundTop>
-    <BackgroundShape src={background} className="" />
-    <FrontDoorBackgroundBottom />
-    <BoxWrapper>
-      <WelcomePageBox>
-        <About>{AboutText}</About>
-        <StartButton>
-          <Link
-            to={{ pathname: "/dashboard" }}
-            style={{ textDecoration: "none", color: "rgb(255, 87, 34)" }}
-          >
-            Get started with Facebook{" "}
-          </Link>
-        </StartButton>
-      </WelcomePageBox>
-    </BoxWrapper>
-    <SimpleFooter>
-      <GitHubFooter />
-    </SimpleFooter>
-  </FrontDoorRelative>
-);
+const responseFacebook = (response, history, addUser) => {
+  response &&
+    response.id &&
+    addUser(response.id, response.accessToken) &&
+    addUser(response.id, response.accessToken) &&
+    history.push("/dashboard/managed");
+};
 
-class Welcome extends React.Component<void> {
-  render() {
-    return <WelcomePage />;
-  }
-}
+type Props = {
+  history: Object,
+  addUser: (userID: string, accessToken: string) => void,
+  addUserToServer: (userID: string, accessToken: string) => void
+};
 
-export default WelcomePage;
+const Welcome = (props: Props) => {
+  return (
+    <FrontDoorRelative>
+      <FrontDoorBackgroundTop>
+        <HeaderTopLeft>
+          <LogoWhite src={logo} />
+          <HeaderLogoText>justpost.me</HeaderLogoText>
+        </HeaderTopLeft>
+        <HeaderTopRight>
+          <TopMenuButton href="#">About</TopMenuButton>
+        </HeaderTopRight>
+      </FrontDoorBackgroundTop>
+      <BackgroundShape src={background} className="" />
+      <FrontDoorBackgroundBottom />
+      <BoxWrapper>
+        <WelcomePageBox>
+          <About>{AboutText}</About>
+          <FacebookLogin
+            appId="2207425962822702"
+            //autoLoad={true}
+            size={"small"}
+            fields="name,email,picture"
+            scope="manage_pages, email, publish_pages"
+            render={renderProps => (
+              <LargeThemedButton onClick={renderProps.onClick}>
+                Get started with Facebook
+              </LargeThemedButton>
+            )}
+            callback={response =>
+              responseFacebook(response, props.history, props.addUser)
+            }
+          />
+        </WelcomePageBox>
+      </BoxWrapper>
+      <SimpleFooter>
+        <GitHubFooter />
+      </SimpleFooter>
+    </FrontDoorRelative>
+  );
+};
+
+export default Welcome;

@@ -4,8 +4,8 @@ import styled from "styled-components";
 import DashboardPage from "./DashboardPage";
 import { Redirect, Switch, Route, NavLink } from "react-router-dom";
 
-import AddPagesSection from "./AddPagesSection";
-import MyPagesSection from "./MyPagesSection";
+import AddPagesSectionContainer from "../../containers/dashboardPage/AddPagesSectionContainer";
+import MyPagesSectionContainer from "../../containers/dashboardPage/MyPagesSectionContainer";
 
 type RouteType = {
   to: string,
@@ -27,7 +27,7 @@ const Wrapper = styled.div`
 const RouteTabsWrapper = styled.div`
     width: 1024px;
     max-width: 85%;
-    height: 60px;
+    min-height: 60px;
     border-bottom: 1px solid gray;
     background white;
     display: flex;
@@ -37,6 +37,7 @@ const RouteTabsWrapper = styled.div`
 
 const TabButton = styled.div`
   width: 150px;
+  height: 60px;
   margin-right: 20px;
   display: flex;
   justify-content: center;
@@ -46,7 +47,7 @@ const TabButton = styled.div`
 const RouteTabs = (props: RouteTabsProps) => (
   <RouteTabsWrapper>
     {props.routes.map(route => (
-      <TabButton>
+      <TabButton key={route.to}>
         <NavLink
           to={route.to}
           style={{
@@ -82,9 +83,11 @@ type Props = {
 };
 
 const tabBarNavRoutes = [
-  { to: "/dashboard/managed", name: "Managed Pages", key: "managed" },
-  { to: "/dashboard/add", name: "Add Pages", key: "add" }
+  { to: "/dashboard/managed", name: "Managed Pages" },
+  { to: "/dashboard/add", name: "Add Pages" }
 ];
+
+//TODO: not with empty list
 
 class ManagePages extends React.Component<Props> {
   render() {
@@ -95,9 +98,12 @@ class ManagePages extends React.Component<Props> {
           <Switch>
             <Route
               path={"/dashboard/managed"}
-              render={() => <MyPagesSection />}
+              render={() => <MyPagesSectionContainer />}
             />
-            <Route path={"/dashboard/add"} render={() => <AddPagesSection />} />
+            <Route
+              path={"/dashboard/add"}
+              render={() => <AddPagesSectionContainer />}
+            />
             <Redirect to={"/dashboard/managed"} />
             )} />
           </Switch>
