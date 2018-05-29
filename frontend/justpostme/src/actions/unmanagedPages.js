@@ -1,34 +1,32 @@
-//@flow
-
 export const FETCH_UNMANAGED_BEGIN = "FETCH_MANAGED_BEGIN";
 export const FETCH_UNMANAGED_SUCCESS = "FETCH_MANAGED_SUCCESS";
 export const FETCH_UNMANAGED_ERROR = "FETCH_MANAGED_ERROR";
 
-export const fetchUnManagedBegin = () => ({
+export const fetchUnmanagedBegin = () => ({
   type: FETCH_UNMANAGED_BEGIN
 });
 
-export const fetchUnManagedSuccess = pages => ({
+export const fetchUnmanagedSuccess = pages => ({
   type: FETCH_UNMANAGED_SUCCESS,
   payload: { pages }
 });
 
-export const fetchUnManagedError = error => ({
+export const fetchUnmanagedError = error => ({
   type: FETCH_UNMANAGED_ERROR,
   payload: { error }
 });
 
-export function fetchUnManagedPages() {
+export function fetchUnmanagedPages() {
   return dispatch => {
-    dispatch(fetchUnManagedBegin());
+    dispatch(fetchUnmanagedBegin());
     return fetch("here the fetch can happen")
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
-        dispatch(fetchUnManagedSuccess(json.pages));
-        return json.products;
+        dispatch(fetchUnmanagedSuccess(json.pages));
+        return json.pages;
       })
-      .catch(error => dispatch(fetchUnManagedError(error)));
+      .catch(error => dispatch(fetchUnmanagedError(error)));
   };
 }
 

@@ -2,25 +2,33 @@
 import React from "react";
 import type { CardProps } from "../../components/dashboardPage/DashboardPageCard.js";
 import { EmptyPagesDisplay, PagesDisplay } from "./PagesDisplay";
+import { fetchManagedPages } from "../../actions/managedPages";
+
 type Props = {
-  pages: Array<CardProps>
+  pages: Array<CardProps>,
+  loading: boolean,
+  error: string
 };
 
 const myPagesEmptyHead = "No pages to manage";
 const myPagesEmptyText =
   "Looks like you have not added any managed pages yet. Add pages by clicking the button below.";
 
-const emptyProps = { pages: [] };
+class MyPagesSection extends React.Component<Props> {
+  componentWillMount() {
+    fetchManagedPages();
+  }
 
-const MyPagesSection = (props: Props) => {
-  return (
-    <PagesDisplay
-      pages={props.pages}
-      emptyHead={myPagesEmptyHead}
-      emptyText={myPagesEmptyText}
-      createCard={false}
-    />
-  );
-};
+  render() {
+    return (
+      <PagesDisplay
+        pages={this.props.pages}
+        emptyHead={myPagesEmptyHead}
+        emptyText={myPagesEmptyText}
+        createCard={false}
+      />
+    );
+  }
+}
 
 export default MyPagesSection;

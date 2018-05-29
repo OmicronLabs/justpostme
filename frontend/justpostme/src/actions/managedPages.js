@@ -19,12 +19,12 @@ export const fetchManagedError = error => ({
 export function fetchManagedPages() {
   return dispatch => {
     dispatch(fetchManagedBegin());
-    return fetch("here the fetch can happen")
+    return fetch("here the fetch can happen, put some url")
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
         dispatch(fetchManagedSuccess(json.pages));
-        return json.products;
+        return json.pages;
       })
       .catch(error => dispatch(fetchManagedError(error)));
   };
