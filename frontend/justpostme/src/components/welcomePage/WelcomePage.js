@@ -6,10 +6,15 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 
 import { Link } from "react-router-dom";
-import "font-awesome/css/font-awesome.min.css";
 
-import background from "media/LoginBackground.svg";
-import logo from "media/logo-white.png";
+import { RoundButton, TopMenuButton } from "../common/Buttons";
+
+import { Box, BoxWrapper } from "../common/Box";
+
+import { SimpleFooter, FooterButton, GitHubFooter } from "../common/Footer";
+
+import background from "../../media/LoginBackground.svg";
+import logo from "../../media/logo-white.png";
 
 const LogoWhite = styled.img`
   transform: scale(0.6, 0.6);
@@ -42,15 +47,6 @@ const HeaderTopLeft = styled.div`
   display: inline;
 `;
 
-const RoundButton = styled.a`
-  text-decoration: none;
-  display: inline-block;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border: 2px solid;
-  border-radius: 30px;
-`;
-
 const StartButton = RoundButton.extend`
   text-decoration: none;
   color: rgb(255, 87, 34);
@@ -62,59 +58,8 @@ const StartButton = RoundButton.extend`
   }
 `;
 
-const TopMenuButton = RoundButton.extend`
-  color: white;
-  border-color: white;
-  &:hover {
-    color: whitesmoke;
-    border: 2px solid whitesmoke;
-  }
-`;
-
-const SimpleFooter = styled.footer`
-  position: fixed;
-  width: 100%;
-  height: 30px;
-  text-align: center;
-  bottom: 0px;
-`;
-
-const FooterButton = styled.a`
-  text-decoration: none;
-  color: grey;
-  padding-bottom: 10px;
-  &:hover {
-    color: darkgray;
-  }
-`;
-
 const AboutText =
   "Welcome to justpost.me, a simple way to manage user-submitted content for your anonymous Facebook pages.";
-
-const BoxWrapper = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Box = styled.div`
-  padding-top: 3em;
-  padding-bottom: 3em;
-  margin-bottom: 12em;
-  max-width: 800px;
-  box-shadow: 0px 0px 19px 3px rgba(126, 149, 168, 0.5);
-  border-radius: 6px;
-  background: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
 
 const FrontDoorRelative = styled.div`
   position: relative;
@@ -152,6 +97,16 @@ const BackgroundShape = styled.img`
   transform: translateY(-99%);
 `;
 
+const WelcomePageBox = Box.extend`
+  padding-top: 3em;
+  padding-bottom: 3em;
+  margin-bottom: 12em;
+  max-width: 800px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
 const WelcomePage = () => (
   <FrontDoorRelative>
     <FrontDoorBackgroundTop>
@@ -166,25 +121,20 @@ const WelcomePage = () => (
     <BackgroundShape src={background} className="" />
     <FrontDoorBackgroundBottom />
     <BoxWrapper>
-      <Box>
+      <WelcomePageBox>
         <About>{AboutText}</About>
         <StartButton>
           <Link
-            to={{ pathname: "/mainpage" }}
+            to={{ pathname: "/dashboard" }}
             style={{ textDecoration: "none", color: "rgb(255, 87, 34)" }}
           >
             Get started with Facebook{" "}
           </Link>
         </StartButton>
-      </Box>
+      </WelcomePageBox>
     </BoxWrapper>
     <SimpleFooter>
-      <FooterButton
-        href="https://github.com/OmicronLabs/justpostme"
-        target="blank"
-      >
-        <i className="fa fa-github" /> view the source code
-      </FooterButton>
+      <GitHubFooter />
     </SimpleFooter>
   </FrontDoorRelative>
 );
