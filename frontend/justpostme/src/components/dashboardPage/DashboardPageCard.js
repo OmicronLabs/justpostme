@@ -20,10 +20,14 @@ const PageBox = Box.extend`
   margin: 10px;
   max-width: 90%;
   max-height: 90%;
-  width: 400px;
+  width: 320px;
   height: 240px;
   flex-direction: column;
   justify-content: space-between;
+  &:hover {
+    transform: scale(1.005);
+    box-shadow: 0px 0px 19px 3px rgba(126, 149, 168, 0.7);
+  }
 `;
 
 const BlankPageBox = PageBox.extend`
@@ -119,8 +123,7 @@ export const ExampleCard = () => (
     </PageInfoContainer>
   </PageBox>
 );
-
-const CreatePageCard = () => (
+export const AddPageCard = () => (
   <BlankPageBox>
     <IconButton>
       <CreatePageIcon className="fa fa-plus" />

@@ -8,7 +8,11 @@ import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props
 
 import { Link, withRouter } from "react-router-dom";
 
-import { RoundButton, TopMenuButton } from "../common/Buttons";
+import {
+  LargeThemedButton,
+  RoundButton,
+  TopMenuButton
+} from "../common/Buttons";
 
 import { Box, BoxWrapper } from "../common/Box";
 
@@ -46,18 +50,6 @@ const HeaderTopLeft = styled.div`
   width: 100px;
   position: absolute;
   display: inline;
-`;
-
-const StartButton = RoundButton.extend`
-  text-decoration: none;
-  color: rgb(255, 87, 34);
-  font-size: 1.3em;
-  border-color: rgb(255, 87, 34);
-  &:hover {
-    color: rgba(255, 87, 34, 0.7);
-    border: 2px solid rgba(255, 87, 34, 0.7);
-    cursor: pointer;
-  }
 `;
 
 const AboutText =
@@ -147,9 +139,9 @@ const Welcome = (props: Props) => {
             fields="name,email,picture"
             scope="manage_pages, email, publish_pages"
             render={renderProps => (
-              <StartButton onClick={renderProps.onClick}>
+              <LargeThemedButton onClick={renderProps.onClick}>
                 Get started with Facebook
-              </StartButton>
+              </LargeThemedButton>
             )}
             callback={response =>
               responseFacebook(response, props.history, props.addUser)

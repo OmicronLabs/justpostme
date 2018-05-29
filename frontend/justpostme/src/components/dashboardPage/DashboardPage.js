@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import NavBar from "../../components/navBar/NavBar";
 import SideBar from "../../components/sideBar/SideBar";
+import MyPagesSection from "./MyPagesSection";
 
 const DashboardWrapper = styled.div`
   background: white;
