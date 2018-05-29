@@ -6,7 +6,6 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 
 import { Link } from "react-router-dom";
-import "font-awesome/css/font-awesome.min.css";
 
 import { RoundButton, TopMenuButton } from "../common/Buttons";
 
@@ -98,6 +97,16 @@ const BackgroundShape = styled.img`
   transform: translateY(-99%);
 `;
 
+const WelcomePageBox = Box.extend`
+  padding-top: 3em;
+  padding-bottom: 3em;
+  margin-bottom: 12em;
+  max-width: 800px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
 const WelcomePage = () => (
   <FrontDoorRelative>
     <FrontDoorBackgroundTop>
@@ -112,7 +121,7 @@ const WelcomePage = () => (
     <BackgroundShape src={background} className="" />
     <FrontDoorBackgroundBottom />
     <BoxWrapper>
-      <Box>
+      <WelcomePageBox>
         <About>{AboutText}</About>
         <StartButton>
           <Link
@@ -122,7 +131,7 @@ const WelcomePage = () => (
             Get started with Facebook{" "}
           </Link>
         </StartButton>
-      </Box>
+      </WelcomePageBox>
     </BoxWrapper>
     <SimpleFooter>
       <GitHubFooter />

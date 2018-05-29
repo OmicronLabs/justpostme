@@ -18,3 +18,12 @@ export const TopMenuButton = RoundButton.extend`
     border: 2px solid rgba(255, 255, 255, 0.85);
   }
 `;
+
+export const IconButton = styled.a`
+  text-decoration: none;
+  color: grey;
+  padding-bottom: 10px;
+  &:hover {
+    color: darkgray;
+  }
+`;
