@@ -26,6 +26,7 @@ const Wrapper = styled.div`
 
 const RouteTabsWrapper = styled.div`
     width: 1024px;
+    max-width: 85%;
     height: 60px;
     border-bottom: 1px solid gray;
     background white;
@@ -48,7 +49,14 @@ const RouteTabs = (props: RouteTabsProps) => (
       <TabButton>
         <NavLink
           to={route.to}
-          style={{ textDecoration: "none", color: "grey" }}
+          style={{
+            textDecoration: "none",
+            color: "grey",
+            height: "60px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
           activeStyle={{
             color: "rgb(249, 60, 102)",
             borderBottom: "3px solid rgb(249, 60, 102)",

@@ -19,10 +19,6 @@ const DashboardWrapper = styled.div`
 const DashboardSidebarWrapper = styled.div`
   width: 100%;
   height: 100%;
-
-  /* display: flex; */
-  /* a-direction: column; */
-  /* justify-content: center; */
 `;
 
 type Props = {
