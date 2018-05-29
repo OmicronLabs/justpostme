@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 import { RoundButton, TopMenuButton } from "../common/Buttons";
 
@@ -109,50 +109,54 @@ const WelcomePageBox = Box.extend`
   flex-direction: column;
 `;
 
-const responseFacebook = response => {
-  console.log(response);
+const responseFacebook = (response, history) => {
+  response &&
+    response.expiresIn &&
+    response.accessToken &&
+    response.id &&
+    history.push("/dashboard/managed");
 };
-
-const WelcomePage = () => (
-  <FrontDoorRelative>
-    <FrontDoorBackgroundTop>
-      <HeaderTopLeft>
-        <LogoWhite src={logo} />
-        <HeaderLogoText>justpost.me</HeaderLogoText>
-      </HeaderTopLeft>
-      <HeaderTopRight>
-        <TopMenuButton href="#">About</TopMenuButton>
-      </HeaderTopRight>
-    </FrontDoorBackgroundTop>
-    <BackgroundShape src={background} className="" />
-    <FrontDoorBackgroundBottom />
-    <BoxWrapper>
-      <WelcomePageBox>
-        <About>{AboutText}</About>
-        <FacebookLogin
-          appId="2207425962822702"
-          autoLoad={true}
-          fields="name,email,picture"
-          scope="manage_pages, email, publish_pages"
-          render={renderProps => (
-            <StartButton onClick={renderProps.onClick}>
-              Get started with Facebook
-            </StartButton>
-          )}
-          callback={responseFacebook}
-        />
-      </WelcomePageBox>
-    </BoxWrapper>
-    <SimpleFooter>
-      <GitHubFooter />
-    </SimpleFooter>
-  </FrontDoorRelative>
-);
 
 class Welcome extends React.Component<void> {
   render() {
-    return <WelcomePage />;
+    return (
+      <FrontDoorRelative>
+        <FrontDoorBackgroundTop>
+          <HeaderTopLeft>
+            <LogoWhite src={logo} />
+            <HeaderLogoText>justpost.me</HeaderLogoText>
+          </HeaderTopLeft>
+          <HeaderTopRight>
+            <TopMenuButton href="#">About</TopMenuButton>
+          </HeaderTopRight>
+        </FrontDoorBackgroundTop>
+        <BackgroundShape src={background} className="" />
+        <FrontDoorBackgroundBottom />
+        <BoxWrapper>
+          <WelcomePageBox>
+            <About>{AboutText}</About>
+            <FacebookLogin
+              appId="2207425962822702"
+              autoLoad={true}
+              fields="name,email,picture"
+              scope="manage_pages, email, publish_pages"
+              render={renderProps => (
+                <StartButton onClick={renderProps.onClick}>
+                  Get started with Facebook
+                </StartButton>
+              )}
+              callback={response =>
+                responseFacebook(response, this.props.history)
+              }
+            />
+          </WelcomePageBox>
+        </BoxWrapper>
+        <SimpleFooter>
+          <GitHubFooter />
+        </SimpleFooter>
+      </FrontDoorRelative>
+    );
   }
 }
 
-export default WelcomePage;
+export default Welcome;
