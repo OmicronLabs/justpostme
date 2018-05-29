@@ -86,7 +86,9 @@ const PageName = styled.h1`
 export type CardProps = {
   card: {
     pageName: string,
-    backgroundImage: string
+    backgroundImage: string,
+    scheduled: number,
+    pending: number
   }
 };
 
@@ -97,7 +99,7 @@ export const GeneratedCard = (props: CardProps) => (
       <PageName>{props.card.pageName}</PageName>
     </PageTextContainer>
     <PageInfoContainer>
-      <PageInfoItem>queued: x</PageInfoItem>
+      <PageInfoItem>pending: x</PageInfoItem>
       <PageInfoItem>scheduled: x</PageInfoItem>
     </PageInfoContainer>
   </PageBox>

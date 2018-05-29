@@ -117,46 +117,46 @@ const responseFacebook = (response, history) => {
     history.push("/dashboard/managed");
 };
 
-class Welcome extends React.Component<void> {
-  render() {
-    return (
-      <FrontDoorRelative>
-        <FrontDoorBackgroundTop>
-          <HeaderTopLeft>
-            <LogoWhite src={logo} />
-            <HeaderLogoText>justpost.me</HeaderLogoText>
-          </HeaderTopLeft>
-          <HeaderTopRight>
-            <TopMenuButton href="#">About</TopMenuButton>
-          </HeaderTopRight>
-        </FrontDoorBackgroundTop>
-        <BackgroundShape src={background} className="" />
-        <FrontDoorBackgroundBottom />
-        <BoxWrapper>
-          <WelcomePageBox>
-            <About>{AboutText}</About>
-            <FacebookLogin
-              appId="2207425962822702"
-              autoLoad={true}
-              fields="name,email,picture"
-              scope="manage_pages, email, publish_pages"
-              render={renderProps => (
-                <StartButton onClick={renderProps.onClick}>
-                  Get started with Facebook
-                </StartButton>
-              )}
-              callback={response =>
-                responseFacebook(response, this.props.history)
-              }
-            />
-          </WelcomePageBox>
-        </BoxWrapper>
-        <SimpleFooter>
-          <GitHubFooter />
-        </SimpleFooter>
-      </FrontDoorRelative>
-    );
-  }
-}
+type Props = {
+  history: Object
+};
+
+const Welcome = (props: Props) => {
+  return (
+    <FrontDoorRelative>
+      <FrontDoorBackgroundTop>
+        <HeaderTopLeft>
+          <LogoWhite src={logo} />
+          <HeaderLogoText>justpost.me</HeaderLogoText>
+        </HeaderTopLeft>
+        <HeaderTopRight>
+          <TopMenuButton href="#">About</TopMenuButton>
+        </HeaderTopRight>
+      </FrontDoorBackgroundTop>
+      <BackgroundShape src={background} className="" />
+      <FrontDoorBackgroundBottom />
+      <BoxWrapper>
+        <WelcomePageBox>
+          <About>{AboutText}</About>
+          <FacebookLogin
+            appId="2207425962822702"
+            autoLoad={true}
+            fields="name,email,picture"
+            scope="manage_pages, email, publish_pages"
+            render={renderProps => (
+              <StartButton onClick={renderProps.onClick}>
+                Get started with Facebook
+              </StartButton>
+            )}
+            callback={response => responseFacebook(response, props.history)}
+          />
+        </WelcomePageBox>
+      </BoxWrapper>
+      <SimpleFooter>
+        <GitHubFooter />
+      </SimpleFooter>
+    </FrontDoorRelative>
+  );
+};
 
 export default Welcome;
