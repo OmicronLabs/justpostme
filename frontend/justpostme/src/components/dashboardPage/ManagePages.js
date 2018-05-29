@@ -2,7 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import DashboardPage from "./DashboardPage";
-import { Redirect, Switch, Route, Link } from "react-router-dom";
+import { Redirect, Switch, Route, NavLink } from "react-router-dom";
 
 import AddPagesSection from "./AddPagesSection";
 import MyPagesSection from "./MyPagesSection";
@@ -35,25 +35,34 @@ const RouteTabsWrapper = styled.div`
 `;
 
 const TabButton = styled.div`
-  width: 200px;
+  width: 150px;
+  margin-right: 20px;
   display: flex;
-  color: rgb(249, 60, 102);
   justify-content: center;
   align-items: center;
-  border-bottom: 2px solid rgb(249, 60, 102);
 `;
 
 const RouteTabs = (props: RouteTabsProps) => (
   <RouteTabsWrapper>
     {props.routes.map(route => (
       <TabButton>
-        <Link
+        <NavLink
           to={route.to}
-          style={{ textDecoration: "none", color: "rgb(249, 60, 102)" }}
+          style={{ textDecoration: "none", color: "grey" }}
+          activeStyle={{
+            color: "rgb(249, 60, 102)",
+            borderBottom: "3px solid rgb(249, 60, 102)",
+            width: "150px",
+            height: "60px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontWeight: "bold"
+          }}
+          replace
         >
-          {" "}
-          {route.name}{" "}
-        </Link>
+          {route.name}
+        </NavLink>
       </TabButton>
     ))}
   </RouteTabsWrapper>
