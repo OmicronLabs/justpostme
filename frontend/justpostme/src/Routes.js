@@ -1,15 +1,15 @@
 import React from "react";
 import { Redirect, Switch, withRouter, Route } from "react-router-dom";
 
-import MainPage from "components/mainPage/MainPage";
-import WelcomePage from "components/welcomePage/WelcomePage";
+import DashboardPage from "./components/dashboardPage/DashboardPage";
+import WelcomePage from "./components/welcomePage/WelcomePage";
 
 class Routes extends React.Component {
   render() {
     return (
       <Switch>
         <Route path="/login" component={WelcomePage} />
-        <Route path="/mainpage" component={MainPage} />
+        <Route path="/dashboard" component={DashboardPage} />
         <Redirect to="/login" />
       </Switch>
     );

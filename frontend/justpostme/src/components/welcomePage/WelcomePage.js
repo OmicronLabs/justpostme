@@ -170,7 +170,7 @@ const WelcomePage = () => (
         <About>{AboutText}</About>
         <StartButton>
           <Link
-            to={{ pathname: "/mainpage" }}
+            to={{ pathname: "/dashboard" }}
             style={{ textDecoration: "none", color: "rgb(255, 87, 34)" }}
           >
             Get started with Facebook{" "}
