@@ -4,8 +4,8 @@ import styled from "styled-components";
 import DashboardPage from "./DashboardPage";
 import { Redirect, Switch, Route, NavLink } from "react-router-dom";
 
-import AddPagesSection from "./AddPagesSection";
-import MyPagesSection from "./MyPagesSection";
+import AddPagesSectionContainer from "../../containers/dashboardPage/AddPagesSectionContainer";
+import MyPagesSectionContainer from "../../containers/dashboardPage/MyPagesSectionContainer";
 
 type RouteType = {
   to: string,
@@ -95,9 +95,12 @@ class ManagePages extends React.Component<Props> {
           <Switch>
             <Route
               path={"/dashboard/managed"}
-              render={() => <MyPagesSection />}
+              render={() => <MyPagesSectionContainer />}
             />
-            <Route path={"/dashboard/add"} render={() => <AddPagesSection />} />
+            <Route
+              path={"/dashboard/add"}
+              render={() => <AddPagesSectionContainer />}
+            />
             <Redirect to={"/dashboard/managed"} />
             )} />
           </Switch>
