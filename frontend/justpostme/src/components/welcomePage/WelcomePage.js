@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import styled, { CSS } from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 import { Link } from "react-router-dom";
 
@@ -55,6 +56,7 @@ const StartButton = RoundButton.extend`
   &:hover {
     color: rgba(255, 87, 34, 0.7);
     border: 2px solid rgba(255, 87, 34, 0.7);
+    cursor: pointer;
   }
 `;
 
@@ -107,6 +109,10 @@ const WelcomePageBox = Box.extend`
   flex-direction: column;
 `;
 
+const responseFacebook = response => {
+  console.log(response);
+};
+
 const WelcomePage = () => (
   <FrontDoorRelative>
     <FrontDoorBackgroundTop>
@@ -123,14 +129,18 @@ const WelcomePage = () => (
     <BoxWrapper>
       <WelcomePageBox>
         <About>{AboutText}</About>
-        <StartButton>
-          <Link
-            to={{ pathname: "/dashboard" }}
-            style={{ textDecoration: "none", color: "rgb(255, 87, 34)" }}
-          >
-            Get started with Facebook{" "}
-          </Link>
-        </StartButton>
+        <FacebookLogin
+          appId="2207425962822702"
+          autoLoad={true}
+          fields="name,email,picture"
+          scope="manage_pages, email, publish_pages"
+          render={renderProps => (
+            <StartButton onClick={renderProps.onClick}>
+              Get started with Facebook
+            </StartButton>
+          )}
+          callback={responseFacebook}
+        />
       </WelcomePageBox>
     </BoxWrapper>
     <SimpleFooter>
