@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect, Switch, withRouter, Route } from "react-router-dom";
 
-import DashboardPage from "./components/dashboardPage/DashboardPage";
+import ManagePages from "./components/dashboardPage/ManagePages";
 import WelcomePage from "./components/welcomePage/WelcomePage";
 
 class Routes extends React.Component {
@@ -9,7 +9,7 @@ class Routes extends React.Component {
     return (
       <Switch>
         <Route path="/login" component={WelcomePage} />
-        <Route path="/dashboard" component={DashboardPage} />
+        <Route path="/dashboard" component={ManagePages} />
         <Redirect to="/login" />
       </Switch>
     );
