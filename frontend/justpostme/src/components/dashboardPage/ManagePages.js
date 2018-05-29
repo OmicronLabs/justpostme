@@ -46,7 +46,7 @@ const TabButton = styled.div`
 const RouteTabs = (props: RouteTabsProps) => (
   <RouteTabsWrapper>
     {props.routes.map(route => (
-      <TabButton>
+      <TabButton key={route.to}>
         <NavLink
           to={route.to}
           style={{
@@ -82,8 +82,8 @@ type Props = {
 };
 
 const tabBarNavRoutes = [
-  { to: "/dashboard/managed", name: "Managed Pages", key: "managed" },
-  { to: "/dashboard/add", name: "Add Pages", key: "add" }
+  { to: "/dashboard/managed", name: "Managed Pages" },
+  { to: "/dashboard/add", name: "Add Pages" }
 ];
 
 class ManagePages extends React.Component<Props> {

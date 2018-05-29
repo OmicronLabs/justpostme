@@ -141,6 +141,7 @@ const Welcome = (props: Props) => {
           <FacebookLogin
             appId="2207425962822702"
             autoLoad={true}
+            size={"small"}
             fields="name,email,picture"
             scope="manage_pages, email, publish_pages"
             render={renderProps => (
