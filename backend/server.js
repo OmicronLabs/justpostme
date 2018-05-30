@@ -4,6 +4,9 @@ var bodyParser = require("body-parser");
 var sql = require("mssql");
 var app = express(); 
 
+require('dotenv').config();
+require('dotenv').load();
+
 // Body Parser Middleware
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({
@@ -22,15 +25,15 @@ app.use(function (req, res, next) {
 //Setting up server
  var server = app.listen(process.env.PORT || 8080, function () {
     var port = server.address().port;
-    console.log("App now running on port", port);
- });
+    console.log("App now running on port", port, process.env.USERNAME);
+});
 
 //Initiallising connection string
 var dbConfig = {
-    user: "mhutti1",
-    password: "D72my5!eysG@z@{'",
-    server: "mhutti1.database.windows.net",
-    database: "justpostme-main",
+    user: process.env.USERNAME,
+    password: process.env.PASSWORD,
+    server: process.env.SERVER,
+    database: process.env.DATABASE,
 
     options: {
         encrypt: true

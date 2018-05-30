@@ -20,9 +20,14 @@
   },
   "homepage": "https://github.com/OmicronLabs/justpostme#readme",
   "dependencies": {
+    "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "global": "^4.3.2",
     "mssql": "^4.1.0",
-    "serve": "^7.1.2"
+    "serve": "^7.1.2",
+    "tedious": "^2.6.1"
+  },
+  "devDependencies": {
+    "node-env-run": "^3.0.2"
   }
 }
