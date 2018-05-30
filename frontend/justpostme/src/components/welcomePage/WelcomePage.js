@@ -5,7 +5,6 @@ import styled, { CSS } from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-
 import { Link, withRouter } from "react-router-dom";
 
 import {
@@ -13,13 +12,11 @@ import {
   RoundButton,
   TopMenuButton
 } from "../common/Buttons";
-
 import { Box, BoxWrapper } from "../common/Box";
-
 import { SimpleFooter, FooterButton, GitHubFooter } from "../common/Footer";
-
 import background from "../../media/LoginBackground.svg";
 import logo from "../../media/logo-white.png";
+import type { User } from "../../containers/welcomePage/WelcomePageContainer";
 
 const LogoWhite = styled.img`
   transform: scale(0.6, 0.6);
@@ -102,17 +99,22 @@ const WelcomePageBox = Box.extend`
 `;
 
 const responseFacebook = (response, history, addUser) => {
+  const user = {
+    userID: response.id,
+    accessToken: response.accessToken,
+    email: response.email,
+    expiresIn: response.expiresIn
+  };
+
   response &&
     response.id &&
-    addUser(response.id, response.accessToken) &&
-    addUser(response.id, response.accessToken) &&
+    addUser(user) &&
     history.push("/dashboard/managed");
 };
 
 type Props = {
   history: Object,
-  addUser: (userID: string, accessToken: string) => void,
-  addUserToServer: (userID: string, accessToken: string) => void
+  addUser: (user: User) => void
 };
 
 const Welcome = (props: Props) => {

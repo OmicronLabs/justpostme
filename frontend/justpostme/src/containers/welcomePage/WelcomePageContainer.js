@@ -1,10 +1,21 @@
 import { connect } from "react-redux";
-import { addUser } from "../../actions/user";
+import { addUser, postUserToServer } from "../../actions/user";
+
 import WelcomePage from "../../components/welcomePage/WelcomePage";
 
+type User = {
+  userID: string,
+  accessToken: string,
+  expiresIn: string,
+  email: string
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  addUser: (userID, userToken) => dispatch(addUser(userID, userToken)),
-  addUserToServer: (userID, userToken) => {}
+  addUser: user => {
+    console.log(user);
+    dispatch(addUser(user.userID, user.accessToken));
+    postUserToServer(user)(dispatch);
+  }
 });
 
 export default connect(null, mapDispatchToProps)(WelcomePage);
