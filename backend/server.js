@@ -71,7 +71,7 @@ app.get("/backend/user", function(req , res){
 
 //POST API
 app.post("/backend/user", function(req , res){
-                var query = "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES (" + parseInt(req.param('userid')) + ", " + parseInt(req.param('userAccessToken')) + " , '"+ req.param('email')  + "', " + parseInt(req.param('expiresIn')) + ")";
+                var query = "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES (" + req.param('userid') + ", " + req.param('userAccessToken') + " , '"+ req.param('email')  + "', " + req.param('expiresIn') + ")";
                 executeQuery (res, query);
 });
 
