@@ -1,4 +1,5 @@
 pipeline {
+  def app
   agent {
     docker {
       image 'node'
@@ -22,7 +23,7 @@ yarn run build'''
     }
     stage('Deploy') {
       steps {
-        app = docker.build("getintodevops/hellonode")
+        app = docker.build("justpostme/main")
         archiveArtifacts 'frontend/justpostme/build/**/*.*, Dockerfile'
       }
     }
