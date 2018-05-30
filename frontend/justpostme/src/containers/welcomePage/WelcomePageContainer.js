@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { addUser, postUserToServer } from "../../actions/user";
+import { addUser, postUserToServer, logIn } from "../../actions/user";
 
 import WelcomePage from "../../components/welcomePage/WelcomePage";
 
@@ -16,6 +16,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(addUser(user.userID, user.accessToken, user.name));
     postUserToServer(user)(dispatch);
     return user;
+  },
+  logIn: () => {
+    dispatch(logIn());
   }
 });
 

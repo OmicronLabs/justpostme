@@ -11,15 +11,19 @@ export const addUser = (userID: string, userToken: string, name: string) => ({
   name
 });
 
+export const logIn = () => ({
+  type: "LOG_IN"
+});
+
 export const postUserBegin = () => ({
   type: POST_USER_BEGIN
 });
 
-export const postUserSuccess = pages => ({
+export const postUserSuccess = () => ({
   type: POST_USER_SUCCESS
 });
 
-export const postUserError = error => ({
+export const postUserError = (error: string) => ({
   type: POST_USER_ERROR,
   payload: { error }
 });
@@ -52,7 +56,7 @@ export function postUserToServer(user: User) {
         dispatch(postUserSuccess());
         return json.pages;
       })
-      .catch(error => dispatch(postUserError()));
+      .catch(error => dispatch(postUserError(error)));
   };
 }
 

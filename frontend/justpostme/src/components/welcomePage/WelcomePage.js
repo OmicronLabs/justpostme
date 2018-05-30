@@ -98,24 +98,25 @@ const WelcomePageBox = Box.extend`
   flex-direction: column;
 `;
 
-const responseFacebook = (response, history, addUser) => {
-  const user = {
-    userID: response.id,
-    accessToken: response.accessToken,
-    email: response.email,
-    expiresIn: response.expiresIn,
-    name: response.first_name
-  };
-
-  response &&
-    response.id &&
-    addUser(user) &&
-    history.push("/dashboard/managed");
+const responseFacebook = (response, history, addUser, logIn) => {
+  if (response && response.id) {
+    const user = {
+      userID: response.id,
+      accessToken: response.accessToken,
+      email: response.email,
+      expiresIn: response.expiresIn,
+      name: response.first_name
+    };
+    addUser(user);
+    logIn();
+    history.push("/dashboard");
+  }
 };
 
 type Props = {
   history: Object,
-  addUser: (user: User) => void
+  addUser: (user: User) => void,
+  login: () => void
 };
 
 const Welcome = (props: Props) => {
@@ -147,7 +148,12 @@ const Welcome = (props: Props) => {
               </LargeThemedButton>
             )}
             callback={response =>
-              responseFacebook(response, props.history, props.addUser)
+              responseFacebook(
+                response,
+                props.history,
+                props.addUser,
+                props.logIn
+              )
             }
           />
         </WelcomePageBox>
