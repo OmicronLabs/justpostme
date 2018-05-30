@@ -6,6 +6,9 @@ var app = express();
 
 // Body Parser Middleware
 app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 //CORS Middleware
 app.use(function (req, res, next) {
@@ -27,28 +30,34 @@ var dbConfig = {
     user: "mhutti1",
     password: "D72my5!eysG@z@{'",
     server: "mhutti1.database.windows.net",
-    database: "justpostme-main"
+    database: "justpostme-main",
+
+    options: {
+        encrypt: true
+    }
 };
 
 //Function to connect to database and execute query
-var  executeQuery = function(res, query) {             
+var  executeQuery = function(res, query) {      
      sql.connect(dbConfig, function (err) {
          if (err) {   
             console.log("Error while connecting database :- " + err);
             res.send(err);
+            sql.close();
         }
         else {
             // create Request object
             var request = new sql.Request();
             // query to the database
-            request.query(query, function (err, res) {
+            request.query(query, function (err, qres) {
                 if (err) {
                     console.log("Error while querying database :- " + err);
                     res.send(err);
                 }
                 else {
-                    res.send(res);
+                    res.send(qres);
                 }
+                sql.close();
             });
         }
     }); 
@@ -56,13 +65,13 @@ var  executeQuery = function(res, query) {
 
 //GET API
 app.get("/backend/user", function(req , res){
-                var query = "select * from users";
+                var query = "select * from [users]";
                 executeQuery (res, query);
 });
 
 //POST API
- app.post("/backend/user", function(req , res){
-                var query = "INSERT INTO users (userid, email, userAccessToken, expiresIn) VALUES (req.body.userid, req.body.email, req.body.userAccessToken, req.body.expiresIn);
+app.post("/backend/user", function(req , res){
+                var query = "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES (" + parseInt(req.param('userid')) + ", " + parseInt(req.param('userAccessToken')) + " , '"+ req.param('email')  + "', " + parseInt(req.param('expiresIn')) + ")";
                 executeQuery (res, query);
 });
 

@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/OmicronLabs/justpostme/issues"
   },
-  "homepage": "https://github.com/OmicronLabs/justpostme#readme"
+  "homepage": "https://github.com/OmicronLabs/justpostme#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mssql": "^4.1.0"
+  }
 }
