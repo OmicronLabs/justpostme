@@ -23,8 +23,8 @@ yarn run build'''
     }
     stage('Deploy') {
       steps {
-        app = docker.build("justpostme/main")
         archiveArtifacts 'frontend/justpostme/build/**/*.*, Dockerfile'
+        sh ‘ssh mhutti1@build.mhutti1.eu mkdir test’
       }
     }
     stage('Cleanup') {
