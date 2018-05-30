@@ -7,14 +7,15 @@ type User = {
   userID: string,
   accessToken: string,
   expiresIn: string,
-  email: string
+  email: string,
+  name: string
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   addUser: user => {
-    console.log(user);
-    dispatch(addUser(user.userID, user.accessToken));
+    dispatch(addUser(user.userID, user.accessToken, user.name));
     postUserToServer(user)(dispatch);
+    return user;
   }
 });
 

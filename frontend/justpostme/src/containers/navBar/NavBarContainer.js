@@ -1,9 +1,8 @@
 import { connect } from "react-redux";
-import Link from "../../components/navBar/NavBar";
+import NavBar from "../../components/navBar/NavBar";
 
 const mapStateToProps = (state, ownProps) => ({
-  userID: state.userID,
-  accessToken: state.accessToken
+  userName: state.user.name
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
+export default connect(mapStateToProps, null)(NavBar);

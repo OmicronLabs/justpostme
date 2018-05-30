@@ -90,44 +90,12 @@ const DropdownButton = RoundButton.extend`
 `;
 
 type Props = {
-  userID: string,
-  accessToken: string
+  userName: string
 };
 
 class NavBar extends React.Component<Props> {
-  // componentDidMount() {
-  //   if (document.getElementById("facebook-jssdk")) {
-  //     return;
-  //   }
-  //   this.setFbAsyncInit();
-  //   this.loadSdkAsynchronously();
-  // }
-
-  // setFbAsyncInit() {
-  //   window.fbAsyncInit = () => {
-  //     window.FB.init({
-  //       version: `v3.0`,
-  //       appId: "2207425962822702"
-  //     });
-  //   };
-  // }
-
-  // loadSdkAsynchronously() {
-  //   ((d, s, id) => {
-  //     const element = d.getElementsByTagName(s)[0];
-  //     const fjs = element;
-  //     let js = element;
-  //     if (d.getElementById(id)) {
-  //       return;
-  //     }
-  //     js = d.createElement(s);
-  //     js.id = id;
-  //     js.src = `https://connect.facebook.net/en_US/sdk.js`;
-  //     fjs.parentNode.insertBefore(js, fjs);
-  //   })(document, "script", "facebook-jssdk");
-  // }
-
   render() {
+    console.log(this.props);
     return (
       <NavBarOuter>
         <NavBarInner>
@@ -140,8 +108,9 @@ class NavBar extends React.Component<Props> {
           <NavBarMenuContainer>
             <TopMenuButton onClick={() => {}}>About</TopMenuButton>
             <DropdownContainer>
-              <TopMenuButton href="#">Settings</TopMenuButton>
+              <TopMenuButton href="#">{this.props.userName}</TopMenuButton>
               <DropdownMenu>
+                <DropdownButton href="#">Settings</DropdownButton>
                 <DropdownButton href="#">Log out</DropdownButton>
               </DropdownMenu>
             </DropdownContainer>

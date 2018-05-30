@@ -1,6 +1,7 @@
 const initialState = {
   id: null,
   token: null,
+  name: null,
   loading: false,
   error: null
 };
@@ -8,13 +9,12 @@ const initialState = {
 const user = (state = initialState, action) => {
   switch (action.type) {
     case "ADD_USER":
-      return [
+      return {
         ...state,
-        {
-          id: action.userID,
-          token: action.userToken
-        }
-      ];
+        id: action.userID,
+        token: action.userToken,
+        name: action.name
+      };
     case "FETCH_UNMANAGED_BEGIN":
       return {
         ...state,

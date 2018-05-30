@@ -4,7 +4,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-import NavBar from "../../components/navBar/NavBar";
+import NavBarContainer from "../../containers/navBar/NavBarContainer";
 import SideBar from "../../components/sideBar/SideBar";
 import MyPagesSection from "./MyPagesSection";
 
@@ -30,7 +30,7 @@ class DashboardPage extends React.Component<Props> {
   render() {
     return (
       <DashboardWrapper>
-        <NavBar />
+        <NavBarContainer />
         <DashboardSidebarWrapper>{this.props.children}</DashboardSidebarWrapper>
       </DashboardWrapper>
     );

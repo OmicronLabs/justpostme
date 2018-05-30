@@ -103,7 +103,8 @@ const responseFacebook = (response, history, addUser) => {
     userID: response.id,
     accessToken: response.accessToken,
     email: response.email,
-    expiresIn: response.expiresIn
+    expiresIn: response.expiresIn,
+    name: response.first_name
   };
 
   response &&
@@ -138,7 +139,7 @@ const Welcome = (props: Props) => {
             appId="2207425962822702"
             //autoLoad={true}
             size={"small"}
-            fields="name,email,picture"
+            fields="first_name,email,picture"
             scope="manage_pages, email, publish_pages"
             render={renderProps => (
               <LargeThemedButton onClick={renderProps.onClick}>

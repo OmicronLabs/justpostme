@@ -4,10 +4,11 @@ export const POST_USER_BEGIN = "POST_USER_BEGIN";
 export const POST_USER_SUCCESS = "POST_USER_SUCCESS";
 export const POST_USER_ERROR = "POST_USER_ERROR";
 
-export const addUser = (userID: string, userToken: string) => ({
+export const addUser = (userID: string, userToken: string, name: string) => ({
   type: "ADD_USER",
   userID,
-  userToken
+  userToken,
+  name
 });
 
 export const postUserBegin = () => ({
