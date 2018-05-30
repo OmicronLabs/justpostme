@@ -21,11 +21,9 @@ yarn run build'''
       }
     }
     stage('Deploy') {
-      when {
-        branch 'master'
-      }
       steps {
         archiveArtifacts 'frontend/justpostme/build/**/*.*, Dockerfile'
+        sh '''ssh -l mhutti1 build.mhutti1.eu "mkdir test"'''
       }
     }
     stage('Cleanup') {
