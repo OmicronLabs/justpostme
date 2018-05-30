@@ -25,6 +25,7 @@ yarn run build'''
         branch 'master'
       }
       steps {
+        sh 'docker build -t justpostme/main .'
         archiveArtifacts 'frontend/justpostme/build/**/*.*, Dockerfile'
       }
     }
