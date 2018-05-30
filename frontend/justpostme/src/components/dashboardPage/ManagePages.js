@@ -59,8 +59,8 @@ const RouteTabs = (props: RouteTabsProps) => (
             alignItems: "center"
           }}
           activeStyle={{
-            color: "rgb(249, 60, 102)",
-            borderBottom: "3px solid rgb(249, 60, 102)",
+            color: "rgb(76,175,80)",
+            borderBottom: "3px solid rgb(76,175,80)",
             width: "150px",
             height: "60px",
             display: "flex",

@@ -1,19 +1,15 @@
 //@flow
 
 import React, { Component } from "react";
-import styled, { CSS } from "styled-components";
+import styled from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { Link, withRouter } from "react-router-dom";
 
-import {
-  LargeThemedButton,
-  RoundButton,
-  TopMenuButton
-} from "../common/Buttons";
+import { LargeThemedButton, TopMenuButton } from "../common/Buttons";
 import { Box, BoxWrapper } from "../common/Box";
-import { SimpleFooter, FooterButton, GitHubFooter } from "../common/Footer";
+import { SimpleFooter, GitHubFooter } from "../common/Footer";
 import background from "../../media/LoginBackground.svg";
 import logo from "../../media/logo-white.png";
 import type { User } from "../../containers/welcomePage/WelcomePageContainer";
@@ -57,7 +53,7 @@ const FrontDoorRelative = styled.div`
 `;
 
 const FrontDoorBackgroundTop = styled.div`
-  background: linear-gradient(to right, #e91e63, #ff5722);
+  background: linear-gradient(to right, #cddc39, #4caf50);
   position: absolute;
   width: 100%;
   left: 0;

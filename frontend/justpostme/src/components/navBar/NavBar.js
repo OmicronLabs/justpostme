@@ -1,10 +1,10 @@
 //@flow
 
 import React from "react";
-import styled, { CSS } from "styled-components";
-import { RoundButton, TopMenuButton } from "../common/Buttons";
+import styled from "styled-components";
+import { RoundButton, TopMenuButton, DropdownButton } from "../common/Buttons";
 
-import navBarImage from "../../media/banner-bg-2.png";
+import navBarImage from "../../media/banner-bg-3.png";
 import logoWhite from "../../media/logo-white.png";
 
 const LogoWhite = styled.img`
@@ -66,26 +66,20 @@ const DropdownMenu = styled.div`
   background: white;
   width: 120px;
   min-width: 120px;
-  height: 45px;
   box-shadow: 5px 5px 19px 3px rgba(126, 149, 168, 0.2);
   z-index: 3;
   border-radius: 3px;
 `;
 
 const DropdownContainer = styled.div`
+  max-width: 120px;
+  padding-left: 0px
+  width: 120px;
   &:hover ${DropdownMenu} {
     display: flex;
     flex-direction: column;
     align-content: center;
-    justify-content: space-around;
-  }
-`;
-
-const DropdownButton = RoundButton.extend`
-  border: 0px;
-  color: gray;
-  &:hover {
-    color: darkgray;
+    justify-content: space-evenly;
   }
 `;
 
