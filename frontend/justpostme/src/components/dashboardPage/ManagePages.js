@@ -87,8 +87,6 @@ const tabBarNavRoutes = [
   { to: "/dashboard/add", name: "Add Pages" }
 ];
 
-//TODO: not with empty list
-
 class ManagePages extends React.Component<Props> {
   render() {
     return (
