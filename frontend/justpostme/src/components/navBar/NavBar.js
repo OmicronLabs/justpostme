@@ -46,14 +46,47 @@ const NavBarHomeButton = styled.a`
 
 const NavBarContainer = styled.div`
   max-height: 100%;
+  height: 70px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
 
+const NavBarMenuContainer = NavBarContainer.extend`
+  margin-top: 12px;
+`;
+
 const NavBarLogoContainer = NavBarContainer.extend`
   height: 70px;
   justify-content: flex-start;
+`;
+
+const DropdownMenu = styled.div`
+  display: none;
+  background: white;
+  width: 120px;
+  min-width: 120px;
+  height: 45px;
+  box-shadow: 5px 5px 19px 3px rgba(126, 149, 168, 0.2);
+  z-index: 3;
+  border-radius: 3px;
+`;
+
+const DropdownContainer = styled.div`
+  &:hover ${DropdownMenu} {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-around;
+  }
+`;
+
+const DropdownButton = RoundButton.extend`
+  border: 0px;
+  color: gray;
+  &:hover {
+    color: darkgray;
+  }
 `;
 
 type Props = {
@@ -104,10 +137,15 @@ class NavBar extends React.Component<Props> {
               <HeaderLogoText>justpost.me</HeaderLogoText>
             </NavBarLogoContainer>
           </NavBarHomeButton>
-          <NavBarContainer>
+          <NavBarMenuContainer>
             <TopMenuButton onClick={() => {}}>About</TopMenuButton>
-            <TopMenuButton href="#">Settings</TopMenuButton>
-          </NavBarContainer>
+            <DropdownContainer>
+              <TopMenuButton href="#">Settings</TopMenuButton>
+              <DropdownMenu>
+                <DropdownButton href="#">Log out</DropdownButton>
+              </DropdownMenu>
+            </DropdownContainer>
+          </NavBarMenuContainer>
         </NavBarInner>
       </NavBarOuter>
     );
