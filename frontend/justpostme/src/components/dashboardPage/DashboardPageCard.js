@@ -109,20 +109,6 @@ export const GeneratedCard = (props: CardProps) => (
   </PageBox>
 );
 
-export const ExampleCard = () => (
-  <PageBox>
-    <PageImage src={testBackground} />
-    <PageTextContainer>
-      <PageName>
-        STi (See Tits immediately subarutechincainternationalfanclub)
-      </PageName>
-    </PageTextContainer>
-    <PageInfoContainer>
-      <PageInfoItem>queued: x</PageInfoItem>
-      <PageInfoItem>scheduled: x</PageInfoItem>
-    </PageInfoContainer>
-  </PageBox>
-);
 export const AddPageCard = () => (
   <BlankPageBox>
     <IconButton>

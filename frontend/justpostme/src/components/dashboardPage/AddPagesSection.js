@@ -2,6 +2,7 @@
 
 import React from "react";
 import { PagesDisplay } from "./PagesDisplay";
+import type { CardProps } from "./DashboardPageCard";
 import { fetchUnmanagedPages } from "../../actions/unmanagedPages";
 
 type Props = {
