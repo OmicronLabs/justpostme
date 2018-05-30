@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { CSS } from "styled-components";
+import styled from "styled-components";
 
 import "font-awesome/css/font-awesome.min.css";
 import { IconButton } from "./Buttons";

@@ -1,22 +1,18 @@
 //@flow
 
 import React, { Component } from "react";
-import styled, { CSS } from "styled-components";
+import styled from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 import { Link, withRouter } from "react-router-dom";
 
-import {
-  LargeThemedButton,
-  RoundButton,
-  TopMenuButton
-} from "../common/Buttons";
+import { LargeThemedButton, TopMenuButton } from "../common/Buttons";
 
 import { Box, BoxWrapper } from "../common/Box";
 
-import { SimpleFooter, FooterButton, GitHubFooter } from "../common/Footer";
+import { SimpleFooter, GitHubFooter } from "../common/Footer";
 
 import background from "../../media/LoginBackground.svg";
 import logo from "../../media/logo-white.png";

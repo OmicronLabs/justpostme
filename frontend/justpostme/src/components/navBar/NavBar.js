@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import styled, { CSS } from "styled-components";
+import styled from "styled-components";
 import { RoundButton, TopMenuButton } from "../common/Buttons";
 
 import navBarImage from "../../media/banner-bg-2.png";

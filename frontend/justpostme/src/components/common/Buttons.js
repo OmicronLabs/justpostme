@@ -1,5 +1,4 @@
-import React from "react";
-import styled, { CSS } from "styled-components";
+import styled from "styled-components";
 
 export const RoundButton = styled.a`
   text-decoration: none;

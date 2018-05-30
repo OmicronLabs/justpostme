@@ -6,7 +6,6 @@ import styled from "styled-components";
 
 import { Box } from "../common/Box";
 
-import testBackground from "../../media/test_image.jpg";
 import { IconButton } from "../common/Buttons";
 
 const DashboardWrapper = styled.div`
