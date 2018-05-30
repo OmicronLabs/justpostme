@@ -116,7 +116,7 @@ const responseFacebook = (response, history, addUser, logIn) => {
 type Props = {
   history: Object,
   addUser: (user: User) => void,
-  login: () => void
+  logIn: () => void
 };
 
 const Welcome = (props: Props) => {
