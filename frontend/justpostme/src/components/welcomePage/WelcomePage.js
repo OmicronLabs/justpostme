@@ -56,7 +56,7 @@ const FrontDoorRelative = styled.div`
 `;
 
 const FrontDoorBackgroundTop = styled.div`
-  background: linear-gradient(to right, #e91e63, #ff5722);
+  background: linear-gradient(to right, #cddc39, #4caf50);
   position: absolute;
   width: 100%;
   left: 0;

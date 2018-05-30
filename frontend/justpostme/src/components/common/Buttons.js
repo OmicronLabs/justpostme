@@ -27,13 +27,30 @@ export const IconButton = styled.a`
   }
 `;
 
-export const LargeThemedButton = RoundButton.extend`
-  color: rgb(255, 87, 34);
-  font-size: 1.3em;
-  border-color: rgb(255, 87, 34);
+export const DropdownButton = RoundButton.extend`
+  border: 0px;
+  margin: 0em;
+  color: gray;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: space-around;
+  border-radius: 0px;
   &:hover {
-    color: rgba(255, 87, 34, 0.7);
-    border: 2px solid rgba(255, 87, 34, 0.7);
+    color: black;
+    background: whitesmoke;
+    border-radius: 3px;
+  }
+`;
+
+export const LargeThemedButton = RoundButton.extend`
+  color: rgb(76, 175, 80);
+  font-size: 1.3em;
+  border-color: rgb(76, 175, 80);
+  &:hover {
+    color: rgba(76, 175, 80, 0.7);
+    border: 2px solid rgba(76, 175, 80, 0.7);
     cursor: pointer;
   }
 `;
