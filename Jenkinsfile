@@ -23,7 +23,7 @@ yarn run build'''
     stage('Deploy') {
       steps {
         archiveArtifacts 'frontend/justpostme/build/**/*.*, Dockerfile'
-        sh 'ssh mhutti1@build.mhutti1.eu mkdir test'
+        sh 'ssh build.mhutti1.eu mkdir test'
       }
     }
     stage('Cleanup') {
