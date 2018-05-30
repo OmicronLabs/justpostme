@@ -22,7 +22,7 @@ yarn run build'''
     }
     stage('Deploy') {
       steps {
-        sh 'docker build -t justpostme/main .'
+        app = docker.build("getintodevops/hellonode")
         archiveArtifacts 'frontend/justpostme/build/**/*.*, Dockerfile'
       }
     }
