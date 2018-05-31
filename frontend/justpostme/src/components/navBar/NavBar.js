@@ -1,10 +1,10 @@
 //@flow
 
 import React from "react";
-import styled, { CSS } from "styled-components";
-import { RoundButton, TopMenuButton } from "../common/Buttons";
+import styled from "styled-components";
+import { RoundButton, TopMenuButton, DropdownButton } from "../common/Buttons";
 
-import navBarImage from "../../media/banner-bg-2.png";
+import navBarImage from "../../media/banner-bg-3.png";
 import logoWhite from "../../media/logo-white.png";
 
 const LogoWhite = styled.img`
@@ -66,68 +66,30 @@ const DropdownMenu = styled.div`
   background: white;
   width: 120px;
   min-width: 120px;
-  height: 45px;
   box-shadow: 5px 5px 19px 3px rgba(126, 149, 168, 0.2);
   z-index: 3;
   border-radius: 3px;
 `;
 
 const DropdownContainer = styled.div`
+  max-width: 120px;
+  padding-left: 0px
+  width: 120px;
   &:hover ${DropdownMenu} {
     display: flex;
     flex-direction: column;
     align-content: center;
-    justify-content: space-around;
-  }
-`;
-
-const DropdownButton = RoundButton.extend`
-  border: 0px;
-  color: gray;
-  &:hover {
-    color: darkgray;
+    justify-content: space-evenly;
   }
 `;
 
 type Props = {
-  userID: string,
-  accessToken: string
+  userName: string
 };
 
 class NavBar extends React.Component<Props> {
-  // componentDidMount() {
-  //   if (document.getElementById("facebook-jssdk")) {
-  //     return;
-  //   }
-  //   this.setFbAsyncInit();
-  //   this.loadSdkAsynchronously();
-  // }
-
-  // setFbAsyncInit() {
-  //   window.fbAsyncInit = () => {
-  //     window.FB.init({
-  //       version: `v3.0`,
-  //       appId: "2207425962822702"
-  //     });
-  //   };
-  // }
-
-  // loadSdkAsynchronously() {
-  //   ((d, s, id) => {
-  //     const element = d.getElementsByTagName(s)[0];
-  //     const fjs = element;
-  //     let js = element;
-  //     if (d.getElementById(id)) {
-  //       return;
-  //     }
-  //     js = d.createElement(s);
-  //     js.id = id;
-  //     js.src = `https://connect.facebook.net/en_US/sdk.js`;
-  //     fjs.parentNode.insertBefore(js, fjs);
-  //   })(document, "script", "facebook-jssdk");
-  // }
-
   render() {
+    console.log(this.props);
     return (
       <NavBarOuter>
         <NavBarInner>
@@ -140,8 +102,9 @@ class NavBar extends React.Component<Props> {
           <NavBarMenuContainer>
             <TopMenuButton onClick={() => {}}>About</TopMenuButton>
             <DropdownContainer>
-              <TopMenuButton href="#">Settings</TopMenuButton>
+              <TopMenuButton href="#">{this.props.userName}</TopMenuButton>
               <DropdownMenu>
+                <DropdownButton href="#">Settings</DropdownButton>
                 <DropdownButton href="#">Log out</DropdownButton>
               </DropdownMenu>
             </DropdownContainer>

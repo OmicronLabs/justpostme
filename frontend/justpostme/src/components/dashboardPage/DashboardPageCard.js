@@ -6,7 +6,6 @@ import styled from "styled-components";
 
 import { Box } from "../common/Box";
 
-import testBackground from "../../media/test_image.jpg";
 import { IconButton } from "../common/Buttons";
 
 const DashboardWrapper = styled.div`
@@ -109,20 +108,6 @@ export const GeneratedCard = (props: CardProps) => (
   </PageBox>
 );
 
-export const ExampleCard = () => (
-  <PageBox>
-    <PageImage src={testBackground} />
-    <PageTextContainer>
-      <PageName>
-        STi (See Tits immediately subarutechincainternationalfanclub)
-      </PageName>
-    </PageTextContainer>
-    <PageInfoContainer>
-      <PageInfoItem>queued: x</PageInfoItem>
-      <PageInfoItem>scheduled: x</PageInfoItem>
-    </PageInfoContainer>
-  </PageBox>
-);
 export const AddPageCard = () => (
   <BlankPageBox>
     <IconButton>
