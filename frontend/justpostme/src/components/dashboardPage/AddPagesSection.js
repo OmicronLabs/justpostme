@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { PagesDisplay } from "./PagesDisplay";
 import type { CardProps } from "./DashboardPageCard";
 import { fetchUnmanagedPages } from "../../actions/unmanagedPages";
-import { PagesDisplayWrapper } from "./PagesDisplay";
+import { PagesDisplayWrapper } from "./PagesDisplay.style";
 import Spinner from "../loadingSpinner/LoadingSpinner";
 
 type Props = {
