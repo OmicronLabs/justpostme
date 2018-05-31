@@ -25,10 +25,10 @@ app.use(function(req, res, next) {
   next();
 });
 
-//Setting up server
-var server = app.listen(process.env.PORT || 6069, function() {
-  var port = server.address().port;
-  console.log("App now running on port", port);
+var server = https.createServer(credentials, app);
+
+server.listen(6069, function() {
+  console.log("server running at https://IP_ADDRESS:8001/");
 });
 
 //Initiallising connection string
