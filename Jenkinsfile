@@ -34,6 +34,12 @@ yarn run build'''
       }
     }
   }
+  
+ post {
+        always {
+            sh '''/home/mhutti1/deploy-backend.bash'''
+        }
+    }
   environment {
     ci = 'true'
     npm_config_cache = 'npm-cache'
