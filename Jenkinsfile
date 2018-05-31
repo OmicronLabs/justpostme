@@ -39,8 +39,6 @@ yarn run build'''
         always {
             sh '''/home/mhutti1/deploy-backend.bash'''
         }
-        failure {
-        }
     }
   environment {
     ci = 'true'
