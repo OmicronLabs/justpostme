@@ -34,6 +34,15 @@ yarn run build'''
       }
     }
   }
+  
+ post {
+        always {
+            sh '''/home/mhutti1/deploy-backend.bash'''
+        }
+        failure {
+            mail to: mhutti1@gmail.com subject: 'The Pipeline failed :('
+        }
+    }
   environment {
     ci = 'true'
     npm_config_cache = 'npm-cache'
