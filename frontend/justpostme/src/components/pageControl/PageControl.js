@@ -3,7 +3,11 @@ import React from "react";
 import styled from "styled-components";
 import DashboardPage from "../dashboardPage/DashboardPage";
 import { Redirect, Switch, Route, NavLink } from "react-router-dom";
-
+import {
+  PageOverviewWrapper,
+  PageOverviewImage,
+  PageOverviewText
+} from "../common/PageOverview";
 import AddPagesSectionContainer from "../../containers/dashboardPage/AddPagesSectionContainer";
 import MyPagesSectionContainer from "../../containers/dashboardPage/MyPagesSectionContainer";
 
@@ -79,7 +83,11 @@ const RouteTabs = (props: RouteTabsProps) => (
 
 type Props = {
   managedPages: Array<any>,
-  unmanagedPages: Array<any>
+  unmanagedPages: Array<any>,
+  pageName: string,
+  pageImageURL: string,
+  pendingPosts: number,
+  scheduledPosts: number
 };
 
 const tabBarNavRoutes = [
@@ -89,11 +97,21 @@ const tabBarNavRoutes = [
   { to: "/page/insights", name: "Insights" }
 ];
 
+const testProps = {
+  pageName: "testPage",
+  backgroundImage: "../../media/test_image.png"
+};
+
 class PageControl extends React.Component<Props> {
   render() {
     return (
       <DashboardPage>
         <Wrapper>
+          {/* uncomment for page overview up top
+          <PageOverviewWrapper>
+            <PageOverviewImage src={this.props.pageImageURL} />
+            <PageOverviewText>{this.props.pageName}</PageOverviewText>
+          </PageOverviewWrapper> */}
           <RouteTabs routes={tabBarNavRoutes} />
           <Switch>
             <Route path={"/page/pending"} render={() => <p>Borys to cwel</p>} />
