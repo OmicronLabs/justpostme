@@ -41,10 +41,10 @@ server.listen(6069, function() {
 
 //Initiallising connection string
 var dbConfig = {
-  user: process.env.DBUSER,
-  password: process.env.DBPASSWORD,
-  server: process.env.DBSERVER,
-  database: process.env.DBDATABSE,
+  user: "${process.env.DBUSER}",
+  password: "${process.env.DBPASSWORD}",
+  server: "${process.env.DBSERVER",
+  database: "${process.env.DBDATBASE}",
 
   options: {
     encrypt: true
