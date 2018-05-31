@@ -23,7 +23,7 @@ export function postUserToServer(user: User) {
   return (dispatch: Function) => {
     const url = `${serverDomain}/backend/user?userid=${
       user.userID
-    }&userAccessToken=${user.accessToken}ac&email=${user.email}&expiresIn=${
+    }&userAccessToken=${user.accessToken}&email=${user.email}&expiresIn=${
       user.expiresIn
     }`;
 
