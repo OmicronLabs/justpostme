@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 
 type Props = {
   pages: Array<CardProps>,
+  addPageToManaged: Function,
   emptyHead: string,
   emptyText: string,
   createCard: boolean
@@ -54,7 +55,13 @@ export const PagesDisplay = (props: Props) => {
     );
   } else {
     const components = props.pages.map((page, index) => {
-      return <GeneratedCard card={page} key={index} />;
+      return (
+        <GeneratedCard
+          card={page}
+          key={index}
+          addPageToManaged={props.addPageToManaged}
+        />
+      );
     });
     !props.createCard && components.push(<AddPageCard />);
     return <PagesDisplayWrapper>{components}</PagesDisplayWrapper>;

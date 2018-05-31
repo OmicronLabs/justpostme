@@ -15,8 +15,9 @@ import {
   CreatePageIcon
 } from "./DashboardPageCard.style";
 
-export type CardProps = {
-  card: Card
+export type Props = {
+  card: Card,
+  addPageToManaged: Function
 };
 
 export type Card = {
@@ -27,7 +28,7 @@ export type Card = {
   pageID: string
 };
 
-const GeneratedCardSimple = (props: CardProps) => {
+const GeneratedCardSimple = (props: Props) => {
   const {
     backgroundImgURL,
     name,
@@ -36,7 +37,12 @@ const GeneratedCardSimple = (props: CardProps) => {
     pageID
   } = props.card;
   return (
-    <PageBox onClick={() => props.history.push(`/page/${pageID}`)}>
+    <PageBox
+      onClick={() => {
+        props.addPageToManaged(pageID);
+        props.history.push(`/page/${pageID}`);
+      }}
+    >
       <PageImage className="image" src={backgroundImgURL} />
       <PageTextContainer>
         <PageName className="name">{name}</PageName>

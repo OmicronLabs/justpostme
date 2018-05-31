@@ -1,13 +1,19 @@
 import { connect } from "react-redux";
-import { addUser } from "../../actions/user";
+import { addToManagedServer } from "../../actions/addManagedPage";
+import { fetchUnmanagedPages } from "../../actions/unmanagedPages";
 import AddPagesSection from "../../components/dashboardPage/AddPagesSection";
 
 const mapStateToProps = state => ({
   pages: state.unmanagedPages.pages,
-  // pages: [{ name: "dsfsdfsd" }],
   loading: state.unmanagedPages.loading,
   error: state.unmanagedPages.error,
   userID: state.userMeta.id
 });
 
-export default connect(mapStateToProps)(AddPagesSection);
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  ...ownProps,
+  addPageToManaged: id => dispatch(addToManagedServer(id)),
+  fetchUnmanagedPages: userId => dispatch(fetchUnmanagedPages(userId))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddPagesSection);
