@@ -3,6 +3,14 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var sql = require("mssql");
 var app = express(); 
+var https = require('https');
+var fs = require('fs');
+
+
+var privateKey  = fs.readFileSync('sslcert/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('sslcert/fullchain.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
 
 // Body Parser Middleware
 app.use(bodyParser.json()); 
@@ -19,16 +27,17 @@ app.use(function (req, res, next) {
     next();
 });
 
-//Setting up server
- var server = app.listen(process.env.PORT || 6069, function () {
-    var port = server.address().port;
-    console.log("App now running on port", port);
- });
+
+var server = https.createServer(credentials, app);
+
+server.listen(6069, function(){
+    console.log("server running at https://IP_ADDRESS:8001/")
+});
 
 //Initiallising connection string
 var dbConfig = {
     user: "mhutti1",
-    password: "D72my5!eysG@z@{'",
+    password: "T6Bcy2MJ+Gm^9SF-",
     server: "mhutti1.database.windows.net",
     database: "justpostme-main",
 
@@ -71,7 +80,7 @@ app.get("/backend/user", function(req , res){
 
 //POST API
 app.post("/backend/user", function(req , res){
-                var query = "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES (" + parseInt(req.param('userid')) + ", " + parseInt(req.param('userAccessToken')) + " , '"+ req.param('email')  + "', " + parseInt(req.param('expiresIn')) + ")";
+                var query = "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES ('" + req.param('userid') + "', '" + req.param('userAccessToken') + "' , '"+ req.param('email')  + "', '" + req.param('expiresIn') + "')";
                 executeQuery (res, query);
 });
 
