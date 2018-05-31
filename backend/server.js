@@ -193,17 +193,22 @@ app.post("/backend/postit", function(req, res) {
 });
 
 var postToFacebook = function(res) {
-  pageId = res.recordset[0].pageId;
+  console.log(res);
+  pageId = res.recordset[0].pageid;
   postText = res.recordset[0].postText;
+  console.log(postText);
 
   var query =
     "SELECT pageAccessToken FROM [pages] where pageId = " + pageId + ";";
 
-  //sql.close();
+  sql.close();
   executeQuery(res, query);
 
-  request(
-    `https://graph.facebook.com/${pageId}/feed?access_token=${userAccessToken}&message=${postText}`,
+  console.log(
+    `https://graph.facebook.com/${pageId}/feed?access_token=EAAfXpGhhzC4BAKxhOQ5JOZAINluzIyFLpgGyjXyra28Pzb1zuuzc6zcMCoYFfCSTmEOJ6pohbLTZAFfzyq68YXiNwFhJLhupuX1QpErhsDc0bUB80tuRODO0Sn9zqJrHPbTUzg4BsOF13MfQou278wJ1AGA9VJWFl8m1HHTJrThZBvw92cwHJTXcJW8MjkphIZCPBiGH3wZDZD&message=${postText}`
+  );
+  request.post(
+    `https://graph.facebook.com/${pageId}/feed?access_token=EAAfXpGhhzC4BAKxhOQ5JOZAINluzIyFLpgGyjXyra28Pzb1zuuzc6zcMCoYFfCSTmEOJ6pohbLTZAFfzyq68YXiNwFhJLhupuX1QpErhsDc0bUB80tuRODO0Sn9zqJrHPbTUzg4BsOF13MfQou278wJ1AGA9VJWFl8m1HHTJrThZBvw92cwHJTXcJW8MjkphIZCPBiGH3wZDZD&message=${postText}`,
     function(error, response, body) {
       body = JSON.parse(body);
       if (!error && response.statusCode == 200) {
