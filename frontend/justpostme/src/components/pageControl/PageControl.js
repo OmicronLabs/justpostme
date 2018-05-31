@@ -4,7 +4,11 @@ import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import DashboardPage from "../dashboardPage/DashboardPage";
 import { Redirect, Switch, Route, NavLink } from "react-router-dom";
-
+import {
+  PageOverviewWrapper,
+  PageOverviewImage,
+  PageOverviewText
+} from "../common/PageOverview";
 import AddPagesSectionContainer from "../../containers/dashboardPage/AddPagesSectionContainer";
 import MyPagesSectionContainer from "../../containers/dashboardPage/MyPagesSectionContainer";
 
@@ -80,8 +84,19 @@ const RouteTabs = (props: RouteTabsProps) => (
 
 type Props = {
   managedPages: Array<any>,
-  unmanagedPages: Array<any>
+  unmanagedPages: Array<any>,
+  pageName: string,
+  pageImageURL: string,
+  pendingPosts: number,
+  scheduledPosts: number
 };
+
+const tabBarNavRoutes = [
+  { to: "/page/pending", name: "Pending" },
+  { to: "/page/approved", name: "Approved" },
+  { to: "/page/moderation", name: "Moderation" },
+  { to: "/page/insights", name: "Insights" }
+];
 
 class PageControl extends React.Component<Props> {
   componentDidMount() {
@@ -102,6 +117,11 @@ class PageControl extends React.Component<Props> {
     return (
       <DashboardPage>
         <Wrapper>
+          {/* uncomment for page overview up top
+          <PageOverviewWrapper>
+            <PageOverviewImage src={this.props.pageImageURL} />
+            <PageOverviewText>{this.props.pageName}</PageOverviewText>
+          </PageOverviewWrapper> */}
           <RouteTabs routes={tabBarNavRoutes} />
           <Switch>
             <Route
