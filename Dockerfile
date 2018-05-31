@@ -7,7 +7,8 @@ WORKDIR /usr/src/app
 COPY frontend/justpostme/build .
 
 EXPOSE 80
-
-RUN yarn add global serve
-
-CMD [ "yarn", "serve", ".", "-l", "80"]
+EXPOSE 443
+ 
+RUN yarn add global serve@6.5.4
+ 
+CMD [ "yarn", "serve", ".", "-p", "443", "-T"]
