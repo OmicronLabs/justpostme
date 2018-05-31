@@ -1,13 +1,11 @@
-//Initiallising node modules
 var express = require("express");
 var app = express(); 
 var https = require('https');
 var fs = require('fs');
-var https = require('https');
 
 
-var privateKey  = fs.readFileSync('/var/cert/privkey.pem', 'utf8');
-var certificate = fs.readFileSync('/var/cert/fullchain.pem', 'utf8');
+var privateKey  = fs.readFileSync('privkey.pem', 'utf8');
+var certificate = fs.readFileSync('fullchain.pem', 'utf8');
 
 var credentials = {key: privateKey, cert: certificate};
 
