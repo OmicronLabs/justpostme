@@ -3,19 +3,22 @@
 import React, { Component } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { createStore } from "redux";
-import rootReducer from "./store";
-import Routes from "./Routes";
+import { createStore, applyMiddleware } from "redux";
+import RoutesContainer from "./RoutesContainer";
+import { PersistGate } from "redux-persist/integration/react";
+import persistedStore from "./store";
 
-const store = createStore(rootReducer);
+const { store, persistor } = persistedStore();
 
 class App extends React.Component<void> {
   render() {
     return (
       <Provider store={store}>
-        <Router>
-          <Route component={Routes} />
-        </Router>
+        <PersistGate loading={null} persistor={persistor}>
+          <Router>
+            <Route component={RoutesContainer} />
+          </Router>
+        </PersistGate>
       </Provider>
     );
   }

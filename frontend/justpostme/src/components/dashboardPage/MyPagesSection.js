@@ -7,7 +7,8 @@ import { fetchManagedPages } from "../../actions/managedPages";
 type Props = {
   pages: Array<CardProps>,
   loading: boolean,
-  error: string
+  error: string,
+  userID: string
 };
 
 const myPagesEmptyHead = "No pages to manage";
@@ -15,8 +16,8 @@ const myPagesEmptyText =
   "Looks like you have not added any managed pages yet. Add pages by clicking the button below.";
 
 class MyPagesSection extends React.Component<Props> {
-  componentWillMount() {
-    fetchManagedPages();
+  componentDidMount() {
+    this.props.dispatch(fetchManagedPages(this.props.userID));
   }
 
   render() {
