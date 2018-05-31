@@ -13,23 +13,12 @@ export const PagesDisplayWrapper = styled.div`
   overflow: scroll;
 `;
 
-export const EmptyPagesDisplayWrapper = PagesDisplayWrapper.extend`
+export const ErrorWrapper = PagesDisplayWrapper.extend`
   height: 70%;
+  width: 100%;
+  margin-top: 50px;
+
   justify-content: center;
   flex-direction: column;
   align-items: center;
-`;
-
-export const EmptyPagesHeader = styled.h1`
-  font-size: 250%;
-  max-width: 80%;
-  color: lightgray;
-`;
-
-export const EmptyPagesText = styled.h4`
-  text-align: center;
-  font-size: 100%;
-  width: 500px;
-  max-width: 80%;
-  color: lightgray;
 `;
