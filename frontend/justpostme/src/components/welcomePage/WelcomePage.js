@@ -84,7 +84,7 @@ const BackgroundShape = styled.img`
   transform: translateY(-99%);
 `;
 
-const WelcomePageBox = Box.extend`
+export const WelcomePageBox = Box.extend`
   padding-top: 3em;
   padding-bottom: 3em;
   margin-bottom: 12em;

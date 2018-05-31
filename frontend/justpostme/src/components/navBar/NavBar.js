@@ -95,11 +95,11 @@ class NavBar extends React.Component<Props> {
         <NavBarInner>
           <NavBarHomeButton>
             <NavBarLogoContainer>
-              <LogoWhite src={logoWhite} />
-              <HeaderLogoText>justpost.me</HeaderLogoText>
+              <LogoWhite className="logo" src={logoWhite} />
+              <HeaderLogoText className="logoText">justpost.me</HeaderLogoText>
             </NavBarLogoContainer>
           </NavBarHomeButton>
-          <NavBarMenuContainer>
+          <NavBarMenuContainer className="navBarMenu">
             <TopMenuButton onClick={() => {}}>About</TopMenuButton>
             <DropdownContainer>
               <TopMenuButton href="#">{this.props.userName}</TopMenuButton>
