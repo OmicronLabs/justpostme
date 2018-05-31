@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generates correct /addcard/ card 1`] = `
+<div
+  className="sc-dnqmqq iXhAvY"
+>
+  <a
+    className="sc-htpNat hvFCZO"
+  >
+    <i
+      className="fa fa-plus sc-VigVT kjYgMT"
+    />
+  </a>
+</div>
+`;
