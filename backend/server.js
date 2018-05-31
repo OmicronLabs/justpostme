@@ -20,7 +20,7 @@ app.use(function (req, res, next) {
 });
 
 //Setting up server
- var server = app.listen(process.env.PORT || 8080, function () {
+ var server = app.listen(process.env.PORT || 6069, function () {
     var port = server.address().port;
     console.log("App now running on port", port);
  });
@@ -74,6 +74,14 @@ app.post("/backend/user", function(req , res){
                 var query = "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES (" + parseInt(req.param('userid')) + ", " + parseInt(req.param('userAccessToken')) + " , '"+ req.param('email')  + "', " + parseInt(req.param('expiresIn')) + ")";
                 executeQuery (res, query);
 });
+
+//POST API
+app.get("/backend/managedpages/:id", function(req , res){
+                var query = "SELECT * from [pages] WHERE userid = " + req.param("id") + " AND managed=1";
+                executeQuery (res, query);
+});
+
+
 
 /*
 //PUT API
