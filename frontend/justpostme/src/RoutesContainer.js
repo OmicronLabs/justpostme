@@ -3,7 +3,7 @@ import Routes from "./Routes";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state, ownProps) => ({
-  loggedIn: state.user.loggedIn
+  loggedIn: state.userMeta.loggedIn
 });
 
 export default connect(mapStateToProps, null)(Routes);

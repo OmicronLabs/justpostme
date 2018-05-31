@@ -42,7 +42,7 @@ export const EmptyPagesDisplay = (props: EmptyProps) => {
           {props.head}
         </EmptyPagesHeader>
         <EmptyPagesText className="emptyText">{props.text}</EmptyPagesText>
-        <Link to="/dashboard/add">
+        <Link to="/pages/add">
           <LargeThemedButton>Add a managed page</LargeThemedButton>
         </Link>
       </EmptyPagesDisplayWrapper>

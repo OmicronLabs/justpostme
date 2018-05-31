@@ -6,7 +6,7 @@ const mapStateToProps = state => ({
   pages: state.unmanagedPages.pages,
   loading: state.unmanagedPages.loading,
   error: state.unmanagedPages.error,
-  userID: state.user.id
+  userID: state.userMeta.id
 });
 
 export default connect(mapStateToProps)(AddPagesSection);

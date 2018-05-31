@@ -7,7 +7,7 @@ import { fetchManagedPages } from "../../actions/managedPages";
 type Props = {
   pages: Array<CardProps>,
   loading: boolean,
-  error: string,
+  error: boolean,
   userID: string,
   dispatch: Function
 };
