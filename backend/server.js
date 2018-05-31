@@ -225,3 +225,12 @@ app.post("/backend/newpost", function(req, res) {
     "')";
   executeQuery(res, query);
 });
+
+//POST API
+app.post("/backend/addtomanaged", function(req, res) {
+  var query =
+    "UPDATE [pages] SET managed = 1 WHERE pageId = '" +
+    req.param("pageid") +
+    "';";
+  executeQuery(res, query);
+});
