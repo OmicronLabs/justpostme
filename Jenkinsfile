@@ -40,7 +40,6 @@ yarn run build'''
             sh '''/home/mhutti1/deploy-backend.bash'''
         }
         failure {
-            mail to: mhutti1@gmail.com subject: 'The Pipeline failed :('
         }
     }
   environment {
