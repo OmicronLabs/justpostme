@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 COPY frontend/justpostme/ .
 COPY /var/cert/ .
 
+
 EXPOSE 80
 EXPOSE 443
  
