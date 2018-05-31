@@ -7,9 +7,9 @@ export const PagesDisplayWrapper = styled.div`
   margin-bottom: 90px;
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column-reverse;
+  flex-direction: row;
   align-content: center;
-  justify-content: space-around;
+  justify-content: flex-start;
   overflow: scroll;
 `;
 
