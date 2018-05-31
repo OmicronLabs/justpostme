@@ -18,7 +18,8 @@ const myPagesEmptyText =
 
 class MyPagesSection extends React.Component<Props> {
   componentDidMount() {
-    this.props.dispatch(fetchManagedPages(this.props.userID));
+    const { dispatch, userID } = this.props;
+    dispatch(fetchManagedPages(userID));
   }
 
   render() {

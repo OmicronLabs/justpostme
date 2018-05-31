@@ -1,5 +1,8 @@
 //@flow
 
+import { serverDomain } from "../const/serverURL";
+import type { User } from "../containers/welcomePage/WelcomePageContainer";
+
 export const POST_USER_BEGIN = "POST_USER_BEGIN";
 export const POST_USER_SUCCESS = "POST_USER_SUCCESS";
 export const POST_USER_ERROR = "POST_USER_ERROR";
@@ -18,11 +21,11 @@ export const postUserError = (error: string) => ({
 
 export function postUserToServer(user: User) {
   return dispatch => {
-    const url = `https://justpostme.tech:6069/backend/user?userid=\"${
+    const url = `${serverDomain}/backend/user?userid=${
       user.userID
-    }\"&userAccessToken=\"${user.accessToken}\"ac&email=\"${
-      user.email
-    }\"&expiresIn=\"${user.expiresIn}\"`;
+    }&userAccessToken=${user.accessToken}ac&email=${user.email}&expiresIn=${
+      user.expiresIn
+    }`;
 
     dispatch(postUserBegin());
     return fetch(url, {

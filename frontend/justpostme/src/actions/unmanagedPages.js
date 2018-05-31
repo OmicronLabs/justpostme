@@ -1,6 +1,8 @@
-export const FETCH_UNMANAGED_BEGIN = "FETCH_MANAGED_BEGIN";
-export const FETCH_UNMANAGED_SUCCESS = "FETCH_MANAGED_SUCCESS";
-export const FETCH_UNMANAGED_ERROR = "FETCH_MANAGED_ERROR";
+import { serverDomain } from "../const/serverURL";
+
+export const FETCH_UNMANAGED_BEGIN = "FETCH_UNMANAGED_BEGIN";
+export const FETCH_UNMANAGED_SUCCESS = "FETCH_UNMANAGED_SUCCESS";
+export const FETCH_UNMANAGED_ERROR = "FETCH_UNMANAGED_ERROR";
 
 export const fetchUnmanagedBegin = () => ({
   type: FETCH_UNMANAGED_BEGIN
@@ -16,15 +18,24 @@ export const fetchUnmanagedError = error => ({
   payload: { error }
 });
 
-export function fetchUnmanagedPages() {
+export function fetchUnmanagedPages(userID: string) {
   return dispatch => {
     dispatch(fetchUnmanagedBegin());
-    return fetch("here the fetch can happen")
+    return fetch(`${serverDomain}/backend/unmanagedpages?id=${userID}`)
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
-        dispatch(fetchUnmanagedSuccess(json.pages));
-        return json.pages;
+        const records = json.recordset;
+        const pages = records.map(record => ({
+          name: record.name,
+          databaseId: record.ID,
+          pageID: record.pageId,
+          pendingPosts: record.pending,
+          scheduledPosts: record.scheduledPosts,
+          backgroundImgURL: null
+        }));
+        dispatch(fetchUnmanagedSuccess(pages));
+        return pages;
       })
       .catch(error => dispatch(fetchUnmanagedError(error)));
   };

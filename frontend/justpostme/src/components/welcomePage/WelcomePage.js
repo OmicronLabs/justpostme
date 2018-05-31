@@ -141,7 +141,6 @@ class Welcome extends React.Component<Props> {
   }
 
   render() {
-    console.log(this.props);
     const { addUser, logIn, posting, error } = this.props;
     return (
       <FrontDoorRelative>

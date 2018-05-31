@@ -19,24 +19,27 @@ export type CardProps = {
 };
 
 export type Card = {
-  pageName: string,
-  backgroundImage: string,
-  scheduled: number,
-  pending: number
+  name: string,
+  backgroundImgURL: string,
+  pendingPosts: number,
+  scheduledPosts: number
 };
 
-export const GeneratedCard = (props: CardProps) => (
-  <PageBox>
-    <PageImage className="image" src={props.card.backgroundImage} />
-    <PageTextContainer>
-      <PageName className="name">{props.card.pageName}</PageName>
-    </PageTextContainer>
-    <PageInfoContainer>
-      <PageInfoItem>pending: x</PageInfoItem>
-      <PageInfoItem>scheduled: x</PageInfoItem>
-    </PageInfoContainer>
-  </PageBox>
-);
+export const GeneratedCard = (props: CardProps) => {
+  const { backgroundImgURL, name, pendingPosts, scheduledPosts } = props.card;
+  return (
+    <PageBox>
+      <PageImage className="image" src={backgroundImgURL} />
+      <PageTextContainer>
+        <PageName className="name">{name}</PageName>
+      </PageTextContainer>
+      <PageInfoContainer>
+        <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
+        <PageInfoItem>{`scheduled: ${scheduledPosts}`}</PageInfoItem>
+      </PageInfoContainer>
+    </PageBox>
+  );
+};
 
 export const AddPageCard = () => (
   <BlankPageBox>
