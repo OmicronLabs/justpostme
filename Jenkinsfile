@@ -25,7 +25,7 @@ yarn run build'''
         branch 'master'
       }
       steps {
-        archiveArtifacts 'frontend/justpostme/build/**/*.*, Dockerfile, frontend/justpostme/server.js'
+        archiveArtifacts 'frontend/justpostme/build/**/*.*, frontend/Dockerfile, frontend/justpostme/server.js'
       }
     }
     stage('Cleanup') {
