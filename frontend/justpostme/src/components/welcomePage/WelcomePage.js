@@ -105,7 +105,7 @@ const responseFacebook = (response, history, addUser, logIn) => {
     };
     addUser(user);
     logIn();
-    history.push("/dashboard");
+    history.push("/pages");
   }
 };
 
