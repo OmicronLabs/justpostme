@@ -72,13 +72,15 @@ var updatePages = function(res, userid, userAccessToken) {
             //console.log(body.data);
         }
         var data = body.data;
-        var query = "";
-        for(var i = 0; i < data.length; i++) {
-            query = query + "INSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES (" + userid + ", 0, 0, " + data[i].id + " , '" + data[i].access_token  + "', 0, '" + data[i].name + "')\n";
-        }
-        sql.close();
-        executeQuery (res, query);
+        var query = "DELETE FROM [pages] where userid = " + userid + ";";
 
+        for(var i = 0; i < data.length; i++) {
+            query = query + "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES (" + userid + ", 0, 0, " + data[i].id + " , '" + data[i].access_token  + "', 0, '" + data[i].name + "');";
+        }
+
+        sql.close();
+        console.log(query);
+        executeQuery (res, query);
     });
 }
 
