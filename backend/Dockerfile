@@ -14,5 +14,6 @@ RUN yarn add global https
 RUN yarn add global fs
 RUN yarn add global mssql
 RUN yarn add global body-parser
+RUN yarn add global request
  
 CMD [ "node", "server.js"]
