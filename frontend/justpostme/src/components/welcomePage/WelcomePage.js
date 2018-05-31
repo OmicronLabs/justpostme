@@ -13,6 +13,7 @@ import { SimpleFooter, GitHubFooter } from "../common/Footer";
 import background from "../../media/LoginBackground.svg";
 import logo from "../../media/logo-white.png";
 import type { User } from "../../containers/welcomePage/WelcomePageContainer";
+import Spinner from "../loadingSpinner/LoadingSpinner";
 
 const LogoWhite = styled.img`
   transform: scale(0.6, 0.6);
@@ -45,8 +46,12 @@ const HeaderTopLeft = styled.div`
   display: inline;
 `;
 
-const AboutText =
+const aboutText =
   "Welcome to justpost.me, a simple way to manage user-submitted content for your anonymous Facebook pages.";
+
+const loadingText = "Loading.";
+
+const errorText = "Something went wrong :( Please try again!";
 
 const FrontDoorRelative = styled.div`
   position: relative;
@@ -86,6 +91,10 @@ const BackgroundShape = styled.img`
 
 export const WelcomePageBox = Box.extend`
   padding-top: 3em;
+  margin-left: 1em;
+  margin-right: 1em;
+  height: 230px;
+  width: 800px;
   padding-bottom: 3em;
   margin-bottom: 12em;
   max-width: 800px;
@@ -94,7 +103,7 @@ export const WelcomePageBox = Box.extend`
   flex-direction: column;
 `;
 
-const responseFacebook = (response, history, addUser, logIn) => {
+const responseFacebook = (response, addUser, logIn) => {
   if (response && response.id) {
     const user = {
       userID: response.id,
@@ -105,60 +114,86 @@ const responseFacebook = (response, history, addUser, logIn) => {
     };
     addUser(user);
     logIn();
-    history.push("/pages");
   }
 };
 
 type Props = {
   history: Object,
+  loggedIn: boolean,
+  posting: boolean,
+  error: string,
   addUser: (user: User) => void,
   logIn: () => void
 };
 
-const Welcome = (props: Props) => {
-  return (
-    <FrontDoorRelative>
-      <FrontDoorBackgroundTop>
-        <HeaderTopLeft>
-          <LogoWhite src={logo} />
-          <HeaderLogoText>justpost.me</HeaderLogoText>
-        </HeaderTopLeft>
-        <HeaderTopRight>
-          <TopMenuButton href="#">About</TopMenuButton>
-        </HeaderTopRight>
-      </FrontDoorBackgroundTop>
-      <BackgroundShape src={background} className="" />
-      <FrontDoorBackgroundBottom />
-      <BoxWrapper>
-        <WelcomePageBox>
-          <About>{AboutText}</About>
-          <FacebookLogin
-            appId="2207425962822702"
-            autoLoad={true}
-            size={"small"}
-            fields="first_name,email,picture"
-            scope="manage_pages, email, publish_pages"
-            render={renderProps => (
-              <LargeThemedButton onClick={renderProps.onClick}>
-                Get started with Facebook
-              </LargeThemedButton>
-            )}
-            callback={response =>
-              responseFacebook(
-                response,
-                props.history,
-                props.addUser,
-                props.logIn
+class Welcome extends React.Component<Props> {
+  componentWillReceiveProps(newProps: Props) {
+    const { loggedIn, posting, history } = this.props;
+    if (
+      posting &&
+      loggedIn &&
+      newProps.loggedIn &&
+      !newProps.posting &&
+      !newProps.error
+    ) {
+      history.push("/pages");
+    }
+  }
+
+  render() {
+    console.log(this.props);
+    const { addUser, logIn, posting, error } = this.props;
+    return (
+      <FrontDoorRelative>
+        <FrontDoorBackgroundTop>
+          <HeaderTopLeft>
+            <LogoWhite src={logo} />
+            <HeaderLogoText>justpost.me</HeaderLogoText>
+          </HeaderTopLeft>
+          <HeaderTopRight>
+            <TopMenuButton href="#">About</TopMenuButton>
+          </HeaderTopRight>
+        </FrontDoorBackgroundTop>
+        <BackgroundShape src={background} className="" />
+        <FrontDoorBackgroundBottom />
+        <BoxWrapper>
+          <WelcomePageBox>
+            <About>
+              {!posting && !error
+                ? aboutText
+                : posting && !error
+                  ? loadingText
+                  : errorText}
+            </About>
+            {!posting && !error ? (
+              posting ? (
+                <Spinner />
+              ) : (
+                <FacebookLogin
+                  appId="2207425962822702"
+                  // autoLoad={true}
+                  size={"small"}
+                  fields="first_name,email,picture"
+                  scope="manage_pages, email, publish_pages"
+                  render={renderProps => (
+                    <LargeThemedButton onClick={renderProps.onClick}>
+                      Get started with Facebook
+                    </LargeThemedButton>
+                  )}
+                  callback={response =>
+                    responseFacebook(response, addUser, logIn)
+                  }
+                />
               )
-            }
-          />
-        </WelcomePageBox>
-      </BoxWrapper>
-      <SimpleFooter>
-        <GitHubFooter />
-      </SimpleFooter>
-    </FrontDoorRelative>
-  );
-};
+            ) : null}
+          </WelcomePageBox>
+        </BoxWrapper>
+        <SimpleFooter>
+          <GitHubFooter />
+        </SimpleFooter>
+      </FrontDoorRelative>
+    );
+  }
+}
 
 export default Welcome;

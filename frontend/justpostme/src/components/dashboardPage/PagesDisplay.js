@@ -6,7 +6,7 @@ import { GeneratedCard, AddPageCard } from "./DashboardPageCard";
 import type { CardProps } from "./DashboardPageCard";
 import { Link } from "react-router-dom";
 
-const PagesDisplayWrapper = styled.div`
+export const PagesDisplayWrapper = styled.div`
   margin-top: 30px;
   width: 1024px;
   max-width: 85%;
@@ -69,7 +69,7 @@ export const EmptyPagesDisplay = (props: EmptyProps) => {
           {props.head}
         </EmptyPagesHeader>
         <EmptyPagesText className="emptyText">{props.text}</EmptyPagesText>
-        <Link to="/dashboard/add">
+        <Link to="/pages/add">
           <LargeThemedButton>Add a managed page</LargeThemedButton>
         </Link>
       </EmptyPagesDisplayWrapper>

@@ -5,7 +5,7 @@ const mapStateToProps = state => ({
   pages: state.managedPages.pages,
   loading: state.managedPages.loading,
   error: state.managedPages.error,
-  userID: state.user.id
+  userID: state.userMeta.id
 });
 
 export default connect(mapStateToProps)(MyPagesSection);

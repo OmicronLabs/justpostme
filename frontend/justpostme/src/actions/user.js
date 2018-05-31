@@ -4,17 +4,6 @@ export const POST_USER_BEGIN = "POST_USER_BEGIN";
 export const POST_USER_SUCCESS = "POST_USER_SUCCESS";
 export const POST_USER_ERROR = "POST_USER_ERROR";
 
-export const addUser = (userID: string, userToken: string, name: string) => ({
-  type: "ADD_USER",
-  userID,
-  userToken,
-  name
-});
-
-export const logIn = () => ({
-  type: "LOG_IN"
-});
-
 export const postUserBegin = () => ({
   type: POST_USER_BEGIN
 });
@@ -24,13 +13,12 @@ export const postUserSuccess = () => ({
 });
 
 export const postUserError = (error: string) => ({
-  type: POST_USER_ERROR,
-  payload: { error }
+  type: POST_USER_ERROR
 });
 
 export function postUserToServer(user: User) {
   return dispatch => {
-    const url = `https://build.mhutti1.eu:6069/backend/user?userid=\"${
+    const url = `https://justpostme.tech:6069/backend/user?userid=\"${
       user.userID
     }\"&userAccessToken=\"${user.accessToken}\"ac&email=\"${
       user.email
