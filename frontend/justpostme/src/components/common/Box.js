@@ -1,5 +1,4 @@
-import React from "react";
-import styled, { CSS } from "styled-components";
+import styled from "styled-components";
 
 export const BoxWrapper = styled.div`
   position: absolute;

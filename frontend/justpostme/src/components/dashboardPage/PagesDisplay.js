@@ -56,15 +56,19 @@ export const EmptyPagesDisplay = (props: EmptyProps) => {
   if (props.createCard) {
     return (
       <EmptyPagesDisplayWrapper>
-        <EmptyPagesHeader>{props.head}</EmptyPagesHeader>
-        <EmptyPagesText>{props.text}</EmptyPagesText>
+        <EmptyPagesHeader className="emptyHeader">
+          {props.head}
+        </EmptyPagesHeader>
+        <EmptyPagesText className="emptyText">{props.text}</EmptyPagesText>
       </EmptyPagesDisplayWrapper>
     );
   } else {
     return (
       <EmptyPagesDisplayWrapper>
-        <EmptyPagesHeader>{props.head}</EmptyPagesHeader>
-        <EmptyPagesText>{props.text}</EmptyPagesText>
+        <EmptyPagesHeader className="emptyHeader">
+          {props.head}
+        </EmptyPagesHeader>
+        <EmptyPagesText className="emptyText">{props.text}</EmptyPagesText>
         <Link to="/dashboard/add">
           <LargeThemedButton>Add a managed page</LargeThemedButton>
         </Link>

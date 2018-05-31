@@ -1,25 +1,18 @@
 //@flow
 
 import React, { Component } from "react";
-import styled, { CSS } from "styled-components";
+import styled from "styled-components";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-
 import { Link, withRouter } from "react-router-dom";
 
-import {
-  LargeThemedButton,
-  RoundButton,
-  TopMenuButton
-} from "../common/Buttons";
-
+import { LargeThemedButton, TopMenuButton } from "../common/Buttons";
 import { Box, BoxWrapper } from "../common/Box";
-
-import { SimpleFooter, FooterButton, GitHubFooter } from "../common/Footer";
-
+import { SimpleFooter, GitHubFooter } from "../common/Footer";
 import background from "../../media/LoginBackground.svg";
 import logo from "../../media/logo-white.png";
+import type { User } from "../../containers/welcomePage/WelcomePageContainer";
 
 const LogoWhite = styled.img`
   transform: scale(0.6, 0.6);
@@ -60,7 +53,7 @@ const FrontDoorRelative = styled.div`
 `;
 
 const FrontDoorBackgroundTop = styled.div`
-  background: linear-gradient(to right, #e91e63, #ff5722);
+  background: linear-gradient(to right, #cddc39, #4caf50);
   position: absolute;
   width: 100%;
   left: 0;
@@ -91,7 +84,7 @@ const BackgroundShape = styled.img`
   transform: translateY(-99%);
 `;
 
-const WelcomePageBox = Box.extend`
+export const WelcomePageBox = Box.extend`
   padding-top: 3em;
   padding-bottom: 3em;
   margin-bottom: 12em;
@@ -101,18 +94,25 @@ const WelcomePageBox = Box.extend`
   flex-direction: column;
 `;
 
-const responseFacebook = (response, history, addUser) => {
-  response &&
-    response.id &&
-    addUser(response.id, response.accessToken) &&
-    addUser(response.id, response.accessToken) &&
-    history.push("/dashboard/managed");
+const responseFacebook = (response, history, addUser, logIn) => {
+  if (response && response.id) {
+    const user = {
+      userID: response.id,
+      accessToken: response.accessToken,
+      email: response.email,
+      expiresIn: response.expiresIn,
+      name: response.first_name
+    };
+    addUser(user);
+    logIn();
+    history.push("/pages");
+  }
 };
 
 type Props = {
   history: Object,
-  addUser: (userID: string, accessToken: string) => void,
-  addUserToServer: (userID: string, accessToken: string) => void
+  addUser: (user: User) => void,
+  logIn: () => void
 };
 
 const Welcome = (props: Props) => {
@@ -134,9 +134,9 @@ const Welcome = (props: Props) => {
           <About>{AboutText}</About>
           <FacebookLogin
             appId="2207425962822702"
-            //autoLoad={true}
+            autoLoad={true}
             size={"small"}
-            fields="name,email,picture"
+            fields="first_name,email,picture"
             scope="manage_pages, email, publish_pages"
             render={renderProps => (
               <LargeThemedButton onClick={renderProps.onClick}>
@@ -144,7 +144,12 @@ const Welcome = (props: Props) => {
               </LargeThemedButton>
             )}
             callback={response =>
-              responseFacebook(response, props.history, props.addUser)
+              responseFacebook(
+                response,
+                props.history,
+                props.addUser,
+                props.logIn
+              )
             }
           />
         </WelcomePageBox>
