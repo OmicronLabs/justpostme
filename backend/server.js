@@ -41,10 +41,10 @@ server.listen(6069, function() {
 
 //Initiallising connection string
 var dbConfig = {
-  user: "mhutti1",
-  password: "T6Bcy2MJ+Gm^9SF-",
-  server: "mhutti1.database.windows.net",
-  database: "justpostme-main",
+  user: process.env.DBUSER,
+  password: process.env.DBPASSWORD,
+  server: process.env.DBSERVER,
+  database: process.env.DBDATABSE,
 
   options: {
     encrypt: true
