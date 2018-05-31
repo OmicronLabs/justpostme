@@ -9,6 +9,8 @@ COPY frontend/justpostme/ .
 EXPOSE 80
 EXPOSE 443
  
-RUN yarn add global serve@6.5.4
+RUN yarn add global express
+RUN yarn add global https
+RUN yarn add global fs
  
 CMD [ "node", "server.js"]
