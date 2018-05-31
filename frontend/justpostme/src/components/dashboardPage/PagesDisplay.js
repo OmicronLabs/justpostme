@@ -4,12 +4,9 @@ import styled from "styled-components";
 import { LargeThemedButton } from "../common/Buttons";
 import { GeneratedCard, AddPageCard } from "./DashboardPageCard";
 import type { CardProps } from "./DashboardPageCard";
-import {
-  EmptyPagesDisplayWrapper,
-  PagesDisplayWrapper,
-  EmptyPagesHeader,
-  EmptyPagesText
-} from "./PagesDisplay.style";
+import { ErrorWrapper, PagesDisplayWrapper } from "./PagesDisplay.style";
+
+import { ErrorHeader, ErrorText } from "../common/ErrorText";
 import { Link } from "react-router-dom";
 
 type Props = {
@@ -25,27 +22,23 @@ type EmptyProps = {
   createCard: boolean
 };
 
-export const EmptyPagesDisplay = (props: EmptyProps) => {
+export const ErrorDisplay = (props: EmptyProps) => {
   if (props.createCard) {
     return (
-      <EmptyPagesDisplayWrapper>
-        <EmptyPagesHeader className="emptyHeader">
-          {props.head}
-        </EmptyPagesHeader>
-        <EmptyPagesText className="emptyText">{props.text}</EmptyPagesText>
-      </EmptyPagesDisplayWrapper>
+      <ErrorWrapper>
+        <ErrorHeader className="emptyHeader">{props.head}</ErrorHeader>
+        <ErrorText className="emptyText">{props.text}</ErrorText>
+      </ErrorWrapper>
     );
   } else {
     return (
-      <EmptyPagesDisplayWrapper>
-        <EmptyPagesHeader className="emptyHeader">
-          {props.head}
-        </EmptyPagesHeader>
-        <EmptyPagesText className="emptyText">{props.text}</EmptyPagesText>
+      <ErrorWrapper>
+        <ErrorHeader className="emptyHeader">{props.head}</ErrorHeader>
+        <ErrorText className="emptyText">{props.text}</ErrorText>
         <Link to="/pages/add">
           <LargeThemedButton>Add a managed page</LargeThemedButton>
         </Link>
-      </EmptyPagesDisplayWrapper>
+      </ErrorWrapper>
     );
   }
 };
@@ -53,7 +46,7 @@ export const EmptyPagesDisplay = (props: EmptyProps) => {
 export const PagesDisplay = (props: Props) => {
   if (!props.pages || props.pages.length < 1) {
     return (
-      <EmptyPagesDisplay
+      <ErrorDisplay
         head={props.emptyHead}
         text={props.emptyText}
         createCard={props.createCard}

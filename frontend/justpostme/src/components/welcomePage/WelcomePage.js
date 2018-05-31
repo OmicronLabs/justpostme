@@ -14,94 +14,32 @@ import background from "../../media/LoginBackground.svg";
 import logo from "../../media/logo-white.png";
 import type { User } from "../../containers/welcomePage/WelcomePageContainer";
 import Spinner from "../loadingSpinner/LoadingSpinner";
-
-const LogoWhite = styled.img`
-  transform: scale(0.6, 0.6);
-  max-width: 100%;
-`;
-
-const HeaderLogoText = styled.h2`
-  top: 15px;
-  left: 96px;
-  position: absolute;
-  color: white;
-`;
-
-const HeaderTopRight = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  z-index: 3;
-  height: 100px;
-  display: inline;
-`;
-
-const HeaderTopLeft = styled.div`
-  top: 0;
-  left: 0;
-  z-index: 3;
-  height: 100px;
-  width: 100px;
-  position: absolute;
-  display: inline;
-`;
+import { ErrorWrapper } from "../dashboardPage/PagesDisplay.style";
+import {
+  ErrorDisplay,
+  ErrorSubHeader,
+  ErrorTextDark,
+  ErrorLink
+} from "../common/ErrorText";
+import {
+  FrontDoorRelative,
+  FrontDoorBackgroundBottom,
+  FrontDoorBackgroundTop,
+  HeaderLogoText,
+  HeaderTopLeft,
+  HeaderTopRight,
+  LogoWhite,
+  BackgroundShape,
+  WelcomePageBox,
+  About
+} from "./WelcomePage.style";
 
 const aboutText =
   "Welcome to justpost.me, a simple way to manage user-submitted content for your anonymous Facebook pages.";
 
 const loadingText = "Loading.";
 
-const errorText = "Something went wrong :( Please try again!";
-
-const FrontDoorRelative = styled.div`
-  position: relative;
-`;
-
-const FrontDoorBackgroundTop = styled.div`
-  background: linear-gradient(to right, #cddc39, #4caf50);
-  position: absolute;
-  width: 100%;
-  left: 0;
-  top: 0;
-  height: 400px;
-`;
-
-const FrontDoorBackgroundBottom = styled.div`
-  position: absolute;
-  width: 100%;
-  left: 0;
-  top: 400px;
-  bottom: 0;
-  background: white;
-`;
-
-const About = styled.p`
-  font-size: large;
-  padding: 2em;
-  text-align: center;
-`;
-
-const BackgroundShape = styled.img`
-  position: absolute;
-  width: 100%;
-  left: 0;
-  top: 400px;
-  transform: translateY(-99%);
-`;
-
-export const WelcomePageBox = Box.extend`
-  padding-top: 3em;
-  margin-left: 1em;
-  margin-right: 1em;
-  height: 230px;
-  width: 800px;
-  padding-bottom: 3em;
-  margin-bottom: 12em;
-  max-width: 800px;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
+const errorHead = "Something went wrong :(";
 
 const responseFacebook = (response, addUser, logIn) => {
   if (response && response.id) {
@@ -126,6 +64,16 @@ type Props = {
   logIn: () => void
 };
 
+const ErrorComponent = () => (
+  <ErrorWrapper>
+    <ErrorSubHeader>{errorHead}</ErrorSubHeader>
+    <ErrorTextDark>
+      {"Please "}
+      <ErrorLink href=".">try again!</ErrorLink>
+    </ErrorTextDark>
+  </ErrorWrapper>
+);
+
 class Welcome extends React.Component<Props> {
   componentWillReceiveProps(newProps: Props) {
     const { loggedIn, posting, history } = this.props;
@@ -142,6 +90,7 @@ class Welcome extends React.Component<Props> {
 
   render() {
     const { addUser, logIn, posting, error } = this.props;
+
     return (
       <FrontDoorRelative>
         <FrontDoorBackgroundTop>
@@ -158,11 +107,13 @@ class Welcome extends React.Component<Props> {
         <BoxWrapper>
           <WelcomePageBox>
             <About>
-              {!posting && !error
-                ? aboutText
-                : posting && !error
-                  ? loadingText
-                  : errorText}
+              {!posting && !error ? (
+                aboutText
+              ) : posting && !error ? (
+                loadingText
+              ) : (
+                <ErrorComponent />
+              )}
             </About>
             {!posting && !error ? (
               posting ? (
