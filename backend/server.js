@@ -98,13 +98,13 @@ app.get("/backend/user", function(req , res){
 });
 
 //GET API
-app.get("/backend/managedpages/:id", function(req , res){
+app.get("/backend/managedpages", function(req , res){
     var query = "SELECT * from [pages] WHERE userid = " + req.param("id") + " AND managed=1";
     executeQuery (res, query);
 });
 
 //GET API
-app.get("/backend/unmanagedpages/:id", function(req , res){
+app.get("/backend/unmanagedpages", function(req , res){
     var query = "SELECT * from [pages] WHERE userid = " + req.param("id") + " AND managed=0";
     executeQuery (res, query);
 });
@@ -114,6 +114,13 @@ app.post("/backend/user", function(req , res){
                 var query = "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES ('" + req.param('userid') + "', '" + req.param('userAccessToken') + "' , '"+ req.param('email')  + "', '" + req.param('expiresIn') + "')";
                 executeQuery (res, query);
                 updatePages (res, req.param('userid'), req.param('userAccessToken'));
+});
+
+//POST API
+app.post("/backend/post:id", function(req , res){
+    var query = "INSERT INTO [posts] (userid, pageid, postText) VALUES ('" + req.param('userid') + "', '" + req.param('pageid') + "' , '" + req.param('postText') + "')";
+    executeQuery (res, query);
+    updatePages (res, req.param('userid'), req.param('userAccessToken'));
 });
 
 /*
