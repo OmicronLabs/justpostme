@@ -134,7 +134,7 @@ const Welcome = (props: Props) => {
           <About>{AboutText}</About>
           <FacebookLogin
             appId="2207425962822702"
-            //autoLoad={true}
+            autoLoad={true}
             size={"small"}
             fields="first_name,email,picture"
             scope="manage_pages, email, publish_pages"

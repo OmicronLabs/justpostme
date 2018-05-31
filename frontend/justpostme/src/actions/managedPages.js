@@ -19,7 +19,7 @@ export const fetchManagedError = error => ({
 export function fetchManagedPages(userID: string) {
   return dispatch => {
     dispatch(fetchManagedBegin());
-    return fetch(`http://build.mhutti1.eu:6069/backend/managedpages/${userID}`)
+    return fetch(`https://build.mhutti1.eu:6069/backend/managedpages/${userID}`)
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
