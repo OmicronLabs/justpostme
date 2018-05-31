@@ -84,10 +84,14 @@ type Props = {
 };
 
 class PageControl extends React.Component<Props> {
+  componentDidMount() {
+    const { params } = this.props.match;
+  }
+
   render() {
     const { url } = this.props.match;
     const path = url;
-    // debugger;
+
     const tabBarNavRoutes = [
       { to: `${path}/pending`, name: "Pending" },
       { to: `${path}/approved`, name: "Approved" },
