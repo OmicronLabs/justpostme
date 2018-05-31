@@ -25,7 +25,7 @@ class Routes extends React.Component {
           }}
         />
         <Route
-          path="/page"
+          path="/page/:id"
           render={props => {
             return loggedIn ? (
               <PageControl />

@@ -2,8 +2,16 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var sql = require("mssql");
-var app = express();
-var request = require("request");
+var app = express(); 
+var https = require('https');
+var fs = require('fs');
+
+
+var privateKey  = fs.readFileSync('privkey.pem', 'utf8');
+var certificate = fs.readFileSync('fullchain.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+var request = require('request');
 
 // Body Parser Middleware
 app.use(bodyParser.json());

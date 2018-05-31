@@ -4,7 +4,7 @@ FROM node:alpine
 WORKDIR /usr/src/app
 
 # Bundle app source
-COPY frontend/justpostme/ .
+COPY justpostme/ .
 
 EXPOSE 80
 EXPOSE 443

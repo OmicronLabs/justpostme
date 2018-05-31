@@ -7,6 +7,7 @@ import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
 import storage from "redux-persist/lib/storage";
 import user from "./reducers/user";
+import userMeta from "./reducers/userMeta";
 import managedPages from "./reducers/managedPages";
 import unmanagedPages from "./reducers/unmanagedPages";
 
@@ -15,11 +16,12 @@ const loggerMiddleware = createLogger();
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user"]
+  whitelist: ["userMeta"]
 };
 
 const rootReducer = combineReducers({
   user,
+  userMeta,
   managedPages,
   unmanagedPages
 });

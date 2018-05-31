@@ -4,40 +4,10 @@ import styled from "styled-components";
 import { LargeThemedButton } from "../common/Buttons";
 import { GeneratedCard, AddPageCard } from "./DashboardPageCard";
 import type { CardProps } from "./DashboardPageCard";
+import { ErrorWrapper, PagesDisplayWrapper } from "./PagesDisplay.style";
+
+import { ErrorHeader, ErrorText } from "../common/ErrorText";
 import { Link } from "react-router-dom";
-
-const PagesDisplayWrapper = styled.div`
-  margin-top: 30px;
-  width: 1024px;
-  max-width: 85%;
-  margin-bottom: 90px;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-around;
-  overflow: scroll;
-`;
-
-const EmptyPagesDisplayWrapper = PagesDisplayWrapper.extend`
-  height: 70%;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const EmptyPagesHeader = styled.h1`
-  font-size: 250%;
-  max-width: 80%;
-  color: lightgray;
-`;
-
-const EmptyPagesText = styled.h4`
-  text-align: center;
-  font-size: 100%;
-  width: 500px;
-  max-width: 80%;
-  color: lightgray;
-`;
 
 type Props = {
   pages: Array<CardProps>,
@@ -52,27 +22,23 @@ type EmptyProps = {
   createCard: boolean
 };
 
-export const EmptyPagesDisplay = (props: EmptyProps) => {
+export const ErrorDisplay = (props: EmptyProps) => {
   if (props.createCard) {
     return (
-      <EmptyPagesDisplayWrapper>
-        <EmptyPagesHeader className="emptyHeader">
-          {props.head}
-        </EmptyPagesHeader>
-        <EmptyPagesText className="emptyText">{props.text}</EmptyPagesText>
-      </EmptyPagesDisplayWrapper>
+      <ErrorWrapper>
+        <ErrorHeader className="emptyHeader">{props.head}</ErrorHeader>
+        <ErrorText className="emptyText">{props.text}</ErrorText>
+      </ErrorWrapper>
     );
   } else {
     return (
-      <EmptyPagesDisplayWrapper>
-        <EmptyPagesHeader className="emptyHeader">
-          {props.head}
-        </EmptyPagesHeader>
-        <EmptyPagesText className="emptyText">{props.text}</EmptyPagesText>
-        <Link to="/dashboard/add">
+      <ErrorWrapper>
+        <ErrorHeader className="emptyHeader">{props.head}</ErrorHeader>
+        <ErrorText className="emptyText">{props.text}</ErrorText>
+        <Link to="/pages/add">
           <LargeThemedButton>Add a managed page</LargeThemedButton>
         </Link>
-      </EmptyPagesDisplayWrapper>
+      </ErrorWrapper>
     );
   }
 };
@@ -80,15 +46,15 @@ export const EmptyPagesDisplay = (props: EmptyProps) => {
 export const PagesDisplay = (props: Props) => {
   if (!props.pages || props.pages.length < 1) {
     return (
-      <EmptyPagesDisplay
+      <ErrorDisplay
         head={props.emptyHead}
         text={props.emptyText}
         createCard={props.createCard}
       />
     );
   } else {
-    const components = props.pages.map(page => {
-      return <GeneratedCard card={page} />;
+    const components = props.pages.map((page, index) => {
+      return <GeneratedCard card={page} key={index} />;
     });
     !props.createCard && components.push(<AddPageCard />);
     return <PagesDisplayWrapper>{components}</PagesDisplayWrapper>;
