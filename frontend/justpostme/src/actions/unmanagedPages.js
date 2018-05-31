@@ -1,4 +1,5 @@
 import { serverDomain } from "../const/serverURL";
+import altImage from "../media/page_alt_img.png";
 
 export const FETCH_UNMANAGED_BEGIN = "FETCH_UNMANAGED_BEGIN";
 export const FETCH_UNMANAGED_SUCCESS = "FETCH_UNMANAGED_SUCCESS";
@@ -30,9 +31,9 @@ export function fetchUnmanagedPages(userID: string) {
           name: record.name,
           databaseId: record.ID,
           pageID: record.pageId,
-          pendingPosts: record.pending,
+          pendingPosts: record.pendingPosts,
           scheduledPosts: record.scheduledPosts,
-          backgroundImgURL: null
+          backgroundImgURL: altImage
         }));
         dispatch(fetchUnmanagedSuccess(pages));
         return pages;

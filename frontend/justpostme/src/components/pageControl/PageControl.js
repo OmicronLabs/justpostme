@@ -1,6 +1,7 @@
 //@flow
 import React from "react";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 import DashboardPage from "../dashboardPage/DashboardPage";
 import { Redirect, Switch, Route, NavLink } from "react-router-dom";
 
@@ -82,34 +83,40 @@ type Props = {
   unmanagedPages: Array<any>
 };
 
-const tabBarNavRoutes = [
-  { to: "/page/pending", name: "Pending" },
-  { to: "/page/approved", name: "Approved" },
-  { to: "/page/moderation", name: "Moderation" },
-  { to: "/page/insights", name: "Insights" }
-];
-
 class PageControl extends React.Component<Props> {
   render() {
+    const { url } = this.props.match;
+    const path = url;
+    // debugger;
+    const tabBarNavRoutes = [
+      { to: `${path}/pending`, name: "Pending" },
+      { to: `${path}/approved`, name: "Approved" },
+      { to: `${path}/moderation`, name: "Moderation" },
+      { to: `${path}/insights`, name: "Insights" }
+    ];
+
     return (
       <DashboardPage>
         <Wrapper>
           <RouteTabs routes={tabBarNavRoutes} />
           <Switch>
-            <Route path={"/page/pending"} render={() => <p>Borys to cwel</p>} />
             <Route
-              path={"/page/approved"}
+              path={`${path}/pending`}
+              render={() => <p>Borys to cwel</p>}
+            />
+            <Route
+              path={`${path}/approved`}
               render={() => <p>Borys to chuj</p>}
             />
             <Route
-              path={"/page/moderation"}
+              path={`${path}/moderation`}
               render={() => <p>Borys to pizda</p>}
             />
             <Route
-              path={"/page/insights"}
+              path={`${path}/insights`}
               render={() => <p>Borys to zjeb</p>}
             />
-            <Redirect to={"/page/pending"} />
+            <Redirect to={`${path}/pending`} />
             )} />
           </Switch>
         </Wrapper>
@@ -118,4 +125,4 @@ class PageControl extends React.Component<Props> {
   }
 }
 
-export default PageControl;
+export default withRouter(PageControl);

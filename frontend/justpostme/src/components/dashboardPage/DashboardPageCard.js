@@ -3,6 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 import { IconButton } from "../common/Buttons";
+import { withRouter } from "react-router-dom";
 import {
   PageBox,
   PageImage,
@@ -22,13 +23,20 @@ export type Card = {
   name: string,
   backgroundImgURL: string,
   pendingPosts: number,
-  scheduledPosts: number
+  scheduledPosts: number,
+  pageID: string
 };
 
-export const GeneratedCard = (props: CardProps) => {
-  const { backgroundImgURL, name, pendingPosts, scheduledPosts } = props.card;
+const GeneratedCardSimple = (props: CardProps) => {
+  const {
+    backgroundImgURL,
+    name,
+    pendingPosts,
+    scheduledPosts,
+    pageID
+  } = props.card;
   return (
-    <PageBox>
+    <PageBox onClick={() => props.history.push(`/page/34324`)}>
       <PageImage className="image" src={backgroundImgURL} />
       <PageTextContainer>
         <PageName className="name">{name}</PageName>
@@ -40,6 +48,8 @@ export const GeneratedCard = (props: CardProps) => {
     </PageBox>
   );
 };
+
+export const GeneratedCard = withRouter(GeneratedCardSimple);
 
 export const AddPageCard = () => (
   <BlankPageBox>

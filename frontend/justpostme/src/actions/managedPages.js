@@ -1,4 +1,5 @@
 import { serverDomain } from "../const/serverURL";
+import altImage from "../media/page_alt_img.png";
 
 export const FETCH_MANAGED_BEGIN = "FETCH_MANAGED_BEGIN";
 export const FETCH_MANAGED_SUCCESS = "FETCH_MANAGED_SUCCESS";
@@ -30,9 +31,9 @@ export function fetchManagedPages(userID: string) {
           name: record.name,
           databaseId: record.ID,
           pageID: record.pageId,
-          pendingPosts: record.pending,
+          pendingPosts: record.pendingPosts,
           scheduledPosts: record.scheduledPosts,
-          backgroundImgURL: null
+          backgroundImgURL: altImage
         }));
         dispatch(fetchManagedSuccess(pages));
         return pages;
