@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders navbar 1`] = `
+.c7 {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  display: inline-block;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid;
+  border-radius: 30px;
+  color: white;
+  border-color: white;
+  border: 0px;
+}
+
+.c7:hover {
+  color: rgba(255,255,255,0.85);
+}
+
+.c11 {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  display: inline-block;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid;
+  border-radius: 30px;
+  border: 0px;
+  margin: 0em;
+  color: gray;
+  height: 40px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-content: center;
+  -ms-flex-line-pack: center;
+  align-content: center;
+  -webkit-box-pack: space-around;
+  -webkit-justify-content: space-around;
+  -ms-flex-pack: space-around;
+  justify-content: space-around;
+  border-radius: 0px;
+}
+
+.c11:hover {
+  color: black;
+  background: whitesmoke;
+  border-radius: 3px;
+}
+
+.c4 {
+  -webkit-transform: scale(0.7,0.7);
+  -ms-transform: scale(0.7,0.7);
+  transform: scale(0.7,0.7);
+  width: auto;
+  position: relative;
+  max-height: 100%;
+}
+
+.c5 {
+  color: white;
+}
+
+.c0 {
+  position: relative;
+  width: 100%;
+  height: 70px;
+  background-image: url(banner-bg-3.png);
+  background-size: cover;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c1 {
+  max-width: 1024px;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 70px;
+  box-sizing: border-box;
+}
+
+.c2 {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c6 {
+  max-height: 100%;
+  height: 70px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.c3 {
+  max-height: 100%;
+  height: 70px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  height: 70px;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+}
+
+.c10 {
+  display: none;
+  background: white;
+  width: 120px;
+  min-width: 120px;
+  box-shadow: 5px 5px 19px 3px rgba(126,149,168,0.2);
+  z-index: 3;
+  border-radius: 3px;
+}
+
+.c8 {
+  max-width: 120px;
+  padding-left: 0px;
+  width: 120px;
+}
+
+.c8:hover .c9 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-content: center;
+  -ms-flex-line-pack: center;
+  align-content: center;
+  -webkit-box-pack: space-evenly;
+  -webkit-justify-content: space-evenly;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
+}
+
+<div
+  className="c0"
+>
+  <div
+    className="c1"
+  >
+    <a
+      className="c2"
+    >
+      <div
+        className="c3"
+      >
+        <img
+          className="logo c4"
+          src="logo-white.png"
+        />
+        <h2
+          className="logoText c5"
+        >
+          justpost.me
+        </h2>
+      </div>
+    </a>
+    <div
+      className="navBarMenu c6"
+    >
+      <a
+        className="c7"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+      <a
+        className="c7"
+        onClick={[Function]}
+      >
+        About
+      </a>
+      <div
+        className="c8"
+      >
+        <a
+          className="c7"
+          href="#"
+        />
+        <div
+          className="c9 c10"
+        >
+          <a
+            className="c11"
+            href="#"
+          >
+            Settings
+          </a>
+          <a
+            className="c11"
+            href="#"
+          >
+            Log out
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
