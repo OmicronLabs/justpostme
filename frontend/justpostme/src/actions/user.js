@@ -20,7 +20,7 @@ export const postUserError = (error: string) => ({
 });
 
 export function postUserToServer(user: User) {
-  return dispatch => {
+  return (dispatch: Function) => {
     const url = `${serverDomain}/backend/user?userid=${
       user.userID
     }&userAccessToken=${user.accessToken}ac&email=${user.email}&expiresIn=${
