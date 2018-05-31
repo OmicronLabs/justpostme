@@ -16,6 +16,7 @@ export const PageBox = Box.extend`
   width: 320px;
   height: 240px;
   flex-direction: column;
+  cursor: pointer;
   justify-content: space-between;
   &:hover {
     transform: scale(1.005);
@@ -38,13 +39,13 @@ export const PageTextContainer = styled.div`
 `;
 
 export const PageInfoContainer = styled.div`
-  width: 100%;
+  width: 80%;
   height: 30px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
 `;
 
 export const PageInfoItem = styled.a`
@@ -73,8 +74,8 @@ export const PageImage = styled.img`
 `;
 
 export const PageName = styled.h1`
-  width: 90%;
-  font-size: 24px;
+  width: 80%;
+  font-size: 22px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

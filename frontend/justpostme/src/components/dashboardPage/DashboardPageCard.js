@@ -3,6 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 import { IconButton } from "../common/Buttons";
+import { withRouter } from "react-router-dom";
 import {
   PageBox,
   PageImage,
@@ -19,24 +20,36 @@ export type CardProps = {
 };
 
 export type Card = {
-  pageName: string,
-  backgroundImage: string,
-  scheduled: number,
-  pending: number
+  name: string,
+  backgroundImgURL: string,
+  pendingPosts: number,
+  scheduledPosts: number,
+  pageID: string
 };
 
-export const GeneratedCard = (props: CardProps) => (
-  <PageBox>
-    <PageImage className="image" src={props.card.backgroundImage} />
-    <PageTextContainer>
-      <PageName className="name">{props.card.pageName}</PageName>
-    </PageTextContainer>
-    <PageInfoContainer>
-      <PageInfoItem>pending: x</PageInfoItem>
-      <PageInfoItem>scheduled: x</PageInfoItem>
-    </PageInfoContainer>
-  </PageBox>
-);
+const GeneratedCardSimple = (props: CardProps) => {
+  const {
+    backgroundImgURL,
+    name,
+    pendingPosts,
+    scheduledPosts,
+    pageID
+  } = props.card;
+  return (
+    <PageBox onClick={() => props.history.push(`/page/34324`)}>
+      <PageImage className="image" src={backgroundImgURL} />
+      <PageTextContainer>
+        <PageName className="name">{name}</PageName>
+      </PageTextContainer>
+      <PageInfoContainer>
+        <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
+        <PageInfoItem>{`scheduled: ${scheduledPosts}`}</PageInfoItem>
+      </PageInfoContainer>
+    </PageBox>
+  );
+};
+
+export const GeneratedCard = withRouter(GeneratedCardSimple);
 
 export const AddPageCard = () => (
   <BlankPageBox>

@@ -1,3 +1,6 @@
+import { serverDomain } from "../const/serverURL";
+import altImage from "../media/page_alt_img.png";
+
 export const FETCH_MANAGED_BEGIN = "FETCH_MANAGED_BEGIN";
 export const FETCH_MANAGED_SUCCESS = "FETCH_MANAGED_SUCCESS";
 export const FETCH_MANAGED_ERROR = "FETCH_MANAGED_ERROR";
@@ -19,12 +22,21 @@ export const fetchManagedError = error => ({
 export function fetchManagedPages(userID: string) {
   return dispatch => {
     dispatch(fetchManagedBegin());
-    return fetch(`https://build.mhutti1.eu:6069/backend/managedpages/${userID}`)
+    return fetch(`${serverDomain}/backend/managedpages?id=${userID}`)
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
-        dispatch(fetchManagedSuccess(json.pages));
-        return json.pages;
+        const records = json.recordset;
+        const pages = records.map(record => ({
+          name: record.name,
+          databaseId: record.ID,
+          pageID: record.pageId,
+          pendingPosts: record.pendingPosts,
+          scheduledPosts: record.scheduledPosts,
+          backgroundImgURL: altImage
+        }));
+        dispatch(fetchManagedSuccess(pages));
+        return pages;
       })
       .catch(error => dispatch(fetchManagedError(error)));
   };

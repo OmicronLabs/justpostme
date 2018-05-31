@@ -11,7 +11,9 @@ import Spinner from "../loadingSpinner/LoadingSpinner";
 type Props = {
   pages: Array<CardProps>,
   loading: boolean,
-  error: string
+  error: string,
+  userID: string,
+  dispatch: Function
 };
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
@@ -27,12 +29,13 @@ const addPagesEmptyText =
 
 class AddPagesSection extends React.Component<Props> {
   componentDidMount() {
-    this.props.dispatch(fetchUnmanagedPages());
+    const { dispatch, userID } = this.props;
+    dispatch(fetchUnmanagedPages(userID));
   }
 
   render() {
     const { loading } = this.props;
-    return loading ? (
+    return !loading ? (
       <PagesDisplay
         pages={this.props.pages}
         emptyHead={addPagesEmptyHead}

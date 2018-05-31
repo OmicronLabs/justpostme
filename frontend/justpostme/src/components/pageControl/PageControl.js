@@ -1,6 +1,7 @@
 //@flow
 import React from "react";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 import DashboardPage from "../dashboardPage/DashboardPage";
 import { Redirect, Switch, Route, NavLink } from "react-router-dom";
 import {
@@ -97,13 +98,22 @@ const tabBarNavRoutes = [
   { to: "/page/insights", name: "Insights" }
 ];
 
-const testProps = {
-  pageName: "testPage",
-  backgroundImage: "../../media/test_image.png"
-};
-
 class PageControl extends React.Component<Props> {
+  componentDidMount() {
+    const { params } = this.props.match;
+  }
+
   render() {
+    const { url } = this.props.match;
+    const path = url;
+
+    const tabBarNavRoutes = [
+      { to: `${path}/pending`, name: "Pending" },
+      { to: `${path}/approved`, name: "Approved" },
+      { to: `${path}/moderation`, name: "Moderation" },
+      { to: `${path}/insights`, name: "Insights" }
+    ];
+
     return (
       <DashboardPage>
         <Wrapper>
@@ -114,20 +124,23 @@ class PageControl extends React.Component<Props> {
           </PageOverviewWrapper> */}
           <RouteTabs routes={tabBarNavRoutes} />
           <Switch>
-            <Route path={"/page/pending"} render={() => <p>Borys to cwel</p>} />
             <Route
-              path={"/page/approved"}
+              path={`${path}/pending`}
+              render={() => <p>Borys to cwel</p>}
+            />
+            <Route
+              path={`${path}/approved`}
               render={() => <p>Borys to chuj</p>}
             />
             <Route
-              path={"/page/moderation"}
+              path={`${path}/moderation`}
               render={() => <p>Borys to pizda</p>}
             />
             <Route
-              path={"/page/insights"}
+              path={`${path}/insights`}
               render={() => <p>Borys to zjeb</p>}
             />
-            <Redirect to={"/page/pending"} />
+            <Redirect to={`${path}/pending`} />
             )} />
           </Switch>
         </Wrapper>
@@ -136,4 +149,4 @@ class PageControl extends React.Component<Props> {
   }
 }
 
-export default PageControl;
+export default withRouter(PageControl);

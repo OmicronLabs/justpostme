@@ -53,8 +53,8 @@ export const PagesDisplay = (props: Props) => {
       />
     );
   } else {
-    const components = props.pages.map(page => {
-      return <GeneratedCard card={page} />;
+    const components = props.pages.map((page, index) => {
+      return <GeneratedCard card={page} key={index} />;
     });
     !props.createCard && components.push(<AddPageCard />);
     return <PagesDisplayWrapper>{components}</PagesDisplayWrapper>;
