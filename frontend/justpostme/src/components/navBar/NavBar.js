@@ -84,25 +84,30 @@ const DropdownContainer = styled.div`
 `;
 
 type Props = {
-  userName: string
+  userName: string,
+  history: any
 };
 
 class NavBar extends React.Component<Props> {
   render() {
+    const { userName, history } = this.props;
     console.log(this.props);
     return (
       <NavBarOuter>
         <NavBarInner>
           <NavBarHomeButton>
             <NavBarLogoContainer>
-              <LogoWhite src={logoWhite} />
-              <HeaderLogoText>justpost.me</HeaderLogoText>
+              <LogoWhite className="logo" src={logoWhite} />
+              <HeaderLogoText className="logoText">justpost.me</HeaderLogoText>
             </NavBarLogoContainer>
           </NavBarHomeButton>
-          <NavBarMenuContainer>
+          <NavBarMenuContainer className="navBarMenu">
+            <TopMenuButton onClick={() => history.push("/pages")}>
+              Home
+            </TopMenuButton>
             <TopMenuButton onClick={() => {}}>About</TopMenuButton>
             <DropdownContainer>
-              <TopMenuButton href="#">{this.props.userName}</TopMenuButton>
+              <TopMenuButton href="#">{userName}</TopMenuButton>
               <DropdownMenu>
                 <DropdownButton href="#">Settings</DropdownButton>
                 <DropdownButton href="#">Log out</DropdownButton>

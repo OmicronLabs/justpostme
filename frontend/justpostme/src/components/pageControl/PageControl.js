@@ -1,7 +1,7 @@
 //@flow
 import React from "react";
 import styled from "styled-components";
-import DashboardPage from "./DashboardPage";
+import DashboardPage from "../dashboardPage/DashboardPage";
 import { Redirect, Switch, Route, NavLink } from "react-router-dom";
 
 import AddPagesSectionContainer from "../../containers/dashboardPage/AddPagesSectionContainer";
@@ -83,26 +83,33 @@ type Props = {
 };
 
 const tabBarNavRoutes = [
-  { to: "/pages/managed", name: "Managed Pages" },
-  { to: "/pages/add", name: "Add Pages" }
+  { to: "/page/pending", name: "Pending" },
+  { to: "/page/approved", name: "Approved" },
+  { to: "/page/moderation", name: "Moderation" },
+  { to: "/page/insights", name: "Insights" }
 ];
 
-class ManagePages extends React.Component<Props> {
+class PageControl extends React.Component<Props> {
   render() {
     return (
       <DashboardPage>
         <Wrapper>
           <RouteTabs routes={tabBarNavRoutes} />
           <Switch>
+            <Route path={"/page/pending"} render={() => <p>Borys to cwel</p>} />
             <Route
-              path={"/pages/managed"}
-              render={() => <MyPagesSectionContainer />}
+              path={"/page/approved"}
+              render={() => <p>Borys to chuj</p>}
             />
             <Route
-              path={"/pages/add"}
-              render={() => <AddPagesSectionContainer />}
+              path={"/page/moderation"}
+              render={() => <p>Borys to pizda</p>}
             />
-            <Redirect to={"/pages/managed"} />
+            <Route
+              path={"/page/insights"}
+              render={() => <p>Borys to zjeb</p>}
+            />
+            <Redirect to={"/page/pending"} />
             )} />
           </Switch>
         </Wrapper>
@@ -111,4 +118,4 @@ class ManagePages extends React.Component<Props> {
   }
 }
 
-export default ManagePages;
+export default PageControl;

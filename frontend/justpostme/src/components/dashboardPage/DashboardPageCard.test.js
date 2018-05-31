@@ -1,10 +1,8 @@
 import React from "react";
 import renderer from "react-test-renderer";
-
+import { shallow } from "enzyme";
 import { GeneratedCard, AddPageCard } from "./DashboardPageCard";
 import testImage from "../../media/test_image.jpg";
-
-import "jest-styled-components";
 
 const testProps = {
   pageName: "testPage",
@@ -14,6 +12,17 @@ const testProps = {
 it("generates correct card from props", () => {
   const card = renderer.create(<GeneratedCard card={testProps} />).toJSON();
   expect(card).toMatchSnapshot();
+});
+
+it("adds correct name and picture from props", () => {
+  const card = shallow(<GeneratedCard card={testProps} />);
+  expect(card.find(".image").prop("src")).toEqual(testProps.backgroundImage);
+  expect(
+    card
+      .find(".name")
+      .render()
+      .text()
+  ).toEqual(testProps.pageName);
 });
 
 it("generates correct /addcard/ card", () => {

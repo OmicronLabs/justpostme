@@ -84,7 +84,7 @@ const BackgroundShape = styled.img`
   transform: translateY(-99%);
 `;
 
-const WelcomePageBox = Box.extend`
+export const WelcomePageBox = Box.extend`
   padding-top: 3em;
   padding-bottom: 3em;
   margin-bottom: 12em;
@@ -105,7 +105,7 @@ const responseFacebook = (response, history, addUser, logIn) => {
     };
     addUser(user);
     logIn();
-    history.push("/dashboard");
+    history.push("/pages");
   }
 };
 
@@ -134,7 +134,7 @@ const Welcome = (props: Props) => {
           <About>{AboutText}</About>
           <FacebookLogin
             appId="2207425962822702"
-            //autoLoad={true}
+            autoLoad={true}
             size={"small"}
             fields="first_name,email,picture"
             scope="manage_pages, email, publish_pages"

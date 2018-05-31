@@ -30,7 +30,7 @@ export const postUserError = (error: string) => ({
 
 export function postUserToServer(user: User) {
   return dispatch => {
-    const url = `http://build.mhutti1.eu:6069/backend/user?userid=\"${
+    const url = `https://build.mhutti1.eu:6069/backend/user?userid=\"${
       user.userID
     }\"&userAccessToken=\"${user.accessToken}\"ac&email=\"${
       user.email

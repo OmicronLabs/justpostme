@@ -97,9 +97,9 @@ export type CardProps = {
 
 export const GeneratedCard = (props: CardProps) => (
   <PageBox>
-    <PageImage src={props.card.backgroundImage} />
+    <PageImage className="image" src={props.card.backgroundImage} />
     <PageTextContainer>
-      <PageName>{props.card.pageName}</PageName>
+      <PageName className="name">{props.card.pageName}</PageName>
     </PageTextContainer>
     <PageInfoContainer>
       <PageInfoItem>pending: x</PageInfoItem>
