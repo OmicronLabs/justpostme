@@ -3,33 +3,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var sql = require("mssql");
 var app = express(); 
-
-var accessToken = ''
-		var uid = ''
-		window.fbAsyncInit = function() {
-		    FB.init({
-		      appId      : '2207425962822702',
-		      xfbml      : true,
-		      version    : 'v3.0'
-		    });
-		    FB.getLoginStatus(function(response) {
-		    	if (response.status === 'connected') {
-		    		document.getElementById('status').innerHTML = 'We are connected.';
-		    		document.getElementById('login').style.visibility = 'hidden';
-		    	} else if (response.status === 'not_authorized') {
-		    		document.getElementById('status').innerHTML = 'We are not logged in.'
-		    	} else {
-		    		document.getElementById('status').innerHTML = 'You are not logged into Facebook.';
-		    	}
-		    });
-		};
-		(function(d, s, id){
-		    var js, fjs = d.getElementsByTagName(s)[0];
-		    if (d.getElementById(id)) {return;}
-		    js = d.createElement(s); js.id = id;
-		    js.src = "//connect.facebook.net/en_US/sdk.js";
-		    fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));
+var request = require('request');
 
 
 // Body Parser Middleware
@@ -92,8 +66,19 @@ var  executeQuery = function(res, query) {
 }
 
 var updatePages = function(res, userid, userAccessToken) {
-    FB.api('/me', 'GET', {fields: 'first_name,last_name,name,email,location,id'}, function(response) {
-        console.log(response.email);
+    request(`https://graph.facebook.com/${userid}/accounts?access_token=${userAccessToken}`, function (error, response, body) {
+        body = JSON.parse(body);    
+        if (!error && response.statusCode == 200) {
+            //console.log(body.data);
+        }
+        var data = body.data;
+        var query = "";
+        for(var i = 0; i < data.length; i++) {
+            query = query + "INSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES (" + userid + ", 0, 0, " + data[i].id + " , '" + data[i].access_token  + "', 0, '" + data[i].name + "')\n";
+        }
+        sql.close();
+        executeQuery (res, query);
+
     });
 }
 
@@ -109,23 +94,17 @@ app.get("/backend/managedpages/:id", function(req , res){
     executeQuery (res, query);
 });
 
+//GET API
+app.get("/backend/unmanagedpages/:id", function(req , res){
+    var query = "SELECT * from [pages] WHERE userid = " + req.param("id") + " AND managed=0";
+    executeQuery (res, query);
+});
+
 //POST API
 app.post("/backend/user", function(req , res){
                 var query = "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES ('" + req.param('userid') + "', '" + req.param('userAccessToken') + "' , '"+ req.param('email')  + "', '" + req.param('expiresIn') + "')";
                 executeQuery (res, query);
-                //updatePages (res, req.param('userid'), req.param('userAccessToken'));
-});
-
-//POST API
-app.post("/backend/user/managed/:id", function(req , res){
-    var query = "SELECT * from [pages] WHERE userid = " + req.param("id") + " AND managed=1";
-    executeQuery (res, query);
-});
-
-//POST API
-app.post("/backend/user/unmanaged/:id", function(req , res){
-    var query = "SELECT * from [pages] WHERE userid = " + req.param("id") + " AND managed=0";
-    executeQuery (res, query);
+                updatePages (res, req.param('userid'), req.param('userAccessToken'));
 });
 
 /*
