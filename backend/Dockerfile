@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 EXPOSE 80
-EXPOSE 443
+EXPOSE 6069
  
 RUN yarn add global express
 RUN yarn add global https
