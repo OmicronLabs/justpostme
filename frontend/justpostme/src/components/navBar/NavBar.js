@@ -91,7 +91,6 @@ type Props = {
 class NavBar extends React.Component<Props> {
   render() {
     const { userName, history } = this.props;
-    console.log(this.props);
     return (
       <NavBarOuter>
         <NavBarInner>

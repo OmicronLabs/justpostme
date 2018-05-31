@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
-import { addUser, postUserToServer, logIn } from "../../actions/user";
+import { addUser, logIn } from "../../actions/userMeta";
+import { postUserToServer } from "../../actions/user";
 
 import WelcomePage from "../../components/welcomePage/WelcomePage";
 
@@ -22,4 +23,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 });
 
-export default connect(null, mapDispatchToProps)(WelcomePage);
+const mapStateToProps = (state, ownProps) => ({
+  ...ownProps,
+  posting: state.user.loading,
+  error: state.user.error,
+  loggedIn: state.userMeta.loggedIn
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage);
