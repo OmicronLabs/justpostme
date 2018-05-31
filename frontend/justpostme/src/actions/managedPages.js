@@ -16,10 +16,10 @@ export const fetchManagedError = error => ({
   payload: { error }
 });
 
-export function fetchManagedPages() {
+export function fetchManagedPages(userID: string) {
   return dispatch => {
     dispatch(fetchManagedBegin());
-    return fetch("here the fetch can happen, put some url")
+    return fetch(`https://build.mhutti1.eu:6069/backend/managedpages/${userID}`)
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {

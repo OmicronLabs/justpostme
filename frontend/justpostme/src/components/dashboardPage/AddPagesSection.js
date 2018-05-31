@@ -2,6 +2,7 @@
 
 import React from "react";
 import { PagesDisplay } from "./PagesDisplay";
+import type { CardProps } from "./DashboardPageCard";
 import { fetchUnmanagedPages } from "../../actions/unmanagedPages";
 
 type Props = {
@@ -15,8 +16,8 @@ const addPagesEmptyText =
   "Looks like you are not an administrator of any pages. To start create a Facebook page.";
 
 class AddPagesSection extends React.Component<Props> {
-  componentWillMount() {
-    fetchUnmanagedPages();
+  componentDidMount() {
+    this.props.dispatch(fetchUnmanagedPages());
   }
 
   render() {

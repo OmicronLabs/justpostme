@@ -1,13 +1,14 @@
-FROM node
+FROM node:alpine
 
 # Create app directory
 WORKDIR /usr/src/app
 
 # Bundle app source
-COPY frontend/justpostme/build .
+COPY frontend/justpostme/ .
 
 EXPOSE 80
-
-RUN yarn add global serve
-
-CMD [ "yarn", "serve", ".", "-l", "80"]
+EXPOSE 443
+ 
+RUN yarn add global serve@6.5.4
+ 
+CMD [ "node", "server.js"]
