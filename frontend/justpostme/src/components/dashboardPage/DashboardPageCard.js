@@ -36,7 +36,7 @@ const GeneratedCardSimple = (props: CardProps) => {
     pageID
   } = props.card;
   return (
-    <PageBox onClick={() => props.history.push(`/page/34324`)}>
+    <PageBox onClick={() => props.history.push(`/page/${pageID}`)}>
       <PageImage className="image" src={backgroundImgURL} />
       <PageTextContainer>
         <PageName className="name">{name}</PageName>
