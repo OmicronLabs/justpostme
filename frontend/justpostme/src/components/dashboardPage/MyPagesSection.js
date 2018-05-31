@@ -8,7 +8,8 @@ type Props = {
   pages: Array<CardProps>,
   loading: boolean,
   error: string,
-  userID: string
+  userID: string,
+  dispatch: Function
 };
 
 const myPagesEmptyHead = "No pages to manage";
