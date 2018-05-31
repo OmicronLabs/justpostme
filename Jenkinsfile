@@ -21,9 +21,6 @@ yarn run build'''
       }
     }
     stage('Deploy') {
-      when {
-        branch 'master'
-      }
       steps {
         archiveArtifacts 'frontend/justpostme/build/**/*.*, Dockerfile'
       }
