@@ -15,15 +15,16 @@ export const SubmissionsDisplayWrapper = styled.div`
 `;
 
 type Props = {
-  submssions: any
+  submissions: any,
+  token: string
 };
 
-const SubmissionDisplay = (props: Props) => (
-  <SubmissionsDisplayWrapper>
-    {props.submssions.map(post => (
-      <SubmissionCard id={post.id} text={post.text} />
-    ))}
-  </SubmissionsDisplayWrapper>
-);
-
+const SubmissionDisplay = (props: Props) =>
+  props.submissions ? (
+    <SubmissionsDisplayWrapper>
+      {props.submissions.map(post => (
+        <SubmissionCard id={post.id} text={post.text} token={props.token} />
+      ))}
+    </SubmissionsDisplayWrapper>
+  ) : null;
 export default SubmissionDisplay;
