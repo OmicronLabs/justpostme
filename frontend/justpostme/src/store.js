@@ -12,6 +12,7 @@ import userMeta from "./reducers/userMeta";
 import managedPages from "./reducers/managedPages";
 import unmanagedPages from "./reducers/unmanagedPages";
 import addManagedPage from "./reducers/addManagedPage";
+import pendingSubmissions from "./reducers/pendingSubmissions";
 
 const loggerMiddleware = createLogger();
 
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   userMeta,
   managedPages,
   unmanagedPages,
-  addManagedPage
+  addManagedPage,
+  pendingSubmissions
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

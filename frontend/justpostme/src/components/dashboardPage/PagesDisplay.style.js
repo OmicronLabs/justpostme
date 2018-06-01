@@ -15,7 +15,6 @@ export const PagesDisplayWrapper = styled.div`
 
 export const ErrorWrapper = PagesDisplayWrapper.extend`
   height: 70%;
-
   width: 100%;
   margin-top: 50px;
   justify-content: center;
