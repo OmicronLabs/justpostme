@@ -22,7 +22,7 @@ export const addToManagedError = (error: string) => ({
 export function addToManagedServer(id: number) {
   return (dispatch: Function) => {
     const url = `${serverDomain}/backend/addtomanaged?pageid=${id}`;
-
+    alert(url);
     dispatch(addToManagedBegin());
     return fetch(url, {
       method: "POST",
