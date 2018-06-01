@@ -23,19 +23,13 @@ type Props = {
   userToken: string
 };
 
-const postStuff = url =>
-  fetch(url, {
+const postStuff = url => {
+  return fetch(url, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"
     }
-    // body: JSON.stringify({
-    //   userid: user.userID,
-    //   userAccessToken: user.accessToken,
-    //   email: user.email,
-    //   expiresIn: user.expiresIn
-    // })
   })
     .then(handleErrors)
     .then(res => res.json())
@@ -44,7 +38,7 @@ const postStuff = url =>
       return true;
     })
     .catch(error => console.log(error));
-
+};
 function handleErrors(response) {
   if (!response.ok) {
     throw Error(response.statusText);
@@ -53,7 +47,7 @@ function handleErrors(response) {
 }
 
 const SubmissionCard = (props: Props) => {
-  const url = `${serverDomain}/backend/user?postid=${
+  const url = `${serverDomain}/backend/postit?postid=${
     props.id
   }&pageAccessToken=${props.token}`;
   return (

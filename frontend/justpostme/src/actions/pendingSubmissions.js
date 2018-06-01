@@ -21,24 +21,20 @@ export const fetchPendingError = error => ({
 export function fetchPendingSubmissions(pageid: string) {
   return dispatch => {
     dispatch(fetchPendingBegin());
-    return (
-      fetch(`${serverDomain}/backend/getpending?pageid=${pageid}`)
-        .then(handleErrors)
-        .then(res => res.json())
-        .then(json => {
-          const records = json.recordset;
-          const submissions = records.map(record => ({
-            name: record.name,
-            databaseId: record.ID
-          }));
-          dispatch(fetchPendingSuccess(submissions));
-          return submissions;
-        })
-        // .then(() => {
-        //   dispatch(fetchPendingSuccess([{ id: 34, text: "sdsdfdsfdsf sd" }]));
-        // })
-        .catch(error => dispatch(fetchPendingError(error)))
-    );
+    return fetch(`${serverDomain}/backend/getpending?pageid=${pageid}`)
+      .then(handleErrors)
+      .then(res => res.json())
+      .then(json => {
+        const records = json.recordset;
+        const submissions = records.map(record => ({
+          name: record.postText,
+          databaseId: record.ID
+        }));
+        dispatch(fetchPendingSuccess(submissions));
+        return submissions;
+      })
+
+      .catch(error => dispatch(fetchPendingError(error)));
   };
 }
 
