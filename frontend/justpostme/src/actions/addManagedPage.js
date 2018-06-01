@@ -22,7 +22,6 @@ export const addToManagedError = (error: string) => ({
 export function addToManagedServer(id: number) {
   return (dispatch: Function) => {
     const url = `${serverDomain}/backend/addtomanaged?pageid=${id}`;
-    alert(url);
     dispatch(addToManagedBegin());
     return fetch(url, {
       method: "POST",
@@ -30,15 +29,8 @@ export function addToManagedServer(id: number) {
         Accept: "application/json",
         "Content-Type": "application/json"
       }
-      // body: JSON.stringify({
-      //   userid: user.userID,
-      //   userAccessToken: user.accessToken,
-      //   email: user.email,
-      //   expiresIn: user.expiresIn
-      // })
     })
       .then(handleErrors)
-      .then(res => res.json())
       .then(json => {
         dispatch(addToManagedSuccess());
         return true;

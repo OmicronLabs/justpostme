@@ -29,13 +29,13 @@ class PendingSubmissions extends React.Component<Props> {
   }
 
   render() {
-    const { loading, submissions, token } = this.props;
+    const { loading, submissions, accessToken } = this.props;
     return loading ? (
       <SpinnerWrapper>
         <Spinner />
       </SpinnerWrapper>
     ) : (
-      <SubmissionDisplay submissions={submissions} token={token} />
+      <SubmissionDisplay submissions={submissions} token={accessToken} />
     );
   }
 }

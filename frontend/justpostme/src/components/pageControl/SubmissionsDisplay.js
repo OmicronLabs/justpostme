@@ -19,12 +19,19 @@ type Props = {
   token: string
 };
 
-const SubmissionDisplay = (props: Props) =>
-  props.submissions ? (
+
+const SubmissionDisplay = (props: Props) => {
+  return props.submissions ? (
     <SubmissionsDisplayWrapper>
       {props.submissions.map(post => (
-        <SubmissionCard id={post.id} text={post.text} token={props.token} />
+        <SubmissionCard
+          id={post.databaseId}
+          text={post.name}
+          token={props.token}
+        />
       ))}
     </SubmissionsDisplayWrapper>
   ) : null;
+};
+
 export default SubmissionDisplay;
