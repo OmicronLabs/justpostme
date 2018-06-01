@@ -1,8 +1,8 @@
 import React from "react";
 import { Redirect, Switch, withRouter, Route } from "react-router-dom";
 
-import ManagePages from "./components/dashboardPage/ManagePages";
-import PageControl from "./components/pageControl/PageControl";
+import ManagePages from "./containers/dashboardPage/ManagePagesContainer";
+import PageControl from "./containers/pageControl/PageControlContainer";
 import WelcomePage from "./containers/welcomePage/WelcomePageContainer";
 
 class Routes extends React.Component {

@@ -6,10 +6,13 @@ import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
 import storage from "redux-persist/lib/storage";
+
 import user from "./reducers/user";
 import userMeta from "./reducers/userMeta";
 import managedPages from "./reducers/managedPages";
 import unmanagedPages from "./reducers/unmanagedPages";
+import addManagedPage from "./reducers/addManagedPage";
+import pendingSubmissions from "./reducers/pendingSubmissions";
 
 const loggerMiddleware = createLogger();
 
@@ -23,7 +26,9 @@ const rootReducer = combineReducers({
   user,
   userMeta,
   managedPages,
-  unmanagedPages
+  unmanagedPages,
+  addManagedPage,
+  pendingSubmissions
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
