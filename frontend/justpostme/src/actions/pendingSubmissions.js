@@ -27,7 +27,6 @@ export function fetchPendingSubmissions(pageid: string) {
         .then(res => res.json())
         .then(json => {
           const records = json.recordset;
-          debugger;
           const submissions = records.map(record => ({
             name: record.name,
             databaseId: record.ID
