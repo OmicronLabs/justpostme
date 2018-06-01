@@ -20,6 +20,12 @@ yarn install'''
 yarn run build'''
       }
     }
+    stage('Test') {
+      steps {
+        sh '''cd frontend/justpostme
+yarn run test'''
+      }
+    }
     stage('Deploy') {
       when {
         branch 'master'
