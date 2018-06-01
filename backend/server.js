@@ -3,7 +3,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var sql = require("mssql");
 var app = express();
-var http = require("http");
+var https = require("https");
 var fs = require("fs");
 
 var privateKey  = fs.readFileSync('privkey.pem', 'utf8');
