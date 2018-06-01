@@ -18,6 +18,7 @@ import {
 export type Props = {
   card: Card,
   addPageToManaged: Function,
+  removePageFromManaged: Function,
   history: any,
   loading: boolean,
   error: boolean
@@ -50,12 +51,12 @@ class GeneratedCardSimple extends React.Component<Props> {
       scheduledPosts,
       pageID
     } = this.props.card;
-    const { addPageToManaged } = this.props;
+    const { addPageToManaged, removePageFromManaged } = this.props;
     return (
       <PageBox
         onClick={() => {
-          addPageToManaged
-            ? addPageToManaged(pageID)
+          this.props.addPageToManaged
+            ? this.props.addPageToManaged(pageID)
             : this.props.history.push(`/page/${pageID}`);
         }}
       >
@@ -63,6 +64,19 @@ class GeneratedCardSimple extends React.Component<Props> {
         <PageTextContainer>
           <PageName className="name">{name}</PageName>
         </PageTextContainer>
+        {removePageFromManaged ? (
+          <div
+            style={{ background: "red" }}
+            onClick={e => {
+              if (!e) var e = window.event;
+              e.cancelBubble = true;
+              if (e.stopPropagation) e.stopPropagation();
+              removePageFromManaged(pageID);
+            }}
+          >
+            Remove
+          </div>
+        ) : null}
         <PageInfoContainer>
           <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
           <PageInfoItem>{`scheduled: ${scheduledPosts}`}</PageInfoItem>

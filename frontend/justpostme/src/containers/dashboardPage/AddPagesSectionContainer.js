@@ -7,7 +7,8 @@ const mapStateToProps = state => ({
   pages: state.unmanagedPages.pages,
   loading: state.unmanagedPages.loading,
   error: state.unmanagedPages.error,
-  userID: state.userMeta.id
+  userID: state.userMeta.id,
+  addingPage: state.addManagedPage.loading
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

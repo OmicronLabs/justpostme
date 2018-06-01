@@ -1,15 +1,26 @@
 //@flow
 import React from "react";
-import type { CardProps } from "../../components/dashboardPage/DashboardPageCard.js";
-import { EmptyPagesDisplay, PagesDisplay } from "./PagesDisplay";
-import { fetchManagedPages } from "../../actions/managedPages";
+import styled from "styled-components";
+import type { Card } from "../../components/dashboardPage/DashboardPageCard.js";
+import { PagesDisplay } from "./PagesDisplay";
+import { PagesDisplayWrapper } from "./PagesDisplay.style";
+import Spinner from "../loadingSpinner/LoadingSpinner";
+
+const SpinnerWrapper = PagesDisplayWrapper.extend`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 type Props = {
-  pages: Array<CardProps>,
+  pages: Array<Card>,
   loading: boolean,
   error: boolean,
   userID: string,
-  dispatch: Function
+  fetchManagedPages: Function,
+  removeFromManaged: Function,
+  removingPage: boolean
 };
 
 const myPagesEmptyHead = "No pages to manage";
@@ -18,18 +29,34 @@ const myPagesEmptyText =
 
 class MyPagesSection extends React.Component<Props> {
   componentDidMount() {
-    const { dispatch, userID } = this.props;
-    dispatch(fetchManagedPages(userID));
+    const { userID, fetchManagedPages } = this.props;
+    fetchManagedPages(userID);
+  }
+
+  componentWillReceiveProps(nextState: Props) {
+    const { removingPage, userID, fetchManagedPages } = this.props;
+    const nextRemovingPage = nextState.removingPage;
+    if (removingPage && !nextRemovingPage) {
+      fetchManagedPages(userID);
+    }
   }
 
   render() {
-    return (
+    const { loading, error } = this.props;
+    return !loading ? (
       <PagesDisplay
         pages={this.props.pages}
         emptyHead={myPagesEmptyHead}
         emptyText={myPagesEmptyText}
         createCard={false}
+        loading={loading}
+        error={error}
+        removeFromManaged={this.props.removeFromManaged}
       />
+    ) : (
+      <SpinnerWrapper>
+        <Spinner />
+      </SpinnerWrapper>
     );
   }
 }

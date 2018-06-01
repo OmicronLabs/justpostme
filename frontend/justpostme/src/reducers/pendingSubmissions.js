@@ -1,5 +1,3 @@
-//@flow
-
 import {
   FETCH_PENDING_BEGIN,
   FETCH_PENDING_SUCCESS,
