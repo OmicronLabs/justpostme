@@ -19,6 +19,7 @@ type Props = {
   token: string
 };
 
+
 const SubmissionDisplay = (props: Props) => {
   return props.submissions ? (
     <SubmissionsDisplayWrapper>
@@ -32,4 +33,5 @@ const SubmissionDisplay = (props: Props) => {
     </SubmissionsDisplayWrapper>
   ) : null;
 };
+
 export default SubmissionDisplay;

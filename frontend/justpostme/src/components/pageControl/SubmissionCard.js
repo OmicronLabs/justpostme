@@ -23,6 +23,7 @@ type Props = {
   userToken: string
 };
 
+
 const postStuff = url => {
   return fetch(url, {
     method: "POST",
@@ -39,6 +40,7 @@ const postStuff = url => {
     })
     .catch(error => console.log(error));
 };
+
 function handleErrors(response) {
   if (!response.ok) {
     throw Error(response.statusText);

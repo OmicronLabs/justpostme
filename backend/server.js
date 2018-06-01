@@ -184,7 +184,7 @@ app.post("/backend/user", function(req, res) {
 //GET API
 app.get("/backend/getpending", function(req, res) {
   var query =
-    "SELECT * from [posts] WHERE pageid = " + req.param("pageid") + ";";
+    "SELECT * from [posts] WHERE pageid = '" + req.param("pageid") + "';";
   executeQuery(res, query);
 });
 

@@ -21,6 +21,7 @@ export const fetchPendingError = error => ({
 export function fetchPendingSubmissions(pageid: string) {
   return dispatch => {
     dispatch(fetchPendingBegin());
+
     return fetch(`${serverDomain}/backend/getpending?pageid=${pageid}`)
       .then(handleErrors)
       .then(res => res.json())

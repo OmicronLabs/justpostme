@@ -27,13 +27,14 @@ server.listen(443, function(){
     console.log("server running at https://IP_ADDRESS:8001/")
 });
 
+var httpapp = express(); 
 
 // set up http redirect
-var http = express.createServer();
+var httpserver = http.createServer(httpapp);
 
 // set up a route to redirect http to https
-http.get('*', function(req, res) {
+httpapp.get('*', function(req, res) {
     res.redirect('https://' + req.headers.host + req.url);
 })
 
-http.listen(80);
+httpserver.listen(80);

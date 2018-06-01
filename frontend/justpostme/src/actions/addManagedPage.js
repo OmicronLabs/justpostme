@@ -31,7 +31,7 @@ export function addToManagedServer(id: number) {
       }
     })
       .then(handleErrors)
-      .then(res => {
+      .then(json => {
         dispatch(addToManagedSuccess());
         return true;
       })
