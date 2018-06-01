@@ -11,6 +11,7 @@ EXPOSE 443
  
 RUN yarn add global express
 RUN yarn add global https
+RUN yarn add global http
 RUN yarn add global fs
  
 CMD [ "node", "server.js"]
