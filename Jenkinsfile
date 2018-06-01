@@ -23,7 +23,7 @@ yarn run build'''
     stage('Test') {
       steps {
         sh '''cd frontend/justpostme
-yarn run test'''
+CI=true yarn run test'''
       }
     }
     stage('Deploy') {
