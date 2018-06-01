@@ -17,7 +17,10 @@ import {
 
 export type Props = {
   card: Card,
-  addPageToManaged: Function
+  addPageToManaged: Function,
+  history: any,
+  loading: boolean,
+  error: boolean
 };
 
 export type Card = {
@@ -28,32 +31,46 @@ export type Card = {
   pageID: string
 };
 
-const GeneratedCardSimple = (props: Props) => {
-  const {
-    backgroundImgURL,
-    name,
-    pendingPosts,
-    scheduledPosts,
-    pageID
-  } = props.card;
-  return (
-    <PageBox
-      onClick={() => {
-        props.addPageToManaged && props.addPageToManaged(pageID);
-        props.history.push(`/page/${pageID}`);
-      }}
-    >
-      <PageImage className="image" src={backgroundImgURL} />
-      <PageTextContainer>
-        <PageName className="name">{name}</PageName>
-      </PageTextContainer>
-      <PageInfoContainer>
-        <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
-        <PageInfoItem>{`scheduled: ${scheduledPosts}`}</PageInfoItem>
-      </PageInfoContainer>
-    </PageBox>
-  );
-};
+class GeneratedCardSimple extends React.Component<Props> {
+  componentWillReceiveProps(nextProps: Props) {
+    const { pageID } = this.props.card;
+    const { loading, addPageToManaged } = this.props;
+    const nextLoading = nextProps.loading;
+    const error = nextProps.error;
+    if (addPageToManaged && loading && !nextLoading && !error) {
+      this.props.history.push(`/page/${pageID}`);
+    }
+  }
+
+  render() {
+    const {
+      backgroundImgURL,
+      name,
+      pendingPosts,
+      scheduledPosts,
+      pageID
+    } = this.props.card;
+    const { addPageToManaged } = this.props;
+    return (
+      <PageBox
+        onClick={() => {
+          addPageToManaged
+            ? addPageToManaged(pageID)
+            : this.props.history.push(`/page/${pageID}`);
+        }}
+      >
+        <PageImage className="image" src={backgroundImgURL} />
+        <PageTextContainer>
+          <PageName className="name">{name}</PageName>
+        </PageTextContainer>
+        <PageInfoContainer>
+          <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
+          <PageInfoItem>{`scheduled: ${scheduledPosts}`}</PageInfoItem>
+        </PageInfoContainer>
+      </PageBox>
+    );
+  }
+}
 
 export const GeneratedCard = withRouter(GeneratedCardSimple);
 
