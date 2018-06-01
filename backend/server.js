@@ -6,10 +6,10 @@ var app = express();
 var http = require("http");
 var fs = require("fs");
 
-//var privateKey  = fs.readFileSync('privkey.pem', 'utf8');
-//var certificate = fs.readFileSync('fullchain.pem', 'utf8');
+var privateKey  = fs.readFileSync('privkey.pem', 'utf8');
+var certificate = fs.readFileSync('fullchain.pem', 'utf8');
 
-//var credentials = {key: privateKey, cert: certificate};
+var credentials = {key: privateKey, cert: certificate};
 var request = require("request");
 
 // Body Parser Middleware
@@ -32,7 +32,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-var server = http.createServer({}, app);
+var server = https.createServer(credentials, app);
 
 server.listen(6069, function() {
   console.log("server running at https://IP_ADDRESS:8001/");
