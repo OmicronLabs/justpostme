@@ -40,9 +40,9 @@ server.listen(6069, function() {
 
 //Initiallising connection string
 var dbConfig = {
-  user: "mhutti1",
-  password: "T6Bcy2MJ+Gm^9SF-",
-  server: "mhutti1.database.windows.net",
+  user: process.env.DBUSER,
+  password: process.env.DBPASSWORD,
+  server: process.env.DBSERVER,
   database: "justpostme-main",
 
   options: {
@@ -193,8 +193,10 @@ app.post("/backend/postit", function(req, res) {
 });
 
 var postToFacebook = function(res, pageAccessToken) {
+
   pageId = res.recordset[0].pageid;
   postText = res.recordset[0].postText;
+  console.log(postText);
 
   var query =
     "SELECT pageAccessToken FROM [pages] where pageId = " + pageId + ";";
