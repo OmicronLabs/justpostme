@@ -127,7 +127,7 @@ class Welcome extends React.Component<Props> {
                   scope="manage_pages, email, publish_pages"
                   render={renderProps => (
                     <LargeThemedButton onClick={renderProps.onClick}>
-                      Get started with WebApps
+                      Get started with Facebook
                     </LargeThemedButton>
                   )}
                   callback={response =>

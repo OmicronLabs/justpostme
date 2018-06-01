@@ -34,9 +34,11 @@ class AddPagesSection extends React.Component<Props> {
   }
 
   render() {
-    const { loading } = this.props;
+    const { loading, error } = this.props;
     return !loading ? (
       <PagesDisplay
+        loading={loading}
+        error={error}
         pages={this.props.pages}
         addPageToManaged={this.props.addPageToManaged}
         emptyHead={addPagesEmptyHead}

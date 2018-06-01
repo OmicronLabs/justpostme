@@ -14,7 +14,9 @@ type Props = {
   addPageToManaged: Function,
   emptyHead: string,
   emptyText: string,
-  createCard: boolean
+  createCard: boolean,
+  loading: boolean,
+  error: boolean
 };
 
 type EmptyProps = {
@@ -60,6 +62,8 @@ export const PagesDisplay = (props: Props) => {
           card={page}
           key={index}
           addPageToManaged={props.addPageToManaged}
+          loading={props.loading}
+          error={props.error}
         />
       );
     });
