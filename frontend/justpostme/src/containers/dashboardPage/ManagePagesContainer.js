@@ -7,8 +7,8 @@ import ManagePages from "../../components/dashboardPage/ManagePages";
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
-  posting: state.addManagedPage.loading,
-  error: state.addManagedPage.error
+  posting: state.addManagedPage.loading || state.removeManagedPage.loading,
+  error: state.addManagedPage.error || state.removeManagedPage.error
 });
 
 export default withRouter(connect(mapStateToProps, null)(ManagePages));

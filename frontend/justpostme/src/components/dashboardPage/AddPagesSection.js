@@ -13,7 +13,8 @@ type Props = {
   error: string,
   userID: string,
   addPageToManaged: Function,
-  fetchUnmanagedPages: Function
+  fetchUnmanagedPages: Function,
+  addingPage: boolean
 };
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
@@ -34,11 +35,10 @@ class AddPagesSection extends React.Component<Props> {
   }
 
   render() {
-    const { loading, error } = this.props;
+    const { loading, addingPage } = this.props;
     return !loading ? (
       <PagesDisplay
-        loading={loading}
-        error={error}
+        loading={addingPage}
         pages={this.props.pages}
         addPageToManaged={this.props.addPageToManaged}
         emptyHead={addPagesEmptyHead}

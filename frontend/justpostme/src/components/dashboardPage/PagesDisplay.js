@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 type Props = {
   pages: Array<CardProps>,
   addPageToManaged: Function,
+  removeFromManaged: Function,
   emptyHead: string,
   emptyText: string,
   createCard: boolean,
@@ -62,6 +63,7 @@ export const PagesDisplay = (props: Props) => {
           card={page}
           key={index}
           addPageToManaged={props.addPageToManaged}
+          removePageFromManaged={props.removeFromManaged}
           loading={props.loading}
           error={props.error}
         />
