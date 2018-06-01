@@ -8,10 +8,17 @@ export const SubmissionsDisplayWrapper = styled.div`
   width: 1024px;
   margin-bottom: 90px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-content: center;
   justify-content: flex-start;
   overflow: scroll;
+`;
+
+export const SubmissionsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 type Props = {
@@ -19,17 +26,18 @@ type Props = {
   token: string
 };
 
-
 const SubmissionDisplay = (props: Props) => {
   return props.submissions ? (
     <SubmissionsDisplayWrapper>
-      {props.submissions.map(post => (
-        <SubmissionCard
-          id={post.databaseId}
-          text={post.name}
-          token={props.token}
-        />
-      ))}
+      <SubmissionsWrapper>
+        {props.submissions.map(post => (
+          <SubmissionCard
+            id={post.databaseId}
+            text={post.name}
+            token={props.token}
+          />
+        ))}
+      </SubmissionsWrapper>
     </SubmissionsDisplayWrapper>
   ) : null;
 };
