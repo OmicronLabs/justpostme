@@ -164,6 +164,9 @@ app.get("/backend/page", function(req, res) {
 //POST API
 app.post("/backend/user", function(req, res) {
   var query =
+    "DELETE FROM [users] where userid = " +
+    req.param("userid") +
+    ";\n" +
     "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES ('" +
     req.param("userid") +
     "', '" +
