@@ -1,10 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
+import { serverDomain } from "../../const/serverURL";
+
 const Wrapper = styled.div`
   height: 70px;
   width: 100%;
   border: 1px solid green;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 `;
 
 type Submission = {
@@ -17,12 +23,46 @@ type Props = {
   userToken: string
 };
 
-const SubmissionCard = (props: Props) => (
-  <Wrapper>
-    <p>{props.id}</p>
-    <p>{props.text}</p>
-    <button>Click me to post!!! </button>
-  </Wrapper>
-);
+const postStuff = url =>
+  fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+    // body: JSON.stringify({
+    //   userid: user.userID,
+    //   userAccessToken: user.accessToken,
+    //   email: user.email,
+    //   expiresIn: user.expiresIn
+    // })
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(json => {
+      console.log("success");
+      return true;
+    })
+    .catch(error => console.log(error));
+
+function handleErrors(response) {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return response;
+}
+
+const SubmissionCard = (props: Props) => {
+  const url = `${serverDomain}/backend/user?postid=${
+    props.id
+  }&pageAccessToken=${props.token}`;
+  return (
+    <Wrapper>
+      <p>{props.id}</p>
+      <p>{props.text}</p>
+      <button onClick={() => postStuff(url)}>Click me to post!!! </button>
+    </Wrapper>
+  );
+};
 
 export default SubmissionCard;

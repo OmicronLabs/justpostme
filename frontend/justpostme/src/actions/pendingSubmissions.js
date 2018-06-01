@@ -8,9 +8,9 @@ export const fetchPendingBegin = () => ({
   type: FETCH_PENDING_BEGIN
 });
 
-export const fetchPendingSuccess = pending => ({
+export const fetchPendingSuccess = submissions => ({
   type: FETCH_PENDING_SUCCESS,
-  payload: { pending }
+  payload: { submissions }
 });
 
 export const fetchPendingError = error => ({
@@ -18,23 +18,28 @@ export const fetchPendingError = error => ({
   payload: { error }
 });
 
-export function fetchPendingSubmissions(userID: string) {
+export function fetchPendingSubmissions(pageid: string) {
   return dispatch => {
     dispatch(fetchPendingBegin());
-    return fetch(`${serverDomain}/backend/managedpages?id=${userID}`)
-      .then(handleErrors)
-      .then(res => res.json())
-      .then(json => {
-        const records = json.recordset;
-        debugger;
-        const submissions = records.map(record => ({
-          name: record.name,
-          databaseId: record.ID
-        }));
-        dispatch(fetchPendingSuccess(submissions));
-        return submissions;
-      })
-      .catch(error => dispatch(fetchPendingError(error)));
+    return (
+      fetch(`${serverDomain}/backend/getpending?pageid=${pageid}`)
+        .then(handleErrors)
+        .then(res => res.json())
+        .then(json => {
+          const records = json.recordset;
+          debugger;
+          const submissions = records.map(record => ({
+            name: record.name,
+            databaseId: record.ID
+          }));
+          dispatch(fetchPendingSuccess(submissions));
+          return submissions;
+        })
+        // .then(() => {
+        //   dispatch(fetchPendingSuccess([{ id: 34, text: "sdsdfdsfdsf sd" }]));
+        // })
+        .catch(error => dispatch(fetchPendingError(error)))
+    );
   };
 }
 
