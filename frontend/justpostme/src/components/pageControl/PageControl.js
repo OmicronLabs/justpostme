@@ -9,8 +9,8 @@ import {
   PageOverviewImage,
   PageOverviewText
 } from "../common/PageOverview";
-import AddPagesSectionContainer from "../../containers/dashboardPage/AddPagesSectionContainer";
-import MyPagesSectionContainer from "../../containers/dashboardPage/MyPagesSectionContainer";
+
+import PendingSubmissionsContainer from "../../containers/pageControl/PendingSubmissionsContainer";
 
 type RouteType = {
   to: string,
@@ -106,6 +106,7 @@ class PageControl extends React.Component<Props> {
   render() {
     const { url } = this.props.match;
     const path = url;
+    const { id } = this.props.match.params;
 
     const tabBarNavRoutes = [
       { to: `${path}/pending`, name: "Pending" },
@@ -126,7 +127,7 @@ class PageControl extends React.Component<Props> {
           <Switch>
             <Route
               path={`${path}/pending`}
-              render={() => <p>Borys to cwel</p>}
+              render={() => <PendingSubmissionsContainer pageId={id} />}
             />
             <Route
               path={`${path}/approved`}

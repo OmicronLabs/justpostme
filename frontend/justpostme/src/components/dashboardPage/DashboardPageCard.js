@@ -39,7 +39,7 @@ const GeneratedCardSimple = (props: Props) => {
   return (
     <PageBox
       onClick={() => {
-        props.addPageToManaged(pageID);
+        props.addPageToManaged && props.addPageToManaged(pageID);
         props.history.push(`/page/${pageID}`);
       }}
     >
