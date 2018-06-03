@@ -65,7 +65,7 @@ class GeneratedCardSimple extends React.Component<Props> {
           <PageName className="name">{name}</PageName>
         </PageTextContainer>
         {removePageFromManaged ? (
-          <div
+          <IconButton
             style={{ background: "red" }}
             onClick={e => {
               if (!e) var e = window.event;
@@ -75,7 +75,7 @@ class GeneratedCardSimple extends React.Component<Props> {
             }}
           >
             Remove
-          </div>
+          </IconButton>
         ) : null}
         <PageInfoContainer>
           <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
