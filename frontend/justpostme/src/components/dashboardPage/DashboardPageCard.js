@@ -64,22 +64,23 @@ class GeneratedCardSimple extends React.Component<Props> {
         <PageTextContainer>
           <PageName className="name">{name}</PageName>
         </PageTextContainer>
-        {removePageFromManaged ? (
-          <IconButton
-            style={{ background: "red" }}
-            onClick={e => {
-              if (!e) var e = window.event;
-              e.cancelBubble = true;
-              if (e.stopPropagation) e.stopPropagation();
-              removePageFromManaged(pageID);
-            }}
-          >
-            Remove
-          </IconButton>
-        ) : null}
+
         <PageInfoContainer>
           <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
           <PageInfoItem>{`scheduled: ${scheduledPosts}`}</PageInfoItem>
+          {removePageFromManaged ? (
+            <IconButton
+              style={{ background: "red" }}
+              onClick={e => {
+                if (!e) var e = window.event;
+                e.cancelBubble = true;
+                if (e.stopPropagation) e.stopPropagation();
+                removePageFromManaged(pageID);
+              }}
+            >
+              Remove
+            </IconButton>
+          ) : null}
         </PageInfoContainer>
       </PageBox>
     );
