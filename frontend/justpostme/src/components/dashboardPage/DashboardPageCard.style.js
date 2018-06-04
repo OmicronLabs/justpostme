@@ -33,19 +33,24 @@ export const BlankPageBox = PageBox.extend`
 // PAGE CONTAINERS
 export const PageTextContainer = styled.div`
   width: 100%;
-  margin-left: 1em;
-  margin-right: 1em;
+  max-width: 100%;
+  /* margin-left: 1em;
+  margin-right: 1em; */
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const PageInfoContainer = styled.div`
-  width: 80%;
+  width: 100%;
+  max-width: 100%;
   height: 30px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
   display: flex;
+  align-items: center;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
 export const PageInfoItem = styled.a`
@@ -75,6 +80,7 @@ export const PageImage = styled.img`
 
 export const PageName = styled.h1`
   width: 80%;
+  margin-left: 1em;
   font-size: 22px;
   white-space: nowrap;
   overflow: hidden;

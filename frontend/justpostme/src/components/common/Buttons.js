@@ -20,8 +20,9 @@ export const TopMenuButton = RoundButton.extend`
 
 export const IconButton = styled.a`
   text-decoration: none;
-  color: grey;
+  align-content: center;
   padding-bottom: 10px;
+  color: grey;
   &:hover {
     color: darkgray;
   }
