@@ -88,10 +88,12 @@ class GeneratedCardSimple extends React.Component<Props> {
 
 export const GeneratedCard = withRouter(GeneratedCardSimple);
 
-export const AddPageCard = () => (
-  <BlankPageBox>
+const AddPageCardSimple = props => (
+  <BlankPageBox onClick={() => props.history.push(`/pages/add`)}>
     <IconButton>
       <CreatePageIcon className="fa fa-plus" />
     </IconButton>
   </BlankPageBox>
 );
+
+export const AddPageCard = withRouter(AddPageCardSimple);
