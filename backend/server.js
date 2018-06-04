@@ -168,7 +168,7 @@ app.get("/backend/unmanagedpages", function(req, res) {
 
 //GET API
 app.get("/backend/page", function(req, res) {
-  var query = "SELECT * from [pages] WHERE pageid = " + req.param("pageid");
+  var query = "SELECT * from [pages] WHERE pageId = " + req.param("pageid");
   executeQuery(res, query);
 });
 
@@ -202,23 +202,29 @@ app.post("/backend/user", function(req, res) {
 //GET API
 app.get("/backend/getpending", function(req, res) {
   var query =
-    "SELECT * from [posts] WHERE pageid = '" + req.param("pageid") + "';";
+    "SELECT * from [posts] WHERE pageId = '" + req.param("pageid") + "';";
   executeQuery(res, query);
 });
 
 //POST API
 app.post("/backend/postit", function(req, res) {
-  var query = "SELECT * from [posts] WHERE ID = " + req.param("postid") + ";";
-  queryGet(
-    response => postToFacebook(response, req.param("pageAccessToken")),
-    query
-  );
+  var query =
+    "SELECT * from [pages] where pageId = '" + req.param("pageid") + "';";
+
+  query =
+    "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = " +
+    req.param("postid") +
+    ";";
+  console.log(query);
+  queryGet(response => postToFacebook(response), query);
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
-var postToFacebook = function(res, pageAccessToken) {
-  pageId = res.recordset[0].pageid;
+var postToFacebook = function(res) {
+  console.log(res);
+  pageId = res.recordset[0].pageId[0];
   postText = res.recordset[0].postText;
+  pageAccessToken = res.recordset[0].pageAccessToken;
 
   console.log(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`
@@ -241,7 +247,7 @@ app.post("/backend/newpost", function(req, res) {
     "INSERT INTO [posts] (postid) VALUES ('" +
     req.param("userid") +
     "', '" +
-    req.param("pageid") +
+    req.param("pageId") +
     "' , '" +
     req.param("postText") +
     "')";
