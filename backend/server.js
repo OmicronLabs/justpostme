@@ -5,11 +5,19 @@ var sql = require("mssql");
 var app = express();
 var https = require("https");
 var fs = require("fs");
+<<<<<<< HEAD
 
 var privateKey = fs.readFileSync("privkey.pem", "utf8");
 var certificate = fs.readFileSync("fullchain.pem", "utf8");
 
 var credentials = { key: privateKey, cert: certificate };
+=======
+
+var privateKey  = fs.readFileSync('privkey.pem', 'utf8');
+var certificate = fs.readFileSync('fullchain.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+>>>>>>> 1f8372adfba205c319cdbdf82e121baf6fe90d1d
 var request = require("request");
 
 // Body Parser Middleware
@@ -196,6 +204,10 @@ app.post("/backend/postit", function(req, res) {
 });
 
 var postToFacebook = function(res, pageAccessToken) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1f8372adfba205c319cdbdf82e121baf6fe90d1d
   pageId = res.recordset[0].pageid;
   postText = res.recordset[0].postText;
   console.log(postText);

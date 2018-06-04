@@ -15,8 +15,13 @@ import {
   CreatePageIcon
 } from "./DashboardPageCard.style";
 
-export type CardProps = {
-  card: Card
+export type Props = {
+  card: Card,
+  addPageToManaged: Function,
+  removePageFromManaged: Function,
+  history: any,
+  loading: boolean,
+  error: boolean
 };
 
 export type Card = {
@@ -27,27 +32,59 @@ export type Card = {
   pageID: string
 };
 
-const GeneratedCardSimple = (props: CardProps) => {
-  const {
-    backgroundImgURL,
-    name,
-    pendingPosts,
-    scheduledPosts,
-    pageID
-  } = props.card;
-  return (
-    <PageBox onClick={() => props.history.push(`/page/34324`)}>
-      <PageImage className="image" src={backgroundImgURL} />
-      <PageTextContainer>
-        <PageName className="name">{name}</PageName>
-      </PageTextContainer>
-      <PageInfoContainer>
-        <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
-        <PageInfoItem>{`scheduled: ${scheduledPosts}`}</PageInfoItem>
-      </PageInfoContainer>
-    </PageBox>
-  );
-};
+class GeneratedCardSimple extends React.Component<Props> {
+  componentWillReceiveProps(nextProps: Props) {
+    const { pageID } = this.props.card;
+    const { loading, addPageToManaged } = this.props;
+    const nextLoading = nextProps.loading;
+    const error = nextProps.error;
+    if (addPageToManaged && loading && !nextLoading && !error) {
+      this.props.history.push(`/page/${pageID}`);
+    }
+  }
+
+  render() {
+    const {
+      backgroundImgURL,
+      name,
+      pendingPosts,
+      scheduledPosts,
+      pageID
+    } = this.props.card;
+    const { addPageToManaged, removePageFromManaged } = this.props;
+    return (
+      <PageBox
+        onClick={() => {
+          this.props.addPageToManaged
+            ? this.props.addPageToManaged(pageID)
+            : this.props.history.push(`/page/${pageID}`);
+        }}
+      >
+        <PageImage className="image" src={backgroundImgURL} />
+        <PageTextContainer>
+          <PageName className="name">{name}</PageName>
+        </PageTextContainer>
+        {removePageFromManaged ? (
+          <div
+            style={{ background: "red" }}
+            onClick={e => {
+              if (!e) var e = window.event;
+              e.cancelBubble = true;
+              if (e.stopPropagation) e.stopPropagation();
+              removePageFromManaged(pageID);
+            }}
+          >
+            Remove
+          </div>
+        ) : null}
+        <PageInfoContainer>
+          <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
+          <PageInfoItem>{`scheduled: ${scheduledPosts}`}</PageInfoItem>
+        </PageInfoContainer>
+      </PageBox>
+    );
+  }
+}
 
 export const GeneratedCard = withRouter(GeneratedCardSimple);
 

@@ -11,9 +11,13 @@ import { Link } from "react-router-dom";
 
 type Props = {
   pages: Array<CardProps>,
+  addPageToManaged: Function,
+  removeFromManaged: Function,
   emptyHead: string,
   emptyText: string,
-  createCard: boolean
+  createCard: boolean,
+  loading: boolean,
+  error: boolean
 };
 
 type EmptyProps = {
@@ -54,7 +58,16 @@ export const PagesDisplay = (props: Props) => {
     );
   } else {
     const components = props.pages.map((page, index) => {
-      return <GeneratedCard card={page} key={index} />;
+      return (
+        <GeneratedCard
+          card={page}
+          key={index}
+          addPageToManaged={props.addPageToManaged}
+          removePageFromManaged={props.removeFromManaged}
+          loading={props.loading}
+          error={props.error}
+        />
+      );
     });
     !props.createCard && components.push(<AddPageCard />);
     return <PagesDisplayWrapper>{components}</PagesDisplayWrapper>;

@@ -4,7 +4,6 @@ import React from "react";
 import styled from "styled-components";
 import { PagesDisplay } from "./PagesDisplay";
 import type { CardProps } from "./DashboardPageCard";
-import { fetchUnmanagedPages } from "../../actions/unmanagedPages";
 import { PagesDisplayWrapper } from "./PagesDisplay.style";
 import Spinner from "../loadingSpinner/LoadingSpinner";
 
@@ -13,7 +12,9 @@ type Props = {
   loading: boolean,
   error: string,
   userID: string,
-  dispatch: Function
+  addPageToManaged: Function,
+  fetchUnmanagedPages: Function,
+  addingPage: boolean
 };
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
@@ -29,15 +30,17 @@ const addPagesEmptyText =
 
 class AddPagesSection extends React.Component<Props> {
   componentDidMount() {
-    const { dispatch, userID } = this.props;
-    dispatch(fetchUnmanagedPages(userID));
+    const { userID, fetchUnmanagedPages } = this.props;
+    fetchUnmanagedPages(userID);
   }
 
   render() {
-    const { loading } = this.props;
+    const { loading, addingPage } = this.props;
     return !loading ? (
       <PagesDisplay
+        loading={addingPage}
         pages={this.props.pages}
+        addPageToManaged={this.props.addPageToManaged}
         emptyHead={addPagesEmptyHead}
         emptyText={addPagesEmptyText}
         createCard={true}

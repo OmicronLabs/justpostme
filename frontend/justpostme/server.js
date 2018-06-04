@@ -2,7 +2,7 @@ var express = require("express");
 var app = express(); 
 var https = require('https');
 var fs = require('fs');
-
+var http = require('http');
 
 var privateKey  = fs.readFileSync('privkey.pem', 'utf8');
 var certificate = fs.readFileSync('fullchain.pem', 'utf8');
@@ -27,3 +27,14 @@ server.listen(443, function(){
     console.log("server running at https://IP_ADDRESS:8001/")
 });
 
+var httpapp = express(); 
+
+// set up http redirect
+var httpserver = http.createServer(httpapp);
+
+// set up a route to redirect http to https
+httpapp.get('*', function(req, res) {
+    res.redirect('https://' + req.headers.host + req.url);
+})
+
+httpserver.listen(80);
