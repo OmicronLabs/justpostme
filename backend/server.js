@@ -220,12 +220,6 @@ var postToFacebook = function(res, pageAccessToken) {
   pageId = res.recordset[0].pageid;
   postText = res.recordset[0].postText;
 
-  var query =
-    "SELECT pageAccessToken FROM [pages] where pageId = '" + pageId + "';";
-
-  sql.close();
-  executeQuery(res, query);
-
   console.log(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`
   );
