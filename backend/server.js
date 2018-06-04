@@ -5,20 +5,13 @@ var sql = require("mssql");
 var app = express();
 var https = require("https");
 var fs = require("fs");
-<<<<<<< HEAD
+var request = require("request");
+require("dotenv").load();
 
 var privateKey = fs.readFileSync("privkey.pem", "utf8");
 var certificate = fs.readFileSync("fullchain.pem", "utf8");
 
 var credentials = { key: privateKey, cert: certificate };
-=======
-
-var privateKey  = fs.readFileSync('privkey.pem', 'utf8');
-var certificate = fs.readFileSync('fullchain.pem', 'utf8');
-
-var credentials = {key: privateKey, cert: certificate};
->>>>>>> 1f8372adfba205c319cdbdf82e121baf6fe90d1d
-var request = require("request");
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -61,7 +54,7 @@ var dbConfig = {
 var print;
 
 //Function to connect to database and execute query
-var executeQuery = function(res, query) {
+var executeQuery = function(res, query, f) {
   sql.connect(dbConfig, function(err) {
     if (err) {
       console.log("Error while connecting database :- " + err);
@@ -88,7 +81,7 @@ var queryGet = function(res, query) {
   sql.connect(dbConfig, function(err) {
     if (err) {
       console.log("Error while connecting database :- " + err);
-      res.send(err);
+      //res.send(err);
       sql.close();
     } else {
       // create Request object
@@ -107,7 +100,7 @@ var queryGet = function(res, query) {
   });
 };
 
-var updatePages = function(res, userid, userAccessToken) {
+var updatePages = function(res, userid, userAccessToken, response) {
   request(
     `https://graph.facebook.com/${userid}/accounts?access_token=${userAccessToken}`,
     function(error, response, body) {
@@ -118,6 +111,10 @@ var updatePages = function(res, userid, userAccessToken) {
       var data = body.data;
       var query = "DELETE FROM [pages] where userid = " + userid + ";";
 
+      if (data == null) {
+        console.log("OH NO!!!\n");
+        return;
+      }
       for (var i = 0; i < data.length; i++) {
         query =
           query +
@@ -184,15 +181,22 @@ app.post("/backend/user", function(req, res) {
     "', '" +
     req.param("expiresIn") +
     "')";
-  executeQuery(res, query, (err, res, req) => {
-    updatePages(res, req.param("userid"), req.param("userAccessToken"));
-  });
+  queryGet(
+    response =>
+      updatePages(
+        res,
+        req.param("userid"),
+        req.param("userAccessToken"),
+        response
+      ),
+    query
+  );
 });
 
 //GET API
 app.get("/backend/getpending", function(req, res) {
   var query =
-    "SELECT * from [posts] WHERE pageid = '" + req.param("pageid") + "';";
+    "SELECT * from [posts] WHERE pageid = " + req.param("pageid") + ";";
   executeQuery(res, query);
 });
 
@@ -204,13 +208,8 @@ app.post("/backend/postit", function(req, res) {
 });
 
 var postToFacebook = function(res, pageAccessToken) {
-<<<<<<< HEAD
-=======
-
->>>>>>> 1f8372adfba205c319cdbdf82e121baf6fe90d1d
   pageId = res.recordset[0].pageid;
   postText = res.recordset[0].postText;
-  console.log(postText);
 
   var query =
     "SELECT pageAccessToken FROM [pages] where pageId = " + pageId + ";";
@@ -218,11 +217,8 @@ var postToFacebook = function(res, pageAccessToken) {
   sql.close();
   executeQuery(res, query);
 
-  console.log(
-    `https://graph.facebook.com/${pageId}/feed?access_token=EAAfXpGhhzC4BAKxhOQ5JOZAINluzIyFLpgGyjXyra28Pzb1zuuzc6zcMCoYFfCSTmEOJ6pohbLTZAFfzyq68YXiNwFhJLhupuX1QpErhsDc0bUB80tuRODO0Sn9zqJrHPbTUzg4BsOF13MfQou278wJ1AGA9VJWFl8m1HHTJrThZBvw92cwHJTXcJW8MjkphIZCPBiGH3wZDZD&message=${postText}`
-  );
   request.post(
-    `https://graph.facebook.com/${pageId}/feed?access_token=EAAfXpGhhzC4BAKxhOQ5JOZAINluzIyFLpgGyjXyra28Pzb1zuuzc6zcMCoYFfCSTmEOJ6pohbLTZAFfzyq68YXiNwFhJLhupuX1QpErhsDc0bUB80tuRODO0Sn9zqJrHPbTUzg4BsOF13MfQou278wJ1AGA9VJWFl8m1HHTJrThZBvw92cwHJTXcJW8MjkphIZCPBiGH3wZDZD&message=${postText}`,
+    `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
     function(error, response, body) {
       body = JSON.parse(body);
       if (!error && response.statusCode == 200) {
