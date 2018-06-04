@@ -175,9 +175,9 @@ app.get("/backend/page", function(req, res) {
 //POST API
 app.post("/backend/user", function(req, res) {
   var query =
-    "DELETE FROM [users] where userid = " +
+    "DELETE FROM [users] where userid = '" +
     req.param("userid") +
-    ";\n" +
+    "';\n" +
     "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES ('" +
     req.param("userid") +
     "', '" +
@@ -209,7 +209,10 @@ app.get("/backend/getpending", function(req, res) {
 //POST API
 app.post("/backend/postit", function(req, res) {
   var query = "SELECT * from [posts] WHERE ID = " + req.param("postid") + ";";
-  queryGet(response => postToFacebook(response), query);
+  queryGet(
+    response => postToFacebook(response, req.param("pageAccessToken")),
+    query
+  );
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
@@ -222,6 +225,10 @@ var postToFacebook = function(res, pageAccessToken) {
 
   sql.close();
   executeQuery(res, query);
+
+  console.log(
+    `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`
+  );
 
   request.post(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
