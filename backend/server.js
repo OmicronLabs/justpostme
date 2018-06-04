@@ -55,49 +55,55 @@ var print;
 
 //Function to connect to database and execute query
 var executeQuery = function(res, query, f) {
-  sql.connect(dbConfig, function(err) {
-    if (err) {
-      console.log("Error while connecting database :- " + err);
-      res.send(err);
-      sql.close();
-    } else {
-      // create Request object
-      var request = new sql.Request();
-      // query to the database
-      request.query(query, function(err, qres) {
-        if (err) {
-          console.log("Error while querying database :- " + err);
-          res.send(err);
-        } else {
-          res.send(qres);
-        }
+  sql.connect(
+    dbConfig,
+    function(err) {
+      if (err) {
+        console.log("Error while connecting database :- " + err);
+        res.send(err);
         sql.close();
-      });
+      } else {
+        // create Request object
+        var request = new sql.Request();
+        // query to the database
+        request.query(query, function(err, qres) {
+          if (err) {
+            console.log("Error while querying database :- " + err);
+            res.send(err);
+          } else {
+            res.send(qres);
+          }
+          sql.close();
+        });
+      }
     }
-  });
+  );
 };
 
 var queryGet = function(res, query) {
-  sql.connect(dbConfig, function(err) {
-    if (err) {
-      console.log("Error while connecting database :- " + err);
-      //res.send(err);
-      sql.close();
-    } else {
-      // create Request object
-      var request = new sql.Request();
-      // query to the database
-      request.query(query, function(err, qres) {
-        if (err) {
-          console.log("Error while querying database :- " + err);
-          //res.send(err);
-        } else {
-          res(qres);
-        }
+  sql.connect(
+    dbConfig,
+    function(err) {
+      if (err) {
+        console.log("Error while connecting database :- " + err);
+        //res.send(err);
         sql.close();
-      });
+      } else {
+        // create Request object
+        var request = new sql.Request();
+        // query to the database
+        request.query(query, function(err, qres) {
+          if (err) {
+            console.log("Error while querying database :- " + err);
+            //res.send(err);
+          } else {
+            res(qres);
+          }
+          sql.close();
+        });
+      }
     }
-  });
+  );
 };
 
 var updatePages = function(res, userid, userAccessToken, response) {
@@ -109,7 +115,7 @@ var updatePages = function(res, userid, userAccessToken, response) {
         //console.log(body.data);
       }
       var data = body.data;
-      var query = "DELETE FROM [pages] where userid = " + userid + ";";
+      var query = "DELETE FROM [pages] where userid = '" + userid + "';";
 
       if (data == null) {
         console.log("OH NO!!!\n");
@@ -145,18 +151,18 @@ app.get("/backend/user", function(req, res) {
 //GET API
 app.get("/backend/managedpages", function(req, res) {
   var query =
-    "SELECT * from [pages] WHERE userid = " +
+    "SELECT * from [pages] WHERE userid = '" +
     req.param("id") +
-    " AND managed=1";
+    "' AND managed=1";
   executeQuery(res, query);
 });
 
 //GET API
 app.get("/backend/unmanagedpages", function(req, res) {
   var query =
-    "SELECT * from [pages] WHERE userid = " +
+    "SELECT * from [pages] WHERE userid = '" +
     req.param("id") +
-    " AND managed=0";
+    "' AND managed=0";
   executeQuery(res, query);
 });
 
@@ -196,7 +202,7 @@ app.post("/backend/user", function(req, res) {
 //GET API
 app.get("/backend/getpending", function(req, res) {
   var query =
-    "SELECT * from [posts] WHERE pageid = " + req.param("pageid") + ";";
+    "SELECT * from [posts] WHERE pageid = '" + req.param("pageid") + "';";
   executeQuery(res, query);
 });
 
@@ -212,7 +218,7 @@ var postToFacebook = function(res, pageAccessToken) {
   postText = res.recordset[0].postText;
 
   var query =
-    "SELECT pageAccessToken FROM [pages] where pageId = " + pageId + ";";
+    "SELECT pageAccessToken FROM [pages] where pageId = '" + pageId + "';";
 
   sql.close();
   executeQuery(res, query);
