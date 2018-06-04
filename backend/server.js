@@ -5,7 +5,6 @@ var sql = require("mssql");
 var app = express();
 var https = require("https");
 var fs = require("fs");
-require("dotenv").load();
 
 var privateKey = fs.readFileSync("privkey.pem", "utf8");
 var certificate = fs.readFileSync("fullchain.pem", "utf8");
@@ -165,6 +164,9 @@ app.get("/backend/page", function(req, res) {
 //POST API
 app.post("/backend/user", function(req, res) {
   var query =
+    "DELETE FROM [users] where userid = " +
+    req.param("userid") +
+    ";\n" +
     "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES ('" +
     req.param("userid") +
     "', '" +
@@ -174,14 +176,15 @@ app.post("/backend/user", function(req, res) {
     "', '" +
     req.param("expiresIn") +
     "')";
-  executeQuery(res, query);
-  updatePages(res, req.param("userid"), req.param("userAccessToken"));
+  executeQuery(res, query, (err, res, req) => {
+    updatePages(res, req.param("userid"), req.param("userAccessToken"));
+  });
 });
 
-//POST API
-app.post("/backend/post", function(req, res) {
+//GET API
+app.get("/backend/getpending", function(req, res) {
   var query =
-    "SELECT * from [posts] WHERE pageid = " + req.param("pageid") + ";";
+    "SELECT * from [posts] WHERE pageid = '" + req.param("pageid") + "';";
   executeQuery(res, query);
 });
 
@@ -192,8 +195,7 @@ app.post("/backend/postit", function(req, res) {
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
-var postToFacebook = function(res) {
-  console.log(res);
+var postToFacebook = function(res, pageAccessToken) {
   pageId = res.recordset[0].pageid;
   postText = res.recordset[0].postText;
   console.log(postText);
@@ -235,6 +237,15 @@ app.post("/backend/newpost", function(req, res) {
 app.post("/backend/addtomanaged", function(req, res) {
   var query =
     "UPDATE [pages] SET managed = 1 WHERE pageId = '" +
+    req.param("pageid") +
+    "';";
+  executeQuery(res, query);
+});
+
+//POST API
+app.post("/backend/removefrommanaged", function(req, res) {
+  var query =
+    "UPDATE [pages] SET managed = 0 WHERE pageId = '" +
     req.param("pageid") +
     "';";
   executeQuery(res, query);
