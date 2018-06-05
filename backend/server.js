@@ -274,6 +274,7 @@ app.post("/backend/postit", function(req, res) {
     req.param("postid") +
     ";";
   queryGet(response => postToFacebook(res, response), query);
+  res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
 var postToFacebook = function(res, response) {
@@ -292,7 +293,6 @@ var postToFacebook = function(res, response) {
       if (!error && response.statusCode == 200) {
         //console.log(body.data);
       }
-      res.end('{"success" : "Updated Successfully", "status" : 200}');
     }
   );
 };
