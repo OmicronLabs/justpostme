@@ -18,13 +18,23 @@ type Props = {
   userID: string,
   fetchPendingSubmissions: Function,
   pageId: string,
-  token: string
+  token: string,
+  postingToFb: boolean
 };
 
 class PendingSubmissions extends React.Component<Props> {
   componentDidMount() {
     const { pageId, fetchPendingSubmissions } = this.props;
     fetchPendingSubmissions(pageId);
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { postingToFb, pageId, fetchPendingSubmissions } = this.props;
+    const newPostingToFb = nextProps.postingToFb;
+
+    if (postingToFb && !newPostingToFb) {
+      fetchPendingSubmissions(pageId);
+    }
   }
 
   render() {
