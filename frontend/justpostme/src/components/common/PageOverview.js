@@ -13,8 +13,9 @@ export const BoxWrapper = styled.div`
 
 export const PageOverviewWrapper = styled.div`
   margin-top: 0px;
-  height: 140px;
-  width: 964px;
+  height: 60px;
+  width: 1024px;
+  max-width: 85%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -22,17 +23,18 @@ export const PageOverviewWrapper = styled.div`
 `;
 
 export const PageOverviewImage = styled.img`
-  margin: 20px;
+  margin: 10px;
   border-radius: 10px;
   height: 100px;
   min-width: 100px;
   width: 100px;
   object-fit: cover;
-  box-shadow: 0px 0px 19px 3px rgba(126, 149, 168, 0.5);
+  box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
 `;
 
 export const PageOverviewText = styled.h1`
-  margin: 20px;
+  /* margin: 20px; */
+  font-size: 20px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -11,6 +11,7 @@ import {
 } from "../common/PageOverview";
 
 import PendingSubmissionsContainer from "../../containers/pageControl/PendingSubmissionsContainer";
+import PageSettings from "./PageSettings";
 
 type RouteType = {
   to: string,
@@ -91,13 +92,6 @@ type Props = {
   scheduledPosts: number
 };
 
-const tabBarNavRoutes = [
-  { to: "/page/pending", name: "Pending" },
-  { to: "/page/approved", name: "Approved" },
-  { to: "/page/moderation", name: "Moderation" },
-  { to: "/page/insights", name: "Insights" }
-];
-
 class PageControl extends React.Component<Props> {
   componentDidMount() {
     const { params } = this.props.match;
@@ -112,17 +106,17 @@ class PageControl extends React.Component<Props> {
       { to: `${path}/pending`, name: "Pending" },
       { to: `${path}/approved`, name: "Approved" },
       { to: `${path}/moderation`, name: "Moderation" },
-      { to: `${path}/insights`, name: "Insights" }
+      { to: `${path}/insights`, name: "Insights" },
+      { to: `${path}/settings`, name: "Settings" }
     ];
 
     return (
       <DashboardPage>
         <Wrapper>
-          {/* uncomment for page overview up top
           <PageOverviewWrapper>
-            <PageOverviewImage src={this.props.pageImageURL} />
-            <PageOverviewText>{this.props.pageName}</PageOverviewText>
-          </PageOverviewWrapper> */}
+            {/* <PageOverviewImage src={this.props.pageImageURL} /> */}
+            <PageOverviewText>{"Imperial Secrets Test"}</PageOverviewText>
+          </PageOverviewWrapper>
           <RouteTabs routes={tabBarNavRoutes} />
           <Switch>
             <Route
@@ -139,7 +133,11 @@ class PageControl extends React.Component<Props> {
             />
             <Route
               path={`${path}/insights`}
-              render={() => <p>Borys to zjeb</p>}
+              render={() => <p>To be implemented</p>}
+            />
+            <Route
+              path={`${path}/settings`}
+              render={() => <PageSettings pageId={id} />}
             />
             <Redirect to={`${path}/pending`} />
             )} />

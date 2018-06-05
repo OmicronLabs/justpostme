@@ -6,7 +6,6 @@ import Spinner from "../loadingSpinner/LoadingSpinner";
 import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
