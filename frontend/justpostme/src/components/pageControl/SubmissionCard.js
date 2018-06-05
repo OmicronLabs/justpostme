@@ -20,9 +20,9 @@ type Submission = {
 
 type Props = {
   submission: Submission,
-  userToken: string
+  userToken: string,
+  pageID: string
 };
-
 
 const postStuff = url => {
   return fetch(url, {
@@ -49,9 +49,9 @@ function handleErrors(response) {
 }
 
 const SubmissionCard = (props: Props) => {
-  const url = `${serverDomain}/backend/postit?postid=${
-    props.id
-  }&pageAccessToken=${props.token}`;
+  const url = `${serverDomain}/backend/postit?postid=${props.id}&pageid=${
+    props.pageId
+  }`;
   return (
     <Wrapper>
       <p>{props.id}</p>

@@ -23,7 +23,8 @@ export const SubmissionsWrapper = styled.div`
 
 type Props = {
   submissions: any,
-  token: string
+  token: string,
+  pageId: string
 };
 
 const SubmissionDisplay = (props: Props) => {
@@ -32,6 +33,7 @@ const SubmissionDisplay = (props: Props) => {
       <SubmissionsWrapper>
         {props.submissions.map(post => (
           <SubmissionCard
+            pageId={props.pageId}
             id={post.databaseId}
             text={post.name}
             token={props.token}
