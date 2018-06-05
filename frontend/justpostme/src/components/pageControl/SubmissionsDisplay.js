@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import SubmissionCard from "./SubmissionCard";
+import SubmissionCardContainer from "../../containers/pageControl/SubmissionCardContainer";
 
 export const SubmissionsDisplayWrapper = styled.div`
   margin-top: 30px;
@@ -32,10 +32,9 @@ const SubmissionDisplay = (props: Props) => {
     <SubmissionsDisplayWrapper>
       <SubmissionsWrapper>
         {props.submissions.map(post => (
-          <SubmissionCard
+          <SubmissionCardContainer
             pageId={props.pageId}
-            id={post.databaseId}
-            text={post.name}
+            submission={{ id: post.databaseId, text: post.name }}
             token={props.token}
           />
         ))}
