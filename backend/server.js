@@ -261,7 +261,9 @@ app.post("/backend/user", function(req, res) {
 //GET API
 app.get("/backend/getpending", function(req, res) {
   var query =
-    "SELECT * from [posts] WHERE pageId = '" + req.param("pageid") + "';";
+    "SELECT * from [posts] WHERE pageId = '" +
+    req.param("pageid") +
+    "' AND pending = 1;";
   executeQuery(res, query);
 });
 
@@ -308,9 +310,7 @@ var incrementPosts = function(res, pageId) {
 //POST API
 app.post("/backend/newpost", function(req, res) {
   var query =
-    "INSERT INTO [posts] (userid, pageId, postText, pending) VALUES ('" +
-    req.param("userid") +
-    "', '" +
+    "INSERT INTO [posts] (pageId, postText, pending) VALUES ('" +
     req.param("pageid") +
     "' , '" +
     req.param("postText") +
