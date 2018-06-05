@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Box } from "../common/Box";
+import { IconButton } from "../common/Buttons";
 
 export const DashboardWrapper = styled.div`
   background: white;
@@ -33,23 +34,30 @@ export const BlankPageBox = PageBox.extend`
 // PAGE CONTAINERS
 export const PageTextContainer = styled.div`
   width: 100%;
-  margin-left: 1em;
-  margin-right: 1em;
-  display: flex;
-`;
-
-export const PageInfoContainer = styled.div`
-  width: 80%;
-  height: 30px;
-  border-bottom-right-radius: 6px;
-  border-bottom-left-radius: 6px;
+  max-width: 100%;
+  /* margin-left: 1em;
+  margin-right: 1em; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
 
+export const PageInfoContainer = styled.div`
+  width: 100%;
+  max-width: 100%;
+  height: 30px;
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+`;
+
 export const PageInfoItem = styled.a`
   text-decoration: none;
+  margin-left: 15px;
+  margin-right: 15px;
   color: grey;
   padding-bottom: 10px;
 `;
@@ -75,6 +83,7 @@ export const PageImage = styled.img`
 
 export const PageName = styled.h1`
   width: 80%;
+  margin-left: 15px;
   font-size: 22px;
   white-space: nowrap;
   overflow: hidden;
