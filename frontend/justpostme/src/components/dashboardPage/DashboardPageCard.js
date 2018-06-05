@@ -2,7 +2,7 @@
 
 import React from "react";
 import styled from "styled-components";
-import { IconButton } from "../common/Buttons";
+import { IconButton, RemoveButton } from "../common/Buttons";
 import { withRouter } from "react-router-dom";
 import {
   PageBox,
@@ -63,24 +63,20 @@ class GeneratedCardSimple extends React.Component<Props> {
         <PageImage className="image" src={backgroundImgURL} />
         <PageTextContainer>
           <PageName className="name">{name}</PageName>
+          <RemoveButton
+            className="fa fa-times"
+            onClick={e => {
+              if (!e) var e = window.event;
+              e.cancelBubble = true;
+              if (e.stopPropagation) e.stopPropagation();
+              removePageFromManaged(pageID);
+            }}
+          />
         </PageTextContainer>
 
         <PageInfoContainer>
           <PageInfoItem>{`pending: ${pendingPosts}`}</PageInfoItem>
           <PageInfoItem>{`scheduled: ${scheduledPosts}`}</PageInfoItem>
-          {removePageFromManaged ? (
-            <IconButton
-              style={{ background: "red" }}
-              onClick={e => {
-                if (!e) var e = window.event;
-                e.cancelBubble = true;
-                if (e.stopPropagation) e.stopPropagation();
-                removePageFromManaged(pageID);
-              }}
-            >
-              Remove
-            </IconButton>
-          ) : null}
         </PageInfoContainer>
       </PageBox>
     );
