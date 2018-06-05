@@ -23,7 +23,7 @@ export function addToManagedServer(id: number) {
   return (dispatch: Function) => {
     const url = `${serverDomain}/backend/addtomanaged?pageid=${id}`;
     dispatch(addToManagedBegin());
-    debugger;
+
     return fetch(url, {
       method: "POST",
       headers: {
