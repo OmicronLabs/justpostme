@@ -15,6 +15,8 @@ import {
   CreatePageIcon
 } from "./DashboardPageCard.style";
 
+import "font-awesome/css/font-awesome.min.css";
+
 export type Props = {
   card: Card,
   addPageToManaged: Function,
