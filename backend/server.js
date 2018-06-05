@@ -151,8 +151,7 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
   //console.log("Response to updatePages is: " + response.recordset[0].name);
   var pagesInDB = response.recordset;
 
-  //var query = "DELETE FROM [pages] where userid = '" + userid + "';";
-  var query = "";
+  var query = "DELETE FROM [pages] where userid = '" + userid + "';";
 
   if (pagesToInsert == null) {
     console.log("Data passed to updatePages is null\n");
