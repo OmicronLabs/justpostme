@@ -15,5 +15,6 @@ RUN yarn add global fs
 RUN yarn add global mssql
 RUN yarn add global body-parser
 RUN yarn add global request
+RUN yarn add global dotenv
  
 CMD [ "node", "server.js"]
