@@ -12,7 +12,7 @@ export const BoxWrapper = styled.div`
 `;
 
 export const PageOverviewWrapper = styled.div`
-  margin-top: 0px;
+  margin-top: 2px;
   height: 60px;
   width: 1024px;
   max-width: 85%;
@@ -33,12 +33,18 @@ export const PageOverviewImage = styled.img`
 `;
 
 export const PageOverviewText = styled.h1`
-  /* margin: 20px; */
   font-size: 20px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   color: gray;
+`;
+
+export const ClickablePageOverviewText = PageOverviewText.extend`
+  cursor: pointer;
+  &:hover {
+    color: rgba(76, 175, 80, 0.7);
+  }
 `;
 
 export const Box = styled.div`
