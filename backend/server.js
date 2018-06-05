@@ -151,8 +151,7 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
   //console.log("Response to updatePages is: " + response.recordset[0].name);
   var pagesInDB = response.recordset;
 
-  //var query = "DELETE FROM [pages] where userid = '" + userid + "';";
-  var query = "";
+  var query = "DELETE FROM [pages] where userid = '" + userid + "';";
 
   if (pagesToInsert == null) {
     console.log("Data passed to updatePages is null\n");
@@ -160,31 +159,42 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
   }
   for (var i = 0; i < pagesToInsert.length; i++) {
     var sameFlag = false;
+    var sameManaged = 0;
     for (var j = 0; j < pagesInDB.length; j++) {
       if (pagesToInsert[i].name === pagesInDB[j].name) {
         sameFlag = true;
+        sameManaged = pagesInDB[j].managed;
         console.log(
           "Name to insert: " +
             pagesToInsert[i].name +
             ", Name in: " +
             pagesInDB[j].name +
+            ", Managed: " +
+            pagesInDB[j].managed +
             "; SAME"
         );
+        break;
       }
     }
-    if (!sameFlag) {
-      query =
-        query +
-        "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES (" +
-        userid +
-        ", 0, 0, " +
-        pagesToInsert[i].id +
-        " , '" +
-        pagesToInsert[i].access_token +
-        "', 0, '" +
-        pagesToInsert[i].name +
-        "');";
+
+    if (sameManaged) {
+      sameManaged = 1;
+    } else {
+      sameManaged = 0;
     }
+    query =
+      query +
+      "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES (" +
+      userid +
+      ", 0, 0, " +
+      pagesToInsert[i].id +
+      " , '" +
+      pagesToInsert[i].access_token +
+      "', " +
+      sameManaged +
+      ", '" +
+      pagesToInsert[i].name +
+      "');";
   }
 
   sql.close();
@@ -251,7 +261,9 @@ app.post("/backend/user", function(req, res) {
 //GET API
 app.get("/backend/getpending", function(req, res) {
   var query =
-    "SELECT * from [posts] WHERE pageId = '" + req.param("pageid") + "';";
+    "SELECT * from [posts] WHERE pageId = '" +
+    req.param("pageid") +
+    "' AND pending = 1;";
   executeQuery(res, query);
 });
 
@@ -261,18 +273,14 @@ app.post("/backend/postit", function(req, res) {
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = " +
     req.param("postid") +
     ";";
-  queryGet(response => postToFacebook(response), query);
+  queryGet(response => postToFacebook(res, response), query);
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
-var postToFacebook = function(res) {
-  pageId = res.recordset[0].pageId[0];
-  postText = res.recordset[0].postText;
-  pageAccessToken = res.recordset[0].pageAccessToken;
-
-  // console.log(
-  //   `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`
-  // );
+var postToFacebook = function(res, response) {
+  pageId = response.recordset[0].pageId[0];
+  postText = response.recordset[0].postText;
+  pageAccessToken = response.recordset[0].pageAccessToken;
 
   request.post(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
@@ -298,13 +306,12 @@ var incrementPosts = function(res, pageId) {
 //POST API
 app.post("/backend/newpost", function(req, res) {
   var query =
-    "INSERT INTO [posts] (userid, pageId, postText) VALUES ('" +
-    req.param("userid") +
-    "', '" +
+    "INSERT INTO [posts] (pageId, postText, pending) VALUES ('" +
     req.param("pageid") +
     "' , '" +
     req.param("postText") +
-    "')";
+    "', 1)";
+
   queryGetNoClose(response => incrementPosts(res, req.param("pageid")), query);
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
