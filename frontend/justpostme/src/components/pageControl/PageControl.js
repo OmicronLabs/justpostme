@@ -6,8 +6,10 @@ import { Redirect, Switch, Route, NavLink } from "react-router-dom";
 import {
   PageOverviewWrapper,
   PageOverviewImage,
-  PageOverviewText
+  PageOverviewText,
+  ClickablePageOverviewText
 } from "../common/PageOverview";
+import "font-awesome/css/font-awesome.min.css";
 
 import PendingSubmissionsContainer from "../../containers/pageControl/PendingSubmissionsContainer";
 import PageSettings from "./PageSettings";
@@ -93,7 +95,8 @@ type Props = {
   currentPageLoading: boolean,
   currentPage: any,
   fetchCurrentPage: Function,
-  match: any
+  match: any,
+  history: any
 };
 
 class PageControl extends React.Component<Props> {
@@ -125,15 +128,31 @@ class PageControl extends React.Component<Props> {
       { to: `${path}/settings`, name: "Settings" }
     ];
 
-    const { currentPage } = this.props;
+    const { currentPage, history } = this.props;
 
     return (
       <DashboardPage>
         <Wrapper>
           <PageOverviewWrapper>
-            <PageOverviewText>
-              {currentPage ? currentPage.name : "Page"}
+            <ClickablePageOverviewText
+              onClick={() => {
+                history.push("/pages");
+              }}
+            >
+              <i style={{ fontSize: "27px" }} class="fa fa-home" />
+            </ClickablePageOverviewText>
+
+            <PageOverviewText style={{ margin: "0 10px", fontSize: "25px" }}>
+              <i class="fa fa-caret-right" />
             </PageOverviewText>
+
+            <ClickablePageOverviewText
+              onClick={() => {
+                history.push(`${path}/pending`);
+              }}
+            >
+              {currentPage ? currentPage.name : "Page"}
+            </ClickablePageOverviewText>
           </PageOverviewWrapper>
           <RouteTabs routes={tabBarNavRoutes} />
           <Switch>
