@@ -1,18 +1,20 @@
 //@flow
 
 import { connect } from "react-redux";
-import { addToManagedServer } from "../../actions/addManagedPage";
-
+import { withRouter } from "react-router-dom";
+import { fetchCurrentPage } from "../../actions/currentPage";
 import PageControl from "../../components/pageControl/PageControl";
 
-// const mapDispatchToProps = (dispatch, ownProps) => ({
-//   addToManagedServer: id => dispatch(addToManagedServer(id))
-// });
+const mapStateToProps = (state, ownProps) => ({
+  ...ownProps,
+  currentPageLoading: state.currentPage.loading
+});
 
-// const mapStateToProps = (state, ownProps) => ({
-//   ...ownProps,
-//   posting: state.addManagedPage.loading,
-//   error: state.addManagedPage.error
-// });
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  ...ownProps,
+  fetchCurrentPage: id => dispatch(fetchCurrentPage(id))
+});
 
-export default PageControl;
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(PageControl)
+);

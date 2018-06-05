@@ -1,7 +1,6 @@
 //@flow
 import React from "react";
 import styled from "styled-components";
-import { withRouter } from "react-router-dom";
 import DashboardPage from "../dashboardPage/DashboardPage";
 import { Redirect, Switch, Route, NavLink } from "react-router-dom";
 import {
@@ -12,6 +11,7 @@ import {
 
 import PendingSubmissionsContainer from "../../containers/pageControl/PendingSubmissionsContainer";
 import PageSettings from "./PageSettings";
+import { fetchCurrentPage } from "../../actions/currentPage";
 
 type RouteType = {
   to: string,
@@ -89,12 +89,17 @@ type Props = {
   pageName: string,
   pageImageURL: string,
   pendingPosts: number,
-  scheduledPosts: number
+  scheduledPosts: number,
+  currentPageLoading: boolean,
+  currentPage: any,
+  fetchCurrentPage: Function,
+  match: any
 };
 
 class PageControl extends React.Component<Props> {
   componentDidMount() {
-    const { params } = this.props.match;
+    const { fetchCurrentPage, match } = this.props;
+    fetchCurrentPage(match.params.id);
   }
 
   render() {
@@ -120,12 +125,15 @@ class PageControl extends React.Component<Props> {
       { to: `${path}/settings`, name: "Settings" }
     ];
 
+    const { currentPage } = this.props;
+
     return (
       <DashboardPage>
         <Wrapper>
           <PageOverviewWrapper>
-            {/* <PageOverviewImage src={this.props.pageImageURL} /> */}
-            <PageOverviewText>{"Imperial Secrets Test"}</PageOverviewText>
+            <PageOverviewText>
+              {currentPage ? currentPage.name : "Page"}
+            </PageOverviewText>
           </PageOverviewWrapper>
           <RouteTabs routes={tabBarNavRoutes} />
           <Switch>
@@ -158,4 +166,4 @@ class PageControl extends React.Component<Props> {
   }
 }
 
-export default withRouter(PageControl);
+export default PageControl;
