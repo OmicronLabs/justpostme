@@ -282,10 +282,6 @@ var postToFacebook = function(res, response) {
   postText = response.recordset[0].postText;
   pageAccessToken = response.recordset[0].pageAccessToken;
 
-  // console.log(
-  //   `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`
-  // );
-
   request.post(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
     function(error, response, body) {
