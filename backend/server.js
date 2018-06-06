@@ -262,8 +262,12 @@ app.post("/backend/postit", function(req, res) {
 var postToFacebook = function(res, response) {
   pageId = response.recordset[0].pageId[0];
   postText = response.recordset[0].postText;
+  postId = response.recordset[0].ID[1];
+  console.log("ID: " + postId);
   pageAccessToken = response.recordset[0].pageAccessToken;
 
+  var query = "UPDATE [posts] SET pending = 0 WHERE ID = '" + postId + "';";
+  queryGet(response => console.log(response), query);
   request.post(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
     function(error, response, body) {
