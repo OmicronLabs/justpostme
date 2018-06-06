@@ -6,6 +6,9 @@ var app = express();
 var https = require("https");
 var fs = require("fs");
 var request = require("request");
+var crypto = require("crypto");
+
+
 require("dotenv").load();
 
 var privateKey = fs.readFileSync("privkey.pem", "utf8");
@@ -283,15 +286,16 @@ var incrementPosts = function(res, pageId) {
 
 //POST API
 app.post("/backend/newpost", function(req, res) {
+  var random = crypto.randomBytes(20).toString('hex');
   var query =
-    "INSERT INTO [posts] (pageId, postText, pending) VALUES ('" +
+    "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
     req.param("pageid") +
     "' , '" +
     req.param("postText") +
-    "', 1)";
+    "', 1, '" + random + "')";
 
   queryGet(response => incrementPosts(res, req.param("pageid")), query);
-  res.end('{"success" : "Updated Successfully", "status" : 200}');
+  res.end('{"success" : "Updated Successfully", "status" : 200, "posthash" : "' + random + '"}');
 });
 
 //POST API
