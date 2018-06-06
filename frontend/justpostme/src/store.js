@@ -9,9 +9,11 @@ import storage from "redux-persist/lib/storage";
 
 import user from "./reducers/user";
 import userMeta from "./reducers/userMeta";
+import currentPage from "./reducers/currentPage";
 import managedPages from "./reducers/managedPages";
 import unmanagedPages from "./reducers/unmanagedPages";
 import addManagedPage from "./reducers/addManagedPage";
+import postSubmission from "./reducers/postSubmission";
 import removeManagedPage from "./reducers/removeManagedPage";
 import pendingSubmissions from "./reducers/pendingSubmissions";
 
@@ -26,9 +28,11 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user,
   userMeta,
+  currentPage,
   managedPages,
   unmanagedPages,
   addManagedPage,
+  postSubmission,
   removeManagedPage,
   pendingSubmissions
 });
