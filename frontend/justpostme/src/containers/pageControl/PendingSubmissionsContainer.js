@@ -8,7 +8,8 @@ const mapStateToProps = state => ({
   error: state.pendingSubmissions.error,
   userID: state.userMeta.id,
   accessToken: state.userMeta.token,
-  postingToFb: state.postSubmission.postingLoading
+  postingToFb: state.postSubmission.postingLoading,
+  errorToFb: state.postSubmission.postingError
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -16,4 +17,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchPendingSubmissions: id => dispatch(fetchPendingSubmissions(id))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PendingSubmissions);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PendingSubmissions);
