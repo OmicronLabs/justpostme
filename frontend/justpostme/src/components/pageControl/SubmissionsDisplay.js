@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import SubmissionCardContainer from "../../containers/pageControl/SubmissionCardContainer";
 import SubmissionCard from "../pageControl/SubmissionCard";
 import { ErrorDisplay } from "../dashboardPage/PagesDisplay";
 

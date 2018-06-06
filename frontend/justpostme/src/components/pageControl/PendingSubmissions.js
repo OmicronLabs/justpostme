@@ -6,7 +6,6 @@ import Spinner from "../loadingSpinner/LoadingSpinner";
 import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +18,9 @@ type Props = {
   userID: string,
   fetchPendingSubmissions: Function,
   pageId: string,
-  token: string
+  token: string,
+  errorToFb: boolean,
+  postingToFb: boolean
 };
 
 class PendingSubmissions extends React.Component<Props> {
@@ -28,14 +29,29 @@ class PendingSubmissions extends React.Component<Props> {
     fetchPendingSubmissions(pageId);
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    const { postingToFb, pageId, fetchPendingSubmissions } = this.props;
+    const newPostingToFb = nextProps.postingToFb;
+
+    const errorToFb = nextProps.errorToFb;
+
+    if (postingToFb && !newPostingToFb && errorToFb) {
+      fetchPendingSubmissions(pageId);
+    }
+  }
+
   render() {
-    const { loading, submissions, accessToken } = this.props;
+    const { loading, submissions, accessToken, pageId } = this.props;
     return loading ? (
       <SpinnerWrapper>
         <Spinner />
       </SpinnerWrapper>
     ) : (
-      <SubmissionDisplay submissions={submissions} token={accessToken} />
+      <SubmissionDisplay
+        submissions={submissions}
+        token={accessToken}
+        pageId={pageId}
+      />
     );
   }
 }
