@@ -297,6 +297,12 @@ app.post("/backend/newpost", function(req, res) {
 });
 
 //POST API
+app.post("/backend/bodyTest", function(req, res) {
+  console.log(res.body);
+  res.end('{"success" : "Updated Successfully", "status" : 200}');
+});
+
+//POST API
 app.post("/backend/addtomanaged", function(req, res) {
   var query =
     "UPDATE [pages] SET managed = 1 WHERE pageId = '" +
