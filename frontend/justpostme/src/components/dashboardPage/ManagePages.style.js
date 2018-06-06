@@ -22,6 +22,7 @@ export const RouteTabsWrapper = styled.div`
 
 export const TabButton = styled.div`
   width: 150px;
+  user-select: none;
   height: 60px;
   margin-right: 20px;
   display: flex;
