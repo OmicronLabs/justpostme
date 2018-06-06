@@ -295,8 +295,15 @@ app.post("/backend/newpost", function(req, res) {
 });
 
 //POST API
-app.post("/backend/bodyTest", function(req, res) {
-  console.log("Res: " + req.body("pageId"));
+app.post("/backend/createpost", function(req, res) {
+  var query =
+    "INSERT INTO [posts] (pageId, postText, pending) VALUES ('" +
+    req.body.pageid +
+    "' , '" +
+    req.body.postText +
+    "', 1)";
+
+  queryGet(response => incrementPosts(res, req.param("pageid")), query);
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
