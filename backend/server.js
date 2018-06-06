@@ -53,19 +53,22 @@ var dbConfig = {
 
 var print;
 
+var sqlcon;
+
+async function setup() {
+  sqlcon = await sql.connect(dbConfig, function(err) {
+    if (err) {
+      console.log("Error while connecting database :- " + err);
+      sqlcon.close();
+    }
+  });
+}
+
+setup();
+
 //Function to connect to database and execute query
 var executeQuery = function(res, query) {
-  sql.connect(
-    dbConfig,
-    function(err) {
-      if (err) {
-        console.log("Error while connecting database :- " + err);
-        res.send(err);
-        sql.close();
-      } else {
-        // create Request object
-        var request = new sql.Request();
-        // query to the database
+        var request = sqlcon.request();
         request.query(query, function(err, qres) {
           if (err) {
             console.log("Error while querying database :- " + err);
@@ -73,23 +76,12 @@ var executeQuery = function(res, query) {
           } else {
             res.send(qres);
           }
-          sql.close();
-        });
-      }
-    }
-  );
-};
+  ;
+})};
 
 var queryGet = function(res, query) {
-  sql.connect(
-    dbConfig,
-    function(err) {
-      if (err) {
-        console.log("Error while connecting database :- " + err);
-        sql.close();
-      } else {
         // create Request object
-        var request = new sql.Request();
+        var request = new sqlcon.request();
         // query to the database
         request.query(query, function(err, qres) {
           if (err) {
@@ -97,22 +89,12 @@ var queryGet = function(res, query) {
           } else {
             res(qres);
           }
-          sql.close();
         });
-      }
-    }
-  );
 };
 
 var queryGetNoClose = function(res, query) {
-  sql.connect(
-    dbConfig,
-    function(err) {
-      if (err) {
-        console.log("Error while connecting database :- " + err);
-      } else {
         // create Request object
-        var request = new sql.Request();
+        var request = new sqlcon.request();
         // query to the database
         request.query(query, function(err, qres) {
           if (err) {
@@ -121,9 +103,6 @@ var queryGetNoClose = function(res, query) {
             res(qres);
           }
         });
-      }
-    }
-  );
 };
 
 var updatePages = function(res, userid, userAccessToken, response) {
@@ -137,7 +116,6 @@ var updatePages = function(res, userid, userAccessToken, response) {
       var pagesToInsert = body.data;
 
       var query = "SELECT * FROM [pages] where userid = '" + userid + "';";
-      sql.close();
       queryGetNoClose(
         response => insertRelevantPages(res, response, userid, pagesToInsert),
         query
@@ -197,7 +175,6 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
       "');";
   }
 
-  sql.close();
   executeQuery(res, query);
 };
 
@@ -299,7 +276,6 @@ var incrementPosts = function(res, pageId) {
     pageId +
     "';";
 
-  sql.close();
   queryGet(response => console.log(response), query);
 };
 
