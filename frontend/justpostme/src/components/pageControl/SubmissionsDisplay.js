@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import SubmissionCardContainer from "../../containers/pageControl/SubmissionCardContainer";
+import { ErrorDisplay } from "../dashboardPage/PagesDisplay";
 
 export const SubmissionsDisplayWrapper = styled.div`
   margin-top: 30px;
@@ -28,17 +29,29 @@ type Props = {
   pageId: string
 };
 
+const noSubmissionsHead = "No pending posts";
+const noSubmissionsText =
+  "Looks like you have no pending submission yet. Make sure your users can see the submission link!";
+
 const SubmissionDisplay = (props: Props) => {
   return props.submissions ? (
     <SubmissionsDisplayWrapper>
       <SubmissionsWrapper>
-        {props.submissions.map(post => (
-          <SubmissionCardContainer
-            pageId={props.pageId}
-            submission={{ id: post.databaseId, text: post.name }}
-            token={props.token}
+        {props.submissions.length < 1 ? (
+          <ErrorDisplay
+            head={noSubmissionsHead}
+            text={noSubmissionsText}
+            createCard={true}
           />
-        ))}
+        ) : (
+          props.submissions.map(post => (
+            <SubmissionCardContainer
+              pageId={props.pageId}
+              submission={{ id: post.databaseId, text: post.name }}
+              token={props.token}
+            />
+          ))
+        )}
       </SubmissionsWrapper>
     </SubmissionsDisplayWrapper>
   ) : null;
