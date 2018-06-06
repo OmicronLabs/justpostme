@@ -21,14 +21,18 @@ export const submitFormError = (error: string) => ({
 
 export function submitForm(pageid: string, text: string) {
   return (dispatch: Function) => {
-    const url = `${serverDomain}/backend/newpost?pageid=${pageid}&postText=${text}`;
+    const url = `${serverDomain}/backend/createpost`;
     dispatch(submitFormBegin());
     return fetch(url, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify({
+        pageid: pageid,
+        postText: text
+      })
     })
       .then(handleErrors)
       .then(json => {
