@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const RoundButton = styled.a`
+  user-select: none;
   text-decoration: none;
   display: inline-block;
   margin: 1em;
@@ -19,6 +20,7 @@ export const TopMenuButton = RoundButton.extend`
 `;
 
 export const IconButton = styled.a`
+  user-select: none;
   text-decoration: none;
   align-content: center;
   padding-bottom: 10px;

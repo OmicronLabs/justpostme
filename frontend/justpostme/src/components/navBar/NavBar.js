@@ -31,6 +31,8 @@ const HeaderLogoText = styled.h2`
 
 const NavBarOuter = styled.div`
   position: relative;
+  user-select: none;
+
   width: 100%;
   height: 70px;
   background-image: url(${navBarImage});
