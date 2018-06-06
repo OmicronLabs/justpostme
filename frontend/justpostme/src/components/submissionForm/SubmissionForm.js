@@ -1,6 +1,7 @@
 //@flow
 import React from "react";
 import styled from "styled-components";
+import { submitForm } from "../../actions/submitForm";
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -25,25 +26,42 @@ const InputField = styled.input`
 
 type Props = {
   currentPage: any,
-  currentPageLoading: boolean
+  currentPageLoading: boolean,
+  submitForm: Function,
+  fetchCurrentPage: Function
 };
 
 class SubmissionForm extends React.Component<Props> {
+  constructor(props) {
+    super(props);
+    this.state = { submissionText: "" };
+  }
+
   componentDidMount() {
     const { fetchCurrentPage, match } = this.props;
     fetchCurrentPage(match.params.id);
   }
 
   _renderForm() {
-    const { currentPage } = this.props;
+    const { currentPage, match, submitForm } = this.props;
     return (
       <Form>
         <p> {`Submission form for page ${currentPage.name}`}</p>
         <p> Your submissions content </p>
-        <InputField style={{ height: "130px" }} />
+        <InputField
+          style={{ height: "130px" }}
+          value={this.state.submissionText}
+          onChange={event =>
+            this.setState({ submissionText: event.target.value })
+          }
+        />
         <p> Who you are </p>
         <InputField style={{ height: "70px" }} />
-        <button onClick={() => alert("Submitted")}>Submit me!!!!</button>
+        <button
+          onClick={() => submitForm(match.params.id, this.state.submissionText)}
+        >
+          Submit me!!!!
+        </button>
       </Form>
     );
   }

@@ -3,6 +3,7 @@
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { fetchCurrentPage } from "../../actions/currentPage";
+import { submitForm } from "../../actions/submitForm";
 import SubmissionForm from "../../components/submissionForm/SubmissionForm";
 
 const mapStateToProps = (state, ownProps) => ({
@@ -14,7 +15,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   ...ownProps,
-  fetchCurrentPage: id => dispatch(fetchCurrentPage(id))
+  fetchCurrentPage: id => dispatch(fetchCurrentPage(id)),
+  submitForm: (id, text) => dispatch(submitForm(id, text))
 });
 
 export default withRouter(
