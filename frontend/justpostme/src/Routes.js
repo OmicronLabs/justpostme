@@ -4,6 +4,7 @@ import { Redirect, Switch, withRouter, Route } from "react-router-dom";
 import ManagePages from "./containers/dashboardPage/ManagePagesContainer";
 import PageControl from "./containers/pageControl/PageControlContainer";
 import WelcomePage from "./containers/welcomePage/WelcomePageContainer";
+import SubmissionForm from "./containers/submissionForm/SubmissionFormContainer";
 
 class Routes extends React.Component {
   render() {
@@ -36,6 +37,7 @@ class Routes extends React.Component {
             );
           }}
         />
+        <Route path="/form/:id" render={() => <SubmissionForm />} />
         <Redirect to="/login" />
       </Switch>
     );
