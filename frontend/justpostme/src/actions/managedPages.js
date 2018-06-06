@@ -33,7 +33,9 @@ export function fetchManagedPages(userID: string) {
           pageID: record.pageId,
           pendingPosts: record.pendingPosts,
           scheduledPosts: record.scheduledPosts,
-          backgroundImgURL: altImage
+          backgroundImgURL: `https://graph.facebook.com/${
+            record.pageId
+          }/picture?height=500`
         }));
         dispatch(fetchManagedSuccess(pages));
         return pages;

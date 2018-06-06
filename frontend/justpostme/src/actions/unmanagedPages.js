@@ -33,7 +33,10 @@ export function fetchUnmanagedPages(userID: string) {
           pageID: record.pageId,
           pendingPosts: record.pendingPosts,
           scheduledPosts: record.scheduledPosts,
-          backgroundImgURL: altImage
+          backgroundImgURL: record.scheduledPosts,
+          backgroundImgURL: `https://graph.facebook.com/${
+            record.pageId
+          }/picture?height=500`
         }));
         dispatch(fetchUnmanagedSuccess(pages));
         return pages;
