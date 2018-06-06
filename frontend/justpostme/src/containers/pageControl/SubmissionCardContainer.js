@@ -14,3 +14,4 @@ export default connect(
   null,
   mapDispatchToProps
 )(SubmissionCard);
+
