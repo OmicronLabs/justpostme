@@ -128,10 +128,14 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
   for (var i = 0; i < pagesToInsert.length; i++) {
     var sameFlag = false;
     var sameManaged = 0;
+    var numPending = 0;
+    var numScheduled = 0;
     for (var j = 0; j < pagesInDB.length; j++) {
       if (pagesToInsert[i].name === pagesInDB[j].name) {
         sameFlag = true;
         sameManaged = pagesInDB[j].managed;
+        numPending = pagesInDB[j].pendingPosts;
+        numScheduled = pagesInDB[j].scheduledPosts;
         console.log(
           "Name to insert: " +
             pagesToInsert[i].name +
@@ -139,6 +143,10 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
             pagesInDB[j].name +
             ", Managed: " +
             pagesInDB[j].managed +
+            ", Scheduled #: " +
+            numScheduled +
+            ", Pending #: " +
+            numPending +
             "; SAME"
         );
         break;
@@ -166,7 +174,11 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
       query +
       "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, picture, name) VALUES (" +
       userid +
-      ", 0, 0, " +
+      ", " +
+      numScheduled +
+      ", " +
+      numPending +
+      ", " +
       pagesToInsert[i].id +
       " , '" +
       pagesToInsert[i].access_token +
@@ -266,8 +278,15 @@ var postToFacebook = function(res, response) {
   console.log("ID: " + postId);
   pageAccessToken = response.recordset[0].pageAccessToken;
 
-  var query = "UPDATE [posts] SET pending = 0 WHERE ID = '" + postId + "';";
+  var query =
+    "UPDATE [posts] SET pending = 0 WHERE ID = '" +
+    postId +
+    "';\n" +
+    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageId = '" +
+    pageId +
+    "';";
   queryGet(response => console.log(response), query);
+
   request.post(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
     function(error, response, body) {
