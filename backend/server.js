@@ -254,12 +254,13 @@ var postToFacebook = function(res, response) {
   pageAccessToken = response.recordset[0].pageAccessToken;
 
   var query =
-    "UPDATE [posts] SET pending = 0 WHERE ID = '" +
+    "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = " +
     postId +
-    "';\n" +
+    ";\n" +
     "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageId = '" +
     pageId +
     "';";
+  console.log(query);
   queryGet(response => console.log(response), query);
 
   request.post(
