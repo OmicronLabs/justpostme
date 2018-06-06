@@ -20,10 +20,22 @@ export const TopMenuButton = RoundButton.extend`
 
 export const IconButton = styled.a`
   text-decoration: none;
-  color: grey;
+  align-content: center;
   padding-bottom: 10px;
+  color: grey;
   &:hover {
     color: darkgray;
+  }
+`;
+
+// className="fa fa-times"
+export const RemoveButton = IconButton.extend`
+  height: 18px;
+  padding-bottom: 0px;
+  padding-right: 5px;
+  color: lightgray;
+  &:hover {
+    color: gray;
   }
 `;
 
