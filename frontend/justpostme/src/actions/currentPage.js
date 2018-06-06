@@ -27,6 +27,7 @@ export function fetchCurrentPage(pageid: string) {
       .then(res => res.json())
       .then(json => {
         const records = json.recordset;
+        debugger;
         const page = records.map(record => ({
           name: record.name,
           databaseId: record.ID,
