@@ -37,7 +37,6 @@ const SubmissionCard = (props: Props) => {
     deletePendingSubmission
   } = props;
 
-
   return (
     <Wrapper>
       <p>{submission.id}</p>

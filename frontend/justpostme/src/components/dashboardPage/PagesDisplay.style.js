@@ -18,6 +18,7 @@ export const ErrorWrapper = PagesDisplayWrapper.extend`
   height: 70%;
   width: 100%;
   margin-top: 50px;
+  user-select: none;
   justify-content: center;
   flex-direction: column;
   align-items: center;
