@@ -147,7 +147,7 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
     }
     query =
       query +
-      "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, picture, name) VALUES (" +
+      "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES (" +
       userid +
       ", " +
       numScheduled +
@@ -160,8 +160,6 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
       "', " +
       sameManaged +
       ", '" +
-      picUrl +
-      "', '" +
       pagesToInsert[i].name +
       "');";
   }
@@ -298,7 +296,7 @@ app.post("/backend/newpost", function(req, res) {
 
 //POST API
 app.post("/backend/bodyTest", function(req, res) {
-  console.log(res.body);
+  console.log("Res: " + req.body("pageId"));
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
