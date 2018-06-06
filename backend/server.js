@@ -56,53 +56,56 @@ var print;
 var sqlcon;
 
 async function setup() {
-  sqlcon = await sql.connect(dbConfig, function(err) {
-    if (err) {
-      console.log("Error while connecting database :- " + err);
-      sqlcon.close();
+  sqlcon = await sql.connect(
+    dbConfig,
+    function(err) {
+      if (err) {
+        console.log("Error while connecting database :- " + err);
+        sqlcon.close();
+      }
     }
-  });
+  );
 }
 
 setup();
 
 //Function to connect to database and execute query
 var executeQuery = function(res, query) {
-        var request = sqlcon.request();
-        request.query(query, function(err, qres) {
-          if (err) {
-            console.log("Error while querying database :- " + err);
-            res.send(err);
-          } else {
-            res.send(qres);
-          }
-  ;
-})};
+  var request = sqlcon.request();
+  request.query(query, function(err, qres) {
+    if (err) {
+      console.log("Error while querying database :- " + err);
+      res.send(err);
+    } else {
+      res.send(qres);
+    }
+  });
+};
 
 var queryGet = function(res, query) {
-        // create Request object
-        var request = new sqlcon.request();
-        // query to the database
-        request.query(query, function(err, qres) {
-          if (err) {
-            console.log("Error while querying database :- " + err);
-          } else {
-            res(qres);
-          }
-        });
+  // create Request object
+  var request = sqlcon.request();
+  // query to the database
+  request.query(query, function(err, qres) {
+    if (err) {
+      console.log("Error while querying database :- " + err);
+    } else {
+      res(qres);
+    }
+  });
 };
 
 var queryGetNoClose = function(res, query) {
-        // create Request object
-        var request = new sqlcon.request();
-        // query to the database
-        request.query(query, function(err, qres) {
-          if (err) {
-            console.log("Error while querying database :- " + err);
-          } else {
-            res(qres);
-          }
-        });
+  // create Request object
+  var request = sqlcon.request();
+  // query to the database
+  request.query(query, function(err, qres) {
+    if (err) {
+      console.log("Error while querying database :- " + err);
+    } else {
+      res(qres);
+    }
+  });
 };
 
 var updatePages = function(res, userid, userAccessToken, response) {
