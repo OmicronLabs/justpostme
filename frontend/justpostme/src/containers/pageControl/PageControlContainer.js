@@ -7,7 +7,8 @@ import PageControl from "../../components/pageControl/PageControl";
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
-  currentPageLoading: state.currentPage.loading
+  currentPageLoading: state.currentPage.loading,
+  currentPage: state.currentPage.page
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -16,5 +17,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(PageControl)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(PageControl)
 );
