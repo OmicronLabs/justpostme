@@ -136,35 +136,10 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
         sameManaged = pagesInDB[j].managed;
         numPending = pagesInDB[j].pendingPosts;
         numScheduled = pagesInDB[j].scheduledPosts;
-        console.log(
-          "Name to insert: " +
-            pagesToInsert[i].name +
-            ", Name in: " +
-            pagesInDB[j].name +
-            ", Managed: " +
-            pagesInDB[j].managed +
-            ", Scheduled #: " +
-            numScheduled +
-            ", Pending #: " +
-            numPending +
-            "; SAME"
-        );
         break;
       }
     }
 
-    var picUrl = "";
-    // console.log(`https://graph.facebook.com/${pagesToInsert[i].id}/picture`);
-    // request(
-    //   `https://graph.facebook.com/${pagesToInsert[i].id}/picture`,
-    //   function(error, response, body) {
-    //     //body = JSON.parse(body);
-    //     if (!error && response.statusCode == 200) {
-    //       console.log(response.connection[1]);
-    //       picUrl = body.data.url;
-    //     }
-    //   }
-    // );
     if (sameManaged) {
       sameManaged = 1;
     } else {
@@ -279,12 +254,13 @@ var postToFacebook = function(res, response) {
   pageAccessToken = response.recordset[0].pageAccessToken;
 
   var query =
-    "UPDATE [posts] SET pending = 0 WHERE ID = '" +
+    "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = " +
     postId +
-    "';\n" +
+    ";\n" +
     "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageId = '" +
     pageId +
     "';";
+  console.log(query);
   queryGet(response => console.log(response), query);
 
   request.post(
