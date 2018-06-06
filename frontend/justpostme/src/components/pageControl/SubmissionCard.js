@@ -1,7 +1,10 @@
+//@flow
+
 import React from "react";
 import styled from "styled-components";
 
 import { serverDomain } from "../../const/serverURL";
+import { postToFbInstant } from "../../actions/postSubmission";
 
 const Wrapper = styled.div`
   height: 70px;
@@ -20,43 +23,33 @@ type Submission = {
 
 type Props = {
   submission: Submission,
-  userToken: string
+  userToken: string,
+  pageId: string,
+  postToFbInstant: Function,
+  deletePendingSubmission: Function
 };
-
-
-const postStuff = url => {
-  return fetch(url, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    }
-  })
-    .then(handleErrors)
-    .then(res => res.json())
-    .then(json => {
-      console.log("success");
-      return true;
-    })
-    .catch(error => console.log(error));
-};
-
-function handleErrors(response) {
-  if (!response.ok) {
-    throw Error(response.statusText);
-  }
-  return response;
-}
 
 const SubmissionCard = (props: Props) => {
-  const url = `${serverDomain}/backend/postit?postid=${
-    props.id
-  }&pageAccessToken=${props.token}`;
+  const {
+    postToFbInstant,
+    submission,
+    pageId,
+    deletePendingSubmission
+  } = props;
+
+
   return (
     <Wrapper>
-      <p>{props.id}</p>
-      <p>{props.text}</p>
-      <button onClick={() => postStuff(url)}>Click me to post!!! </button>
+      <p>{submission.id}</p>
+      <p>{submission.text}</p>
+      <button
+        onClick={() => {
+          postToFbInstant(submission.id, pageId);
+          deletePendingSubmission(submission.id);
+        }}
+      >
+        Click me to post!!!
+      </button>
     </Wrapper>
   );
 };

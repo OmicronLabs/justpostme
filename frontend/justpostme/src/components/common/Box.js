@@ -12,7 +12,7 @@ export const BoxWrapper = styled.div`
 `;
 
 export const Box = styled.div`
-  box-shadow: 0px 0px 19px 3px rgba(126, 149, 168, 0.5);
+  box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
   border-radius: 6px;
   background: white;
   display: flex;

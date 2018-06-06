@@ -1,0 +1,29 @@
+{
+  "name": "server_api",
+  "version": "1.0.0",
+  "description": "justpost.me's backend",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmicronLabs/justpostme.git"
+  },
+  "keywords": [
+    "justpost.me"
+  ],
+  "author": "Matej Novak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmicronLabs/justpostme/issues"
+  },
+  "homepage": "https://github.com/OmicronLabs/justpostme#readme",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "global": "^4.3.2",
+    "mssql": "^4.1.0",
+    "request": "^2.87.0"
+  }
+}

@@ -8,6 +8,7 @@ import { ErrorWrapper, PagesDisplayWrapper } from "./PagesDisplay.style";
 
 import { ErrorHeader, ErrorText } from "../common/ErrorText";
 import { Link } from "react-router-dom";
+import { fetchCurrentPage } from "../../actions/currentPage";
 
 type Props = {
   pages: Array<CardProps>,
