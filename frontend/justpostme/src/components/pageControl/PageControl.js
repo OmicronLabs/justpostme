@@ -110,25 +110,23 @@ class PageControl extends React.Component<Props> {
     const path = url;
     const { id } = this.props.match.params;
 
-    const { managedPages } = this.props;
+    const { managedPages, currentPage, history } = this.props;
 
     const tabBarNavRoutes = [
       {
         to: `${path}/pending`,
-        name: "Pending",
+        name: `Pending (${currentPage ? currentPage.pendingPosts : 0}) `,
         number: managedPages ? managedPages : 0
       },
       {
         to: `${path}/approved`,
-        name: "Approved",
+        name: `Approved (${currentPage ? currentPage.scheduledPosts : 0})`,
         number: managedPages ? managedPages : 0
       },
-      { to: `${path}/moderation`, name: "Moderation", number: 0 },
+      { to: `${path}/moderation`, name: `Moderation (${0})`, number: 0 },
       { to: `${path}/insights`, name: "Insights" },
       { to: `${path}/settings`, name: "Settings" }
     ];
-
-    const { currentPage, history } = this.props;
 
     return (
       <DashboardPage>
