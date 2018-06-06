@@ -25,20 +25,29 @@ type Props = {
   submission: Submission,
   userToken: string,
   pageId: string,
-  postToFbInstant: Function
+  postToFbInstant: Function,
+  deletePendingSubmission: Function
 };
 
 const SubmissionCard = (props: Props) => {
-  const url = `${serverDomain}/backend/postit?postid=${props.id}&pageid=${
-    props.pageId
-  }`;
+  const {
+    postToFbInstant,
+    submission,
+    pageId,
+    deletePendingSubmission
+  } = props;
 
-  const { postToFbInstant, submission, pageId } = props;
+
   return (
     <Wrapper>
       <p>{submission.id}</p>
       <p>{submission.text}</p>
-      <button onClick={() => postToFbInstant(submission.id, pageId)}>
+      <button
+        onClick={() => {
+          postToFbInstant(submission.id, pageId);
+          deletePendingSubmission(submission.id);
+        }}
+      >
         Click me to post!!!
       </button>
     </Wrapper>

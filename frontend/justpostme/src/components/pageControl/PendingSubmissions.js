@@ -19,6 +19,7 @@ type Props = {
   fetchPendingSubmissions: Function,
   pageId: string,
   token: string,
+  errorToFb: boolean,
   postingToFb: boolean
 };
 
@@ -32,7 +33,9 @@ class PendingSubmissions extends React.Component<Props> {
     const { postingToFb, pageId, fetchPendingSubmissions } = this.props;
     const newPostingToFb = nextProps.postingToFb;
 
-    if (postingToFb && !newPostingToFb) {
+    const errorToFb = nextProps.errorToFb;
+
+    if (postingToFb && !newPostingToFb && errorToFb) {
       fetchPendingSubmissions(pageId);
     }
   }

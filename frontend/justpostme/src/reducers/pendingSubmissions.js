@@ -1,7 +1,8 @@
 import {
   FETCH_PENDING_BEGIN,
   FETCH_PENDING_SUCCESS,
-  FETCH_PENDING_ERROR
+  FETCH_PENDING_ERROR,
+  DELETE_PENDING
 } from "../actions/pendingSubmissions";
 
 const initialState = {
@@ -32,7 +33,13 @@ const pendingSubmissions = (state = initialState, action) => {
         loading: false,
         error: true
       };
-
+    case DELETE_PENDING:
+      return {
+        ...state,
+        submissions: state.submissions.filter(
+          submission => submission.databaseId !== action.payload.id
+        )
+      };
     default:
       return state;
   }
