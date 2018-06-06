@@ -35,7 +35,6 @@ export function fetchCurrentPage(pageid: string) {
           scheduledPosts: record.scheduledPosts,
           backgroundImgURL: altImage
         }))[0];
-        debugger;
         dispatch(fetchPageSuccess(page));
         return page;
       })
