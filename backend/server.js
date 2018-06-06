@@ -95,19 +95,6 @@ var queryGet = function(res, query) {
   });
 };
 
-var queryGetNoClose = function(res, query) {
-  // create Request object
-  var request = sqlcon.request();
-  // query to the database
-  request.query(query, function(err, qres) {
-    if (err) {
-      console.log("Error while querying database :- " + err);
-    } else {
-      res(qres);
-    }
-  });
-};
-
 var updatePages = function(res, userid, userAccessToken, response) {
   request(
     `https://graph.facebook.com/${userid}/accounts?access_token=${userAccessToken}`,
@@ -119,7 +106,7 @@ var updatePages = function(res, userid, userAccessToken, response) {
       var pagesToInsert = body.data;
 
       var query = "SELECT * FROM [pages] where userid = '" + userid + "';";
-      queryGetNoClose(
+      queryGet(
         response => insertRelevantPages(res, response, userid, pagesToInsert),
         query
       );
@@ -158,6 +145,18 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
       }
     }
 
+    var picUrl = "";
+    // console.log(`https://graph.facebook.com/${pagesToInsert[i].id}/picture`);
+    // request(
+    //   `https://graph.facebook.com/${pagesToInsert[i].id}/picture`,
+    //   function(error, response, body) {
+    //     //body = JSON.parse(body);
+    //     if (!error && response.statusCode == 200) {
+    //       console.log(response.connection[1]);
+    //       picUrl = body.data.url;
+    //     }
+    //   }
+    // );
     if (sameManaged) {
       sameManaged = 1;
     } else {
@@ -165,7 +164,7 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
     }
     query =
       query +
-      "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES (" +
+      "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, picture, name) VALUES (" +
       userid +
       ", 0, 0, " +
       pagesToInsert[i].id +
@@ -174,6 +173,8 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
       "', " +
       sameManaged +
       ", '" +
+      picUrl +
+      "', '" +
       pagesToInsert[i].name +
       "');";
   }
@@ -207,7 +208,8 @@ app.get("/backend/unmanagedpages", function(req, res) {
 
 //GET API
 app.get("/backend/page", function(req, res) {
-  var query = "SELECT * from [pages] WHERE pageId = " + req.param("pageid");
+  var query =
+    "SELECT * from [pages] WHERE pageId = '" + req.param("pageid") + "';";
   executeQuery(res, query);
 });
 
@@ -226,7 +228,7 @@ app.post("/backend/user", function(req, res) {
     "', '" +
     req.param("expiresIn") +
     "')";
-  queryGetNoClose(
+  queryGet(
     response =>
       updatePages(
         res,
@@ -291,7 +293,7 @@ app.post("/backend/newpost", function(req, res) {
     req.param("postText") +
     "', 1)";
 
-  queryGetNoClose(response => incrementPosts(res, req.param("pageid")), query);
+  queryGet(response => incrementPosts(res, req.param("pageid")), query);
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
