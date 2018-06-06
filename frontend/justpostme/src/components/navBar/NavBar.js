@@ -8,10 +8,19 @@ import navBarImage from "../../media/banner-bg-3.png";
 import logoWhite from "../../media/logo-white.png";
 
 const LogoWhite = styled.img`
-  transform: scale(0.7, 0.7);
-  width: auto;
+  height: 50px;
+  width: 50px;
   position: relative;
   max-height: 100%;
+`;
+
+const LogoWrapper = styled.div`
+  height: 70px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
 `;
 
 //TODO: link top left to /dashboard
@@ -98,7 +107,9 @@ class NavBar extends React.Component<Props> {
         <NavBarInner>
           <NavBarHomeButton>
             <NavBarLogoContainer>
-              <LogoWhite className="logo" src={logoWhite} />
+              <LogoWrapper>
+                <LogoWhite className="logo" src={logoWhite} />
+              </LogoWrapper>
               <HeaderLogoText className="logoText">justpost.me</HeaderLogoText>
             </NavBarLogoContainer>
           </NavBarHomeButton>

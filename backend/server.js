@@ -56,53 +56,43 @@ var print;
 var sqlcon;
 
 async function setup() {
-  sqlcon = await sql.connect(dbConfig, function(err) {
-    if (err) {
-      console.log("Error while connecting database :- " + err);
-      sqlcon.close();
+  sqlcon = await sql.connect(
+    dbConfig,
+    function(err) {
+      if (err) {
+        console.log("Error while connecting database :- " + err);
+        sqlcon.close();
+      }
     }
-  });
+  );
 }
 
 setup();
 
 //Function to connect to database and execute query
 var executeQuery = function(res, query) {
-        var request = sqlcon.request();
-        request.query(query, function(err, qres) {
-          if (err) {
-            console.log("Error while querying database :- " + err);
-            res.send(err);
-          } else {
-            res.send(qres);
-          }
-  ;
-})};
-
-var queryGet = function(res, query) {
-        // create Request object
-        var request = new sqlcon.request();
-        // query to the database
-        request.query(query, function(err, qres) {
-          if (err) {
-            console.log("Error while querying database :- " + err);
-          } else {
-            res(qres);
-          }
-        });
+  var request = sqlcon.request();
+  request.query(query, function(err, qres) {
+    if (err) {
+      console.log("Error while querying database :- " + err);
+      res.send(err);
+    } else {
+      res.send(qres);
+    }
+  });
 };
 
-var queryGetNoClose = function(res, query) {
-        // create Request object
-        var request = new sqlcon.request();
-        // query to the database
-        request.query(query, function(err, qres) {
-          if (err) {
-            console.log("Error while querying database :- " + err);
-          } else {
-            res(qres);
-          }
-        });
+var queryGet = function(res, query) {
+  // create Request object
+  var request = sqlcon.request();
+  // query to the database
+  request.query(query, function(err, qres) {
+    if (err) {
+      console.log("Error while querying database :- " + err);
+    } else {
+      res(qres);
+    }
+  });
 };
 
 var updatePages = function(res, userid, userAccessToken, response) {
@@ -116,7 +106,7 @@ var updatePages = function(res, userid, userAccessToken, response) {
       var pagesToInsert = body.data;
 
       var query = "SELECT * FROM [pages] where userid = '" + userid + "';";
-      queryGetNoClose(
+      queryGet(
         response => insertRelevantPages(res, response, userid, pagesToInsert),
         query
       );
@@ -138,19 +128,14 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
   for (var i = 0; i < pagesToInsert.length; i++) {
     var sameFlag = false;
     var sameManaged = 0;
+    var numPending = 0;
+    var numScheduled = 0;
     for (var j = 0; j < pagesInDB.length; j++) {
       if (pagesToInsert[i].name === pagesInDB[j].name) {
         sameFlag = true;
         sameManaged = pagesInDB[j].managed;
-        console.log(
-          "Name to insert: " +
-            pagesToInsert[i].name +
-            ", Name in: " +
-            pagesInDB[j].name +
-            ", Managed: " +
-            pagesInDB[j].managed +
-            "; SAME"
-        );
+        numPending = pagesInDB[j].pendingPosts;
+        numScheduled = pagesInDB[j].scheduledPosts;
         break;
       }
     }
@@ -164,7 +149,11 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
       query +
       "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES (" +
       userid +
-      ", 0, 0, " +
+      ", " +
+      numScheduled +
+      ", " +
+      numPending +
+      ", " +
       pagesToInsert[i].id +
       " , '" +
       pagesToInsert[i].access_token +
@@ -204,7 +193,8 @@ app.get("/backend/unmanagedpages", function(req, res) {
 
 //GET API
 app.get("/backend/page", function(req, res) {
-  var query = "SELECT * from [pages] WHERE pageId = " + req.param("pageid");
+  var query =
+    "SELECT * from [pages] WHERE pageId = '" + req.param("pageid") + "';";
   executeQuery(res, query);
 });
 
@@ -223,7 +213,7 @@ app.post("/backend/user", function(req, res) {
     "', '" +
     req.param("expiresIn") +
     "')";
-  queryGetNoClose(
+  queryGet(
     response =>
       updatePages(
         res,
@@ -257,7 +247,19 @@ app.post("/backend/postit", function(req, res) {
 var postToFacebook = function(res, response) {
   pageId = response.recordset[0].pageId[0];
   postText = response.recordset[0].postText;
+  postId = response.recordset[0].ID[1];
+  console.log("ID: " + postId);
   pageAccessToken = response.recordset[0].pageAccessToken;
+
+  var query =
+    "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = " +
+    postId +
+    ";\n" +
+    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageId = '" +
+    pageId +
+    "';";
+  console.log(query);
+  queryGet(response => console.log(response), query);
 
   request.post(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
@@ -288,7 +290,13 @@ app.post("/backend/newpost", function(req, res) {
     req.param("postText") +
     "', 1)";
 
-  queryGetNoClose(response => incrementPosts(res, req.param("pageid")), query);
+  queryGet(response => incrementPosts(res, req.param("pageid")), query);
+  res.end('{"success" : "Updated Successfully", "status" : 200}');
+});
+
+//POST API
+app.post("/backend/bodyTest", function(req, res) {
+  console.log("Res: " + req.body("pageId"));
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
