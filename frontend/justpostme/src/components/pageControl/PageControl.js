@@ -1,16 +1,19 @@
 //@flow
 import React from "react";
 import styled from "styled-components";
-import { withRouter } from "react-router-dom";
 import DashboardPage from "../dashboardPage/DashboardPage";
 import { Redirect, Switch, Route, NavLink } from "react-router-dom";
 import {
   PageOverviewWrapper,
   PageOverviewImage,
-  PageOverviewText
+  PageOverviewText,
+  ClickablePageOverviewText
 } from "../common/PageOverview";
+import "font-awesome/css/font-awesome.min.css";
 
 import PendingSubmissionsContainer from "../../containers/pageControl/PendingSubmissionsContainer";
+import PageSettings from "./PageSettings";
+import { fetchCurrentPage } from "../../actions/currentPage";
 
 type RouteType = {
   to: string,
@@ -88,19 +91,18 @@ type Props = {
   pageName: string,
   pageImageURL: string,
   pendingPosts: number,
-  scheduledPosts: number
+  scheduledPosts: number,
+  currentPageLoading: boolean,
+  currentPage: any,
+  fetchCurrentPage: Function,
+  match: any,
+  history: any
 };
-
-const tabBarNavRoutes = [
-  { to: "/page/pending", name: "Pending" },
-  { to: "/page/approved", name: "Approved" },
-  { to: "/page/moderation", name: "Moderation" },
-  { to: "/page/insights", name: "Insights" }
-];
 
 class PageControl extends React.Component<Props> {
   componentDidMount() {
-    const { params } = this.props.match;
+    const { fetchCurrentPage, match } = this.props;
+    fetchCurrentPage(match.params.id);
   }
 
   render() {
@@ -108,21 +110,48 @@ class PageControl extends React.Component<Props> {
     const path = url;
     const { id } = this.props.match.params;
 
+    const { managedPages, currentPage, history } = this.props;
+
     const tabBarNavRoutes = [
-      { to: `${path}/pending`, name: "Pending" },
-      { to: `${path}/approved`, name: "Approved" },
-      { to: `${path}/moderation`, name: "Moderation" },
-      { to: `${path}/insights`, name: "Insights" }
+      {
+        to: `${path}/pending`,
+        name: `Pending (${currentPage ? currentPage.pendingPosts : 0}) `,
+        number: managedPages ? managedPages : 0
+      },
+      {
+        to: `${path}/approved`,
+        name: `Approved (${currentPage ? currentPage.scheduledPosts : 0})`,
+        number: managedPages ? managedPages : 0
+      },
+      { to: `${path}/moderation`, name: `Moderation (${0})`, number: 0 },
+      { to: `${path}/insights`, name: "Insights" },
+      { to: `${path}/settings`, name: "Settings" }
     ];
 
     return (
       <DashboardPage>
         <Wrapper>
-          {/* uncomment for page overview up top
           <PageOverviewWrapper>
-            <PageOverviewImage src={this.props.pageImageURL} />
-            <PageOverviewText>{this.props.pageName}</PageOverviewText>
-          </PageOverviewWrapper> */}
+            <ClickablePageOverviewText
+              onClick={() => {
+                history.push("/pages");
+              }}
+            >
+              <i style={{ fontSize: "27px" }} class="fa fa-home" />
+            </ClickablePageOverviewText>
+
+            <PageOverviewText style={{ margin: "0 10px", fontSize: "25px" }}>
+              <i class="fa fa-caret-right" />
+            </PageOverviewText>
+
+            <ClickablePageOverviewText
+              onClick={() => {
+                history.push(`${path}/pending`);
+              }}
+            >
+              {currentPage ? currentPage.name : "Page"}
+            </ClickablePageOverviewText>
+          </PageOverviewWrapper>
           <RouteTabs routes={tabBarNavRoutes} />
           <Switch>
             <Route
@@ -139,7 +168,11 @@ class PageControl extends React.Component<Props> {
             />
             <Route
               path={`${path}/insights`}
-              render={() => <p>Borys to zjeb</p>}
+              render={() => <p>To be implemented</p>}
+            />
+            <Route
+              path={`${path}/settings`}
+              render={() => <PageSettings pageId={id} />}
             />
             <Redirect to={`${path}/pending`} />
             )} />
@@ -150,4 +183,4 @@ class PageControl extends React.Component<Props> {
   }
 }
 
-export default withRouter(PageControl);
+export default PageControl;

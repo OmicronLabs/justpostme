@@ -7,7 +7,8 @@ const mapStateToProps = state => ({
   loading: state.pendingSubmissions.loading,
   error: state.pendingSubmissions.error,
   userID: state.userMeta.id,
-  accessToken: state.userMeta.token
+  accessToken: state.userMeta.token,
+  postingToFb: state.postSubmission.postingLoading
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
