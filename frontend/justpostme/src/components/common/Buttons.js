@@ -28,6 +28,17 @@ export const IconButton = styled.a`
   }
 `;
 
+// className="fa fa-times"
+export const RemoveButton = IconButton.extend`
+  height: 18px;
+  padding-bottom: 0px;
+  padding-right: 5px;
+  color: lightgray;
+  &:hover {
+    color: gray;
+  }
+`;
+
 export const DropdownButton = RoundButton.extend`
   border: 0px;
   margin: 0em;
