@@ -5,6 +5,7 @@ import { serverDomain } from "../../const/serverURL";
 
 const Wrapper = styled.div`
   height: 70px;
+  max-width: 100%;
   width: 100%;
   border: 1px solid green;
   display: flex;
@@ -22,7 +23,6 @@ type Props = {
   submission: Submission,
   userToken: string
 };
-
 
 const postStuff = url => {
   return fetch(url, {

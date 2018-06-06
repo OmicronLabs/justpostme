@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-import SubmissionCard from "./SubmissionCard";
-
+import SubmissionCard from "../pageControl/SubmissionCard";
 import { ErrorDisplay } from "../dashboardPage/PagesDisplay";
 
 export const SubmissionsDisplayWrapper = styled.div`
   margin-top: 30px;
   width: 1024px;
+  max-width: 85%;
   margin-bottom: 90px;
   display: flex;
   flex-direction: column;
@@ -26,7 +26,7 @@ export const SubmissionsWrapper = styled.div`
 type Props = {
   submissions: any,
   token: string,
-  error: boolean
+  pageId: string
 };
 
 const noSubmissionsHead = "No pending posts";
