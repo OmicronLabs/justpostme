@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const RoundButton = styled.a`
   text-decoration: none;
   display: inline-block;
+  user-select: none;
   margin: 1em;
   padding: 0.25em 1em;
   border: 2px solid;
@@ -22,6 +23,7 @@ export const IconButton = styled.a`
   text-decoration: none;
   align-content: center;
   padding-bottom: 10px;
+  user-select: none;
   color: grey;
   &:hover {
     color: darkgray;
