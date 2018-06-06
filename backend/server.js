@@ -81,7 +81,7 @@ var executeQuery = function(res, query) {
 
 var queryGet = function(res, query) {
         // create Request object
-        var request = new sqlcon.request();
+        var request = sqlcon.request();
         // query to the database
         request.query(query, function(err, qres) {
           if (err) {
@@ -94,7 +94,7 @@ var queryGet = function(res, query) {
 
 var queryGetNoClose = function(res, query) {
         // create Request object
-        var request = new sqlcon.request();
+        var request = sqlcon.request();
         // query to the database
         request.query(query, function(err, qres) {
           if (err) {
