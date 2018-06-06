@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import SubmissionCard from "./SubmissionCard";
+import SubmissionCardContainer from "../../containers/pageControl/SubmissionCardContainer";
 
 export const SubmissionsDisplayWrapper = styled.div`
   margin-top: 30px;
   width: 1024px;
+  max-width: 85%;
   margin-bottom: 90px;
   display: flex;
   flex-direction: column;
@@ -23,7 +24,8 @@ export const SubmissionsWrapper = styled.div`
 
 type Props = {
   submissions: any,
-  token: string
+  token: string,
+  pageId: string
 };
 
 const SubmissionDisplay = (props: Props) => {
@@ -31,9 +33,9 @@ const SubmissionDisplay = (props: Props) => {
     <SubmissionsDisplayWrapper>
       <SubmissionsWrapper>
         {props.submissions.map(post => (
-          <SubmissionCard
-            id={post.databaseId}
-            text={post.name}
+          <SubmissionCardContainer
+            pageId={props.pageId}
+            submission={{ id: post.databaseId, text: post.name }}
             token={props.token}
           />
         ))}
