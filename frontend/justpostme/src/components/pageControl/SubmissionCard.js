@@ -29,6 +29,33 @@ type Props = {
   deletePendingSubmission: Function
 };
 
+const SubmissionId = styled.p`
+  background: rgba(127, 255, 0, 0.1);
+  width: 20%;
+  max-width: 20%;
+  text-align: center;
+  line-height: 70px;
+`;
+
+const SubmissionBody = styled.p`
+  width: 50%;
+  max-width: 50%;
+  align: center;
+  text-align: center;
+`;
+
+const SubmissionControls = styled.div`
+  width: 30%;
+  max-width: 30%;
+  height: 100%;
+  background: rgba(127, 255, 0, 0.1);
+  align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+`;
+
 const SubmissionCard = (props: Props) => {
   const {
     postToFbInstant,
@@ -39,16 +66,18 @@ const SubmissionCard = (props: Props) => {
 
   return (
     <Wrapper>
-      <p>{submission.id}</p>
-      <p>{submission.text}</p>
-      <button
-        onClick={() => {
-          postToFbInstant(submission.id, pageId);
-          deletePendingSubmission(submission.id);
-        }}
-      >
-        Click me to post!!!
-      </button>
+      <SubmissionId>{submission.id}</SubmissionId>
+      <SubmissionBody>{submission.text}</SubmissionBody>
+      <SubmissionControls>
+        <button
+          onClick={() => {
+            postToFbInstant(submission.id, pageId);
+            deletePendingSubmission(submission.id);
+          }}
+        >
+          Click me to post!!!
+        </button>
+      </SubmissionControls>
     </Wrapper>
   );
 };
