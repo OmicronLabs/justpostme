@@ -302,6 +302,10 @@ function submitForReview(text, hash) {
   });
 }
 
+app.post("/backend/newreview", function(req, res) {
+  console.log(req.body);
+  res.end();
+});
 
 app.get("/backend/newreview", function(req, res) {
   console.log(req.body);
