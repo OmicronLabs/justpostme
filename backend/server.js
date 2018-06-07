@@ -306,10 +306,10 @@ function submitForReview(text, hash) {
 app.post("/backend/newreview", function(req, res) {
   console.log(req.body);
   var sentiment = req.body.Metadata["sentiment.score"];
-  var profanity = req.body.Metadata["text.hasprofanity"];
+  var profanity = +(req.body.Metadata["text.hasprofanity"] == 'True');
   var language = req.body.Metadata["text.language"];
-  var pii = req.body.Metadata["text.haspii"];
-  var review = req.body.Metadata["text.reviewrecommended"];
+  var pii = +(req.body.Metadata["text.haspii"] == 'True');
+  var review = +(req.body.Metadata["text.reviewrecommended"] == 'True');
   var jobid = req.body.JobId;
   var query = "UPDATE [posts] SET sentiment = " + sentiment + ", profanity = " + profanity + ", language = '" + language + "', pii = " + pii + ", review = " +
       review + " WHERE jobID = '" + jobid + "';";
