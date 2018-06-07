@@ -286,9 +286,32 @@ var incrementPosts = function(res, pageId) {
   queryGet(response => console.log(response), query);
 };
 
+function submitForReview(text, hash) {
+  request.post({
+    url: `https://westeurope.api.cognitive.microsoft.com/contentmoderator/review/v1.0/teams/webapps/jobs?ContentType=Text&ContentId=abc&WorkflowName=text&CallBackEndpoint=https://build.justpostme.tech:6069/backend/newreview`,
+    headers: {'Ocp-Apim-Subscription-Key': process.env.AZACCESS},
+    body: '{\n "ContentValue": "' + text + '" \n}',
+    callback: function(error, response, body) {
+      body = JSON.parse(body);
+      if (!error && response.statusCode == 200) {
+        console.log(body.JobId);
+        var query = "UPDATE [posts] SET jobID = '" + body.JobId + "' WHERE posthash = '" + hash + "';";
+        queryGet(response => console.log(response), query);
+      }
+    }
+  });
+}
+
+
+app.get("/backend/newreview", function(req, res) {
+  console.log(req.body);
+  res.end();
+});
+
 //POST API
 app.post("/backend/newpost", function(req, res) {
   var random = crypto.randomBytes(20).toString("hex");
+  submitForReview(req.param("postText"), random);
   var query =
     "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
     escapeQuotations(req.param("pageid")) +
