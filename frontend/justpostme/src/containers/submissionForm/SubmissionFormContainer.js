@@ -10,7 +10,8 @@ const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
   currentPageLoading: state.currentPage.loading,
   currentPageError: state.currentPage.error,
-  currentPage: state.currentPage.page
+  currentPage: state.currentPage.page,
+  postHash: state.submitForm.postId
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
