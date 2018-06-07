@@ -102,6 +102,17 @@ const ErrorText = styled.a`
   margin-left: 5px;
 `;
 
+const Link = styled.a`
+  color: green;
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
+function openInNewTab(url) {
+  var win = window.open(url, "_blank");
+  win.focus();
+}
+
 type Props = {
   currentPage: any,
   currentPageLoading: boolean,
@@ -125,7 +136,7 @@ class SubmissionForm extends React.Component<Props> {
     return (
       <Form>
         <PageInfoWrapper>
-          <Title>Submission Form</Title>
+          <Title>Success</Title>
           <PageInfoFirstRow>
             <PageImage src={currentPage.backgroundImgURL} />
             <PageName>{currentPage.name}</PageName>
@@ -167,8 +178,37 @@ class SubmissionForm extends React.Component<Props> {
     return <ErrorText>Error, link is broken :( </ErrorText>;
   }
 
+  _renderSubmissionSuccess() {
+    const { postHash, currentPage } = this.props;
+    const trackingLink = `https://justpostme.tech/submission/${postHash}`;
+    return (
+      <Form>
+        <PageInfoWrapper>
+          <PageInfoFirstRow>
+            <PageImage src={currentPage.backgroundImgURL} />
+            <PageName>{currentPage.name}</PageName>
+          </PageInfoFirstRow>
+        </PageInfoWrapper>
+        <SubTitle> Your form has been submitted successfully! </SubTitle>
+        <p> Your unique tracking link is: </p>
+        <Link
+          onClick={() => {
+            openInNewTab(trackingLink);
+          }}
+        >
+          {trackingLink}
+        </Link>
+      </Form>
+    );
+  }
+
   render() {
-    const { currentPage, currentPageError, currentPageLoading } = this.props;
+    const {
+      currentPage,
+      currentPageError,
+      currentPageLoading,
+      postHash
+    } = this.props;
 
     return (
       <FrontDoorRelative>
@@ -184,7 +224,7 @@ class SubmissionForm extends React.Component<Props> {
         </FrontDoorBackgroundTop>
         <BackgroundShape src={background} className="" />
         <FrontDoorBackgroundBottom />
-        <BoxWrapper style={{ overflow: "scroll", alignItems: "flex-start" }}>
+        <BoxWrapper style={{ overflow: "scroll" }}>
           <WelcomePageBox
             style={{
               width: "940px",
@@ -199,7 +239,9 @@ class SubmissionForm extends React.Component<Props> {
             {currentPageLoading
               ? this._renderLoading()
               : currentPage
-                ? this._renderForm()
+                ? postHash
+                  ? this._renderSubmissionSuccess()
+                  : this._renderForm()
                 : this._renderError()}
           </WelcomePageBox>
         </BoxWrapper>
