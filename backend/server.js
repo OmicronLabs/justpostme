@@ -306,7 +306,7 @@ app.post("/backend/newreview", function(req, res) {
   console.log(req.body);
   var sentiment = req.body.Metadata["sentiment.score"];
   var profanity = req.body.Metadata["text.hasprofanity"];
-  var langauge = req.body.Metadata["text.language"];
+  var language = req.body.Metadata["text.language"];
   var pii = req.body.Metadata["text.haspii"];
   var review = req.body.Metadata["text.reviewrecommended"];
   var jobid = req.body.JobId;
