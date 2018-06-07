@@ -16,6 +16,7 @@ import unmanagedPages from "./reducers/unmanagedPages";
 import addManagedPage from "./reducers/addManagedPage";
 import postSubmission from "./reducers/postSubmission";
 import removeManagedPage from "./reducers/removeManagedPage";
+import currentSubmission from "./reducers/currentSubmission";
 import pendingSubmissions from "./reducers/pendingSubmissions";
 
 const loggerMiddleware = createLogger();
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   unmanagedPages,
   addManagedPage,
   postSubmission,
+  currentSubmission,
   removeManagedPage,
   pendingSubmissions
 });
