@@ -106,6 +106,14 @@ class PageControl extends React.Component<Props> {
     fetchCurrentPage(match.params.id);
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    const { match, fetchCurrentPage } = this.props;
+    const newMatch = nextProps.match;
+    if (match !== newMatch) {
+      fetchCurrentPage(match.params.id);
+    }
+  }
+
   render() {
     const { url } = this.props.match;
     const path = url;
