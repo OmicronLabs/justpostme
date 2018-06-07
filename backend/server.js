@@ -312,7 +312,7 @@ app.post("/backend/newreview", function(req, res) {
   var pii = req.body.Metadata["text.haspii"];
   var review = req.body.Metadata["text.reviewrecommended"];
   var jobid = req.body.JobId;
-  var query = "UPDATE [posts] SET sentiment = " + sentiment + ", profanity = " + profanity + ", langauge = '" + language + "', pii = " + pii + ", review = " +
+  var query = "UPDATE [posts] SET sentiment = " + sentiment + ", profanity = " + profanity + ", language = '" + language + "', pii = " + pii + ", review = " +
       review + " WHERE jobID = '" + jobid + "';";
   queryGet(response => console.log(response), query);
   res.end();
