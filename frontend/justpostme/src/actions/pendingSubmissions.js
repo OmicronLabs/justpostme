@@ -34,8 +34,14 @@ export function fetchPendingSubmissions(pageid: string) {
       .then(json => {
         const records = json.recordset;
         const submissions = records.map(record => ({
-          name: record.postText,
-          databaseId: record.ID
+          postText: record.postText,
+          databaseId: record.ID,
+          pending: record.pending,
+          pii: record.pii,
+          profanity: record.profanity,
+          review: record.review,
+          sentiment: record.sentiment,
+          timePosted: record.timePosted
         }));
         dispatch(fetchPendingSuccess(submissions));
         return submissions;

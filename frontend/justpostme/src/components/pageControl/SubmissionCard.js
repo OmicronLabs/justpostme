@@ -80,12 +80,12 @@ const SubmissionCard = (props: Props) => {
   return (
     <Wrapper>
       <SubmissionId style={rowStyle}>{displayId}</SubmissionId>
-      <SubmissionBody style={rowStyle}>{submission.text}</SubmissionBody>
+      <SubmissionBody style={rowStyle}>{submission.postText}</SubmissionBody>
       <SubmissionControls style={rowStyle}>
         <button
           onClick={() => {
-            postToFbInstant(submission.id, pageId);
-            deletePendingSubmission(submission.id);
+            postToFbInstant(submission.databaseId, pageId);
+            deletePendingSubmission(submission.databaseId);
           }}
         >
           Click me to post!!!

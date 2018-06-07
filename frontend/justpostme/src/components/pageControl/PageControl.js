@@ -168,6 +168,10 @@ class PageControl extends React.Component<Props> {
               render={() => <PendingSubmissionsContainer pageId={id} />}
             />
             <Route
+              path={`${path}/pending/:submissionid`}
+              render={() => <PendingSubmissionsContainer pageId={id} />}
+            />
+            <Route
               path={`${path}/approved`}
               render={() => <p>Borys to chuj</p>}
             />
