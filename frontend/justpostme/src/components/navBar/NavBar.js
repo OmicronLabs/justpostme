@@ -29,7 +29,7 @@ const HeaderLogoText = styled.h2`
   color: white;
 `;
 
-const NavBarOuter = styled.div`
+export const NavBarOuter = styled.div`
   position: relative;
   user-select: none;
 
@@ -41,7 +41,7 @@ const NavBarOuter = styled.div`
   justify-content: center;
 `;
 
-const NavBarInner = styled.div`
+export const NavBarInner = styled.div`
   max-width: 1024px;
   width: 100%;
   display: flex;

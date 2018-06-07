@@ -11,8 +11,9 @@ export const submitFormBegin = () => ({
   type: SUBMIT_FORM_BEGIN
 });
 
-export const submitFormSuccess = () => ({
-  type: SUBMIT_FORM_SUCCESS
+export const submitFormSuccess = postId => ({
+  type: SUBMIT_FORM_SUCCESS,
+  payload: { postId }
 });
 
 export const submitFormError = (error: string) => ({
@@ -35,9 +36,11 @@ export function submitForm(pageid: string, text: string) {
       })
     })
       .then(handleErrors)
+      .then(res => res.json())
       .then(json => {
-        dispatch(submitFormSuccess());
-        return true;
+        dispatch(submitFormSuccess(json.posthash));
+        alert(json.posthash);
+        return json.posthash;
       })
       .catch(error => dispatch(submitFormError(error)));
   };
