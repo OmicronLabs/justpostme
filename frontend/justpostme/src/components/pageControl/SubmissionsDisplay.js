@@ -87,7 +87,7 @@ const SubmissionDisplay = (props: Props) => {
           props.submissions.map((post, index) => (
             <SubmissionCardContainer
               pageId={props.pageId}
-              submission={{ id: post.databaseId, text: post.name }}
+              submission={post}
               token={props.token}
               displayId={index + 1}
             />
