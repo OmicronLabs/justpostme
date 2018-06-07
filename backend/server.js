@@ -8,7 +8,6 @@ var fs = require("fs");
 var request = require("request");
 var crypto = require("crypto");
 
-
 require("dotenv").load();
 
 var privateKey = fs.readFileSync("privkey.pem", "utf8");
@@ -108,7 +107,10 @@ var updatePages = function(res, userid, userAccessToken, response) {
       }
       var pagesToInsert = body.data;
 
-      var query = "SELECT * FROM [pages] where userid = '" + userid + "';";
+      var query =
+        "SELECT * FROM [pages] where userid = '" +
+        escapeQuotations(userid) +
+        "';";
       queryGet(
         response => insertRelevantPages(res, response, userid, pagesToInsert),
         query
@@ -118,11 +120,10 @@ var updatePages = function(res, userid, userAccessToken, response) {
 };
 
 var insertRelevantPages = function(res, response, userid, pagesToInsert) {
-  console.log(response.recordset.length);
-  //console.log("Response to updatePages is: " + response.recordset[0].name);
   var pagesInDB = response.recordset;
 
-  var query = "DELETE FROM [pages] where userid = '" + userid + "';";
+  var query =
+    "DELETE FROM [pages] where userid = '" + escapeQuotations(userid) + "';";
 
   if (pagesToInsert == null) {
     console.log("Data passed to updatePages is null\n");
@@ -150,20 +151,20 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
     }
     query =
       query +
-      "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES (" +
-      userid +
-      ", " +
-      numScheduled +
-      ", " +
-      numPending +
-      ", " +
-      pagesToInsert[i].id +
-      " , '" +
-      pagesToInsert[i].access_token +
-      "', " +
-      sameManaged +
-      ", '" +
-      pagesToInsert[i].name +
+      "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES ('" +
+      escapeQuotations(userid) +
+      "', '" +
+      escapeQuotations(numScheduled) +
+      "', '" +
+      escapeQuotations(numPending) +
+      "', '" +
+      escapeQuotations(pagesToInsert[i].id) +
+      "' , '" +
+      escapeQuotations(pagesToInsert[i].access_token) +
+      "', '" +
+      escapeQuotations(sameManaged) +
+      "', '" +
+      escapeQuotations(pagesToInsert[i].name) +
       "');";
   }
 
@@ -180,7 +181,7 @@ app.get("/backend/user", function(req, res) {
 app.get("/backend/managedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
-    req.param("id") +
+    escapeQuotations(req.param("id")) +
     "' AND managed=1";
   executeQuery(res, query);
 });
@@ -189,7 +190,7 @@ app.get("/backend/managedpages", function(req, res) {
 app.get("/backend/unmanagedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
-    req.param("id") +
+    escapeQuotations(req.param("id")) +
     "' AND managed=0";
   executeQuery(res, query);
 });
@@ -197,7 +198,9 @@ app.get("/backend/unmanagedpages", function(req, res) {
 //GET API
 app.get("/backend/page", function(req, res) {
   var query =
-    "SELECT * from [pages] WHERE pageId = '" + req.param("pageid") + "';";
+    "SELECT * from [pages] WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "';";
   executeQuery(res, query);
 });
 
@@ -205,16 +208,16 @@ app.get("/backend/page", function(req, res) {
 app.post("/backend/user", function(req, res) {
   var query =
     "DELETE FROM [users] where userid = '" +
-    req.param("userid") +
+    escapeQuotations(req.param("userid")) +
     "';\n" +
     "INSERT INTO [users] (userid, userAccessToken, email, expiresIn) VALUES ('" +
-    req.param("userid") +
+    escapeQuotations(req.param("userid")) +
     "', '" +
-    req.param("userAccessToken") +
+    escapeQuotations(req.param("userAccessToken")) +
     "' , '" +
-    req.param("email") +
+    escapeQuotations(req.param("email")) +
     "', '" +
-    req.param("expiresIn") +
+    escapeQuotations(req.param("expiresIn")) +
     "')";
   queryGet(
     response =>
@@ -232,7 +235,7 @@ app.post("/backend/user", function(req, res) {
 app.get("/backend/getpending", function(req, res) {
   var query =
     "SELECT * from [posts] WHERE pageId = '" +
-    req.param("pageid") +
+    escapeQuotations(req.param("pageid")) +
     "' AND pending = 1;";
   executeQuery(res, query);
 });
@@ -240,9 +243,10 @@ app.get("/backend/getpending", function(req, res) {
 //POST API
 app.post("/backend/postit", function(req, res) {
   var query =
-    "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = " +
-    req.param("postid") +
-    ";";
+    "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
+  console.log(query);
   queryGet(response => postToFacebook(res, response), query);
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
@@ -251,17 +255,15 @@ var postToFacebook = function(res, response) {
   pageId = response.recordset[0].pageId[0];
   postText = response.recordset[0].postText;
   postId = response.recordset[0].ID[1];
-  console.log("ID: " + postId);
   pageAccessToken = response.recordset[0].pageAccessToken;
 
   var query =
-    "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = " +
-    postId +
-    ";\n" +
+    "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = '" +
+    escapeQuotations(postId) +
+    "';\n" +
     "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageId = '" +
-    pageId +
+    escapeQuotations(pageId) +
     "';";
-  console.log(query);
   queryGet(response => console.log(response), query);
 
   request.post(
@@ -278,37 +280,71 @@ var postToFacebook = function(res, response) {
 var incrementPosts = function(res, pageId) {
   var query =
     "UPDATE [pages] SET pendingPosts = pendingPosts + 1 WHERE pageId = '" +
-    pageId +
+    escapeQuotations(pageId) +
     "';";
 
   queryGet(response => console.log(response), query);
 };
 
-//POST API
-app.post("/backend/newpost", function(req, res) {
-  var random = crypto.randomBytes(20).toString('hex');
-  var query =
-    "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
-    req.param("pageid") +
-    "' , '" +
-    req.param("postText") +
-    "', 1, '" + random + "')";
+function submitForReview(text, hash) {
+  request.post({
+    url: `https://westeurope.api.cognitive.microsoft.com/contentmoderator/review/v1.0/teams/webapps/jobs?ContentType=Text&ContentId=abc&WorkflowName=text&CallBackEndpoint=https://justpostme.tech:6069/backend/newreview`,
+    headers: {'Ocp-Apim-Subscription-Key': process.env.AZACCESS},
+    body: '{\n "ContentValue": "' + text + '" \n}',
+    callback: function(error, response, body) {
+      body = JSON.parse(body);
+      if (!error && response.statusCode == 200) {
+        console.log(body.JobId);
+        var query = "UPDATE [posts] SET jobID = '" + body.JobId + "' WHERE posthash = '" + hash + "';";
+        queryGet(response => console.log(response), query);
+      }
+    }
+  });
+}
 
-  queryGet(response => incrementPosts(res, req.param("pageid")), query);
-  res.end('{"success" : "Updated Successfully", "status" : 200, "posthash" : "' + random + '"}');
+app.post("/backend/newreview", function(req, res) {
+  console.log(req.body);
+  var sentiment = req.body.Metadata.sentiment.score;
+  var profanity = req.body.Metadata.text.hasprofanity;
+  var langauge = req.body.Metadata.text.language;
+  var pii = req.body.Metadata.haspii;
+  var review = req.body.Metadata.text.reviewrecommended;
+  var jobid = req.body.JobId;
+  var query = "UPDATE [posts] SET sentiment = " + sentiment + ", profanity = " + profanity + ", langauge = '" + language + "', pii = " + pii + ", review = " +
+      review + " WHERE jobID = '" + jobid + "';";
+  queryGet(response => console.log(response), query);
+  res.end();
 });
 
 //POST API
 app.post("/backend/createpost", function(req, res) {
+  var random = crypto.randomBytes(20).toString("hex");
+  submitForReview(req.param("postText"), random);
   var query =
-    "INSERT INTO [posts] (pageId, postText, pending) VALUES ('" +
-    req.body.pageid +
+    "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
+    escapeQuotations(req.body.pageid) +
     "' , '" +
-    req.body.postText +
-    "', 1)";
+    escapeQuotations(req.body.postText) +
+    "', 1, '" +
+    escapeQuotations(random) +
+    "')";
 
   queryGet(response => incrementPosts(res, req.param("pageid")), query);
-  res.end('{"success" : "Updated Successfully", "status" : 200}');
+  res.end(
+    '{"success" : "Updated Successfully", "status" : 200, "posthash" : "' +
+      random +
+      '"}'
+  );
+});
+
+//POST API
+app.post("/backend/removepost", function(req, res) {
+  var query =
+    "UPDATE [posts] SET pending = 0 WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
+  console.log(query);
+  executeQuery(res, query);
 });
 
 //POST API
@@ -324,7 +360,19 @@ app.post("/backend/addtomanaged", function(req, res) {
 app.post("/backend/removefrommanaged", function(req, res) {
   var query =
     "UPDATE [pages] SET managed = 0 WHERE pageId = '" +
-    req.param("pageid") +
+    escapeQuotations(req.param("pageid")) +
     "';";
   executeQuery(res, query);
 });
+
+var escapeQuotations = function(str) {
+  result = "";
+  for (var i = 0; i < str.length; i++) {
+    if (str.charAt(i) === "'") {
+      result += str.charAt(i);
+    }
+    result += str.charAt(i);
+  }
+  console.log(result);
+  return result;
+};
