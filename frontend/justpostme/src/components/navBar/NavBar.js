@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 import { RoundButton, TopMenuButton, DropdownButton } from "../common/Buttons";
-
+import { Link } from "react-router-dom";
 import navBarImage from "../../media/banner-bg-3.png";
 import logoWhite from "../../media/logo-white.png";
 
@@ -117,7 +117,9 @@ class NavBar extends React.Component<Props> {
             <TopMenuButton onClick={() => history.push("/pages")}>
               Home
             </TopMenuButton>
-            <TopMenuButton onClick={() => {}}>About</TopMenuButton>
+            <Link to="/about">
+              <TopMenuButton onClick={() => {}}>About</TopMenuButton>
+            </Link>
             <DropdownContainer>
               <TopMenuButton href="#">{userName}</TopMenuButton>
               <DropdownMenu>

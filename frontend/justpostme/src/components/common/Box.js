@@ -4,10 +4,10 @@ export const BoxWrapper = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-  height: 100vh;
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
 `;
 
