@@ -6,6 +6,7 @@ import PageControl from "./containers/pageControl/PageControlContainer";
 import WelcomePage from "./containers/welcomePage/WelcomePageContainer";
 import AboutPage from "./components/aboutPage/AboutPage";
 import SubmissionForm from "./containers/submissionForm/SubmissionFormContainer";
+import SubmissionInfo from "./containers/submissionInfo/SubmissionInfoContainer";
 
 class Routes extends React.Component {
   render() {
@@ -40,6 +41,7 @@ class Routes extends React.Component {
           }}
         />
         <Route path="/form/:id" render={() => <SubmissionForm />} />
+        <Route path="/submission/:id" render={() => <SubmissionInfo />} />
         <Redirect to="/login" />
       </Switch>
     );
