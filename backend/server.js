@@ -2,7 +2,6 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var sql = require("mssql");
-var mysql = require("mysql");
 var app = express();
 var https = require("https");
 var fs = require("fs");
