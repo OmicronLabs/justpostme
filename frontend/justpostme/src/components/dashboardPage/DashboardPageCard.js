@@ -40,8 +40,9 @@ class GeneratedCardSimple extends React.Component<Props> {
     const { loading, addPageToManaged } = this.props;
     const nextLoading = nextProps.loading;
     const error = nextProps.error;
+    debugger;
     if (addPageToManaged && loading && !nextLoading && !error) {
-      this.props.history.push(`/page/${pageID}`);
+      this.props.history.push(`/pages/managed`);
     }
   }
 
