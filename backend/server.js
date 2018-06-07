@@ -178,6 +178,15 @@ app.get("/backend/user", function(req, res) {
 });
 
 //GET API
+app.get("/backend/post", function(req, res) {
+  var query =
+    "select * from [posts] WHERE posthash = '" +
+    escapeQuotations(req.param("postHash")) +
+    "';";
+  executeQuery(res, query);
+});
+
+//GET API
 app.get("/backend/managedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
