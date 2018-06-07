@@ -246,22 +246,21 @@ app.post("/backend/postit", function(req, res) {
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
-  console.log(query);
   queryGet(response => postToFacebook(res, response), query);
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
 var postToFacebook = function(res, response) {
-  pageId = response.recordset[0].pageId[0];
-  postText = response.recordset[0].postText;
-  postId = response.recordset[0].ID[1];
-  pageAccessToken = response.recordset[0].pageAccessToken;
+  var pageId = response.recordset[0].pageId[0];
+  var postText = response.recordset[0].postText;
+  var postid = response.recordset[0].ID[1] + "";
+  var pageAccessToken = response.recordset[0].pageAccessToken;
 
   var query =
     "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = '" +
-    escapeQuotations(postId) +
+    escapeQuotations(postid) +
     "';\n" +
-    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageId = '" +
+    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageid = '" +
     escapeQuotations(pageId) +
     "';";
   queryGet(response => console.log(response), query);
