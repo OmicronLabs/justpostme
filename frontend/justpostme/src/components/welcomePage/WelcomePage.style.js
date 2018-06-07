@@ -69,13 +69,10 @@ export const BackgroundShape = styled.img`
 `;
 
 export const WelcomePageBox = Box.extend`
-  padding-top: 3em;
-  margin-left: 1em;
-  margin-right: 1em;
+  padding: 3em;
+  margin-top: 190px;
   height: 230px;
-  width: 800px;
-  padding-bottom: 3em;
-  margin-bottom: 12em;
+  width: 760px;
   max-width: 800px;
   justify-content: center;
   align-items: center;

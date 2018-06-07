@@ -4,6 +4,7 @@ import { Redirect, Switch, withRouter, Route } from "react-router-dom";
 import ManagePages from "./containers/dashboardPage/ManagePagesContainer";
 import PageControl from "./containers/pageControl/PageControlContainer";
 import WelcomePage from "./containers/welcomePage/WelcomePageContainer";
+import AboutPage from "./components/aboutPage/AboutPage";
 import SubmissionForm from "./containers/submissionForm/SubmissionFormContainer";
 
 class Routes extends React.Component {
@@ -13,6 +14,7 @@ class Routes extends React.Component {
     return (
       <Switch>
         <Route path="/login" component={WelcomePage} />
+        <Route path="/about" component={AboutPage} />
         <Route
           path="/pages"
           render={props => {

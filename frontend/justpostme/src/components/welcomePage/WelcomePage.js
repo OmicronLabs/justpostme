@@ -100,7 +100,9 @@ class Welcome extends React.Component<Props> {
             <HeaderLogoText>justpost.me</HeaderLogoText>
           </HeaderTopLeft>
           <HeaderTopRight>
-            <TopMenuButton href="#">About</TopMenuButton>
+            <Link to="/about">
+              <TopMenuButton href="#">About</TopMenuButton>
+            </Link>
           </HeaderTopRight>
         </FrontDoorBackgroundTop>
         <BackgroundShape src={background} className="" />
