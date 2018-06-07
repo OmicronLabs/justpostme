@@ -2,6 +2,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var sql = require("mssql");
+var mysql = require("mysql");
 var app = express();
 var https = require("https");
 var fs = require("fs");
@@ -153,17 +154,17 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
       query +
       "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES ('" +
       escapeQuotations(userid) +
-      "', '" +
-      escapeQuotations(numScheduled) +
-      "', '" +
-      escapeQuotations(numPending) +
-      "', '" +
+      "', " +
+      numScheduled +
+      ", " +
+      numPending +
+      ", '" +
       escapeQuotations(pagesToInsert[i].id) +
       "' , '" +
       escapeQuotations(pagesToInsert[i].access_token) +
-      "', '" +
-      escapeQuotations(sameManaged) +
-      "', '" +
+      "', " +
+      sameManaged +
+      ", '" +
       escapeQuotations(pagesToInsert[i].name) +
       "');";
   }
@@ -286,6 +287,7 @@ var incrementPosts = function(res, pageId) {
   queryGet(response => console.log(response), query);
 };
 
+
 function submitForReview(text, hash) {
   request.post({
     url: `https://westeurope.api.cognitive.microsoft.com/contentmoderator/review/v1.0/teams/webapps/jobs?ContentType=Text&ContentId=abc&WorkflowName=text&CallBackEndpoint=https://justpostme.tech:6069/backend/newreview`,
@@ -329,7 +331,7 @@ app.post("/backend/createpost", function(req, res) {
     escapeQuotations(random) +
     "')";
 
-  queryGet(response => incrementPosts(res, req.param("pageid")), query);
+  queryGet(response => incrementPosts(res, req.body.pageid), query);
   res.end(
     '{"success" : "Updated Successfully", "status" : 200, "posthash" : "' +
       random +
@@ -365,6 +367,40 @@ app.post("/backend/removefrommanaged", function(req, res) {
   executeQuery(res, query);
 });
 
+app.post("/backend/changeform", function(req, res) {
+  console.log(req.body.form + req.body.content + req.body.pageid);
+
+  var query;
+
+  if (!req.body.submission) {
+    console.log("AHAHAHAHAHAHAHA");
+    query =
+      "UPDATE [pages] SET formText = '" +
+      escapeQuotations(req.body.form) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';";
+  } else if (!req.body.form) {
+    console.log("AHAHAHAHAHAHAHA2");
+    query =
+      "UPDATE [pages] SET submissionText = '" +
+      escapeQuotations(req.body.submission) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';";
+  } else {
+    query =
+      "UPDATE [pages] SET formText = '" +
+      escapeQuotations(req.body.form) +
+      "', submissionText = '" +
+      escapeQuotations(req.body.submission) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';";
+  }
+  executeQuery(res, query);
+});
+
 var escapeQuotations = function(str) {
   result = "";
   for (var i = 0; i < str.length; i++) {
@@ -373,6 +409,5 @@ var escapeQuotations = function(str) {
     }
     result += str.charAt(i);
   }
-  console.log(result);
   return result;
 };
