@@ -132,7 +132,9 @@ class PageControl extends React.Component<Props> {
     return (
       <DashboardPage>
         <Wrapper>
-          <PageOverviewWrapper style={{ marginTop: "10px" }}>
+          <PageOverviewWrapper
+            style={{ minHeight: "50px", maxHeight: "50px", paddingTop: "5px" }}
+          >
             <ClickablePageOverviewText
               onClick={() => {
                 history.push("/pages");
