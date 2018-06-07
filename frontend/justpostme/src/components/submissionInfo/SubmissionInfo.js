@@ -113,12 +113,7 @@ function openInNewTab(url) {
   win.focus();
 }
 
-type Props = {
-  currentPage: any,
-  currentPageLoading: boolean,
-  submitForm: Function,
-  fetchCurrentPage: Function
-};
+type Props = {};
 
 class SubmissionForm extends React.Component<Props> {
   constructor(props) {
@@ -131,42 +126,10 @@ class SubmissionForm extends React.Component<Props> {
     fetchCurrentPage(match.params.id);
   }
 
-  _renderForm() {
-    const { currentPage, match, submitForm } = this.props;
+  _renderInfo() {
+    const { currentSubmission } = this.props;
     return (
-      <Form>
-        <PageInfoWrapper>
-          <Title>Submission</Title>
-          <PageInfoFirstRow>
-            <PageImage src={currentPage.backgroundImgURL} />
-            <PageName>{currentPage.name}</PageName>
-          </PageInfoFirstRow>
-          <PageInfoFirstRow>
-            <p>{currentPage.preFormText ? currentPage.preFormText : ""}</p>
-          </PageInfoFirstRow>
-        </PageInfoWrapper>
-        <SubTitle> Your submissions content </SubTitle>
-        <InputField
-          rows="8"
-          value={this.state.submissionText}
-          onChange={event =>
-            this.setState({ submissionText: event.target.value })
-          }
-        />
-        <SubTitle>
-          What year are you and what do you study (e.g 3rd year Computing)
-        </SubTitle>
-        <InputField />
-        <ButtonWrapper>
-          <LargeThemedButton
-            onClick={() =>
-              submitForm(match.params.id, this.state.submissionText)
-            }
-          >
-            Submit form
-          </LargeThemedButton>
-        </ButtonWrapper>
-      </Form>
+      
     );
   }
 
@@ -239,9 +202,7 @@ class SubmissionForm extends React.Component<Props> {
             {currentPageLoading
               ? this._renderLoading()
               : currentPage
-                ? postHash
-                  ? this._renderSubmissionSuccess()
-                  : this._renderForm()
+                ? this._renderInfo()
                 : this._renderError()}
           </WelcomePageBox>
         </BoxWrapper>
