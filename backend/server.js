@@ -288,7 +288,7 @@ var incrementPosts = function(res, pageId) {
 
 function submitForReview(text, hash) {
   request.post({
-    url: `https://westeurope.api.cognitive.microsoft.com/contentmoderator/review/v1.0/teams/webapps/jobs?ContentType=Text&ContentId=abc&WorkflowName=text&CallBackEndpoint=https://build.justpostme.tech:6069/backend/newreview`,
+    url: `https://westeurope.api.cognitive.microsoft.com/contentmoderator/review/v1.0/teams/webapps/jobs?ContentType=Text&ContentId=abc&WorkflowName=text&CallBackEndpoint=https://justpostme.tech:6069/backend/newreview`,
     headers: {'Ocp-Apim-Subscription-Key': process.env.AZACCESS},
     body: '{\n "ContentValue": "' + text + '" \n}',
     callback: function(error, response, body) {
