@@ -7,9 +7,8 @@ import { serverDomain } from "../../const/serverURL";
 import { postToFbInstant } from "../../actions/postSubmission";
 
 const Wrapper = styled.div`
-  height: 70px;
+  height: 50px;
   width: 100%;
-  border: 1px solid green;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -26,28 +25,36 @@ type Props = {
   userToken: string,
   pageId: string,
   postToFbInstant: Function,
-  deletePendingSubmission: Function
+  deletePendingSubmission: Function,
+  displayId: string
 };
 
 const SubmissionId = styled.p`
-  background: rgba(127, 255, 0, 0.1);
   width: 20%;
   max-width: 20%;
   text-align: center;
-  line-height: 70px;
+  line-height: 50px;
+  margin: 0;
+  padding: 0;
 `;
 
 const SubmissionBody = styled.p`
   width: 50%;
   max-width: 50%;
+  height: 50px;
   align: center;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 `;
 
 const SubmissionControls = styled.div`
   width: 30%;
   max-width: 30%;
-  height: 100%;
+  height: 50px;
   background: rgba(127, 255, 0, 0.1);
   align: center;
   display: flex;
@@ -61,14 +68,20 @@ const SubmissionCard = (props: Props) => {
     postToFbInstant,
     submission,
     pageId,
-    deletePendingSubmission
+    deletePendingSubmission,
+    displayId
   } = props;
+
+  const isGreen = displayId % 2 === 1;
+  const rowStyle = isGreen
+    ? { background: "rgba(127, 255, 0, 0.1)" }
+    : { background: "white" };
 
   return (
     <Wrapper>
-      <SubmissionId>{submission.id}</SubmissionId>
-      <SubmissionBody>{submission.text}</SubmissionBody>
-      <SubmissionControls>
+      <SubmissionId style={rowStyle}>{displayId}</SubmissionId>
+      <SubmissionBody style={rowStyle}>{submission.text}</SubmissionBody>
+      <SubmissionControls style={rowStyle}>
         <button
           onClick={() => {
             postToFbInstant(submission.id, pageId);

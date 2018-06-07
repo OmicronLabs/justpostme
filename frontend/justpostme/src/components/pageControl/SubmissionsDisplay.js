@@ -7,19 +7,19 @@ import { ErrorDisplay } from "../dashboardPage/PagesDisplay";
 export const SubmissionsDisplayWrapper = styled.div`
   width: 1024px;
   max-width: 85%;
-  margin-bottom: 90px;
-  display: flex;
+  margin-bottom: 70px;
   flex-direction: column;
   align-content: center;
   justify-content: flex-start;
-  overflow: scroll;
+  display: flex;
 `;
 
 export const SubmissionsWrapper = styled.div`
-  display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  overflow: scroll;
+  padding-bottom: 20px;
 `;
 
 const SubmissionsLegend = styled.div`
@@ -30,17 +30,17 @@ const SubmissionsLegend = styled.div`
   align-items: center;
   vertical-align: center;
   height: 50px;
+  background: rgb(141, 195, 78);
 `;
 
 const LegendItem = styled.p`
-  color: gray;
+  color: white;
   align: center;
   height: 100%;
   text-align: center;
 `;
 
 const PostId = LegendItem.extend`
-  background: rgba(127, 255, 0, 0.1);
   width: 20%;
   max-width: 20%;
 `;
@@ -51,7 +51,6 @@ const PostContent = LegendItem.extend`
 `;
 
 const PostControls = LegendItem.extend`
-  background: rgba(127, 255, 0, 0.1);
   width: 30%;
   max-width: 30%;
 `;
@@ -71,8 +70,8 @@ const SubmissionDisplay = (props: Props) => {
     <SubmissionsDisplayWrapper>
       {props.submissions.length < 1 ? null : (
         <SubmissionsLegend>
-          <PostId>Post ID</PostId>
-          <PostContent>Content</PostContent>
+          <PostId>Index</PostId>
+          <PostContent>Body</PostContent>
           <PostControls>Post Controls</PostControls>
         </SubmissionsLegend>
       )}
@@ -85,11 +84,12 @@ const SubmissionDisplay = (props: Props) => {
             createCard={true}
           />
         ) : (
-          props.submissions.map(post => (
+          props.submissions.map((post, index) => (
             <SubmissionCardContainer
               pageId={props.pageId}
               submission={{ id: post.databaseId, text: post.name }}
               token={props.token}
+              displayId={index}
             />
           ))
         )}
