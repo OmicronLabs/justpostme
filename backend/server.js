@@ -2,6 +2,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var sql = require("mssql");
+var mysql = require("mysql");
 var app = express();
 var https = require("https");
 var fs = require("fs");
@@ -153,17 +154,17 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
       query +
       "\nINSERT INTO [pages] (userid, scheduledPosts, pendingPosts, pageId, pageAccessToken, managed, name) VALUES ('" +
       escapeQuotations(userid) +
-      "', '" +
-      escapeQuotations(numScheduled) +
-      "', '" +
-      escapeQuotations(numPending) +
-      "', '" +
+      "', " +
+      numScheduled +
+      ", " +
+      numPending +
+      ", '" +
       escapeQuotations(pagesToInsert[i].id) +
       "' , '" +
       escapeQuotations(pagesToInsert[i].access_token) +
-      "', '" +
-      escapeQuotations(sameManaged) +
-      "', '" +
+      "', " +
+      sameManaged +
+      ", '" +
       escapeQuotations(pagesToInsert[i].name) +
       "');";
   }
@@ -289,6 +290,13 @@ var incrementPosts = function(res, pageId) {
 //POST API
 app.post("/backend/createpost", function(req, res) {
   var random = crypto.randomBytes(20).toString("hex");
+
+  // var query =
+  //   "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES (?, ?, 1, ?)";
+  // var inserts = [req.body.pageid, req.body.postText, random];
+  // query = mysql.format(query, inserts);
+  // console.log(query);
+
   var query =
     "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
     escapeQuotations(req.body.pageid) +
@@ -298,7 +306,7 @@ app.post("/backend/createpost", function(req, res) {
     escapeQuotations(random) +
     "')";
 
-  queryGet(response => incrementPosts(res, req.param("pageid")), query);
+  queryGet(response => incrementPosts(res, req.body.pageid), query);
   res.end(
     '{"success" : "Updated Successfully", "status" : 200, "posthash" : "' +
       random +
@@ -334,6 +342,40 @@ app.post("/backend/removefrommanaged", function(req, res) {
   executeQuery(res, query);
 });
 
+app.post("/backend/changeform", function(req, res) {
+  console.log(req.body.form + req.body.content + req.body.pageid);
+
+  var query;
+
+  if (!req.body.submission) {
+    console.log("AHAHAHAHAHAHAHA");
+    query =
+      "UPDATE [pages] SET formText = '" +
+      escapeQuotations(req.body.form) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';";
+  } else if (!req.body.form) {
+    console.log("AHAHAHAHAHAHAHA2");
+    query =
+      "UPDATE [pages] SET submissionText = '" +
+      escapeQuotations(req.body.submission) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';";
+  } else {
+    query =
+      "UPDATE [pages] SET formText = '" +
+      escapeQuotations(req.body.form) +
+      "', submissionText = '" +
+      escapeQuotations(req.body.submission) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';";
+  }
+  executeQuery(res, query);
+});
+
 var escapeQuotations = function(str) {
   result = "";
   for (var i = 0; i < str.length; i++) {
@@ -342,6 +384,5 @@ var escapeQuotations = function(str) {
     }
     result += str.charAt(i);
   }
-  console.log(result);
   return result;
 };
