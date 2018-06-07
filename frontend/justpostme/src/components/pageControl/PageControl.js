@@ -132,7 +132,7 @@ class PageControl extends React.Component<Props> {
     return (
       <DashboardPage>
         <Wrapper>
-          <PageOverviewWrapper>
+          <PageOverviewWrapper style={{ marginTop: "5px" }}>
             <ClickablePageOverviewText
               onClick={() => {
                 history.push("/pages");
@@ -140,11 +140,9 @@ class PageControl extends React.Component<Props> {
             >
               <i style={{ fontSize: "27px" }} class="fa fa-home" />
             </ClickablePageOverviewText>
-
             <PageOverviewText style={{ margin: "0 10px", fontSize: "25px" }}>
               <i class="fa fa-caret-right" />
             </PageOverviewText>
-
             <ClickablePageOverviewText
               onClick={() => {
                 history.push(`${path}/pending`);
