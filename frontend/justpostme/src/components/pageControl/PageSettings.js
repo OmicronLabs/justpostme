@@ -40,11 +40,22 @@ export const SettingsRow = styled.div`
     margin: 5px 0;
 `;
 
+export const Link = styled.a`
+  color: green;
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
 type Props = {
   fetchPageSettings: Function,
   postPageSettings: Function,
   pageId: stirng
 };
+
+function openInNewTab(url) {
+  var win = window.open(url, "_blank");
+  win.focus();
+}
 
 class PageSettings extends React.Component<Props> {
   componentDidMount() {
@@ -59,9 +70,13 @@ class PageSettings extends React.Component<Props> {
         <SubmissionsWrapper>
           <SettingsRow>
             <p>Your annonymous submission link: </p>
-            <a href={`https://justpostme.tech/form/${pageId}`}>
+            <Link
+              onClick={() => {
+                openInNewTab(`https://justpostme.tech/form/${pageId}`);
+              }}
+            >
               {`https://justpostme.tech/form/${pageId}`}
-            </a>
+            </Link>
           </SettingsRow>
           <SettingsRow>
             <p>Pre-submission text: </p>

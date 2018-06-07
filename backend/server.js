@@ -287,16 +287,41 @@ var incrementPosts = function(res, pageId) {
   queryGet(response => console.log(response), query);
 };
 
+
+function submitForReview(text, hash) {
+  request.post({
+    url: `https://westeurope.api.cognitive.microsoft.com/contentmoderator/review/v1.0/teams/webapps/jobs?ContentType=Text&ContentId=abc&WorkflowName=text&CallBackEndpoint=https://justpostme.tech:6069/backend/newreview`,
+    headers: {'Ocp-Apim-Subscription-Key': process.env.AZACCESS},
+    body: '{\n "ContentValue": "' + text + '" \n}',
+    callback: function(error, response, body) {
+      body = JSON.parse(body);
+      if (!error && response.statusCode == 200) {
+        console.log(body.JobId);
+        var query = "UPDATE [posts] SET jobID = '" + body.JobId + "' WHERE posthash = '" + hash + "';";
+        queryGet(response => console.log(response), query);
+      }
+    }
+  });
+}
+
+app.post("/backend/newreview", function(req, res) {
+  console.log(req.body);
+  var sentiment = req.body.Metadata["sentiment.score"];
+  var profanity = req.body.Metadata["text.hasprofanity"];
+  var language = req.body.Metadata["text.language"];
+  var pii = req.body.Metadata["text.haspii"];
+  var review = req.body.Metadata["text.reviewrecommended"];
+  var jobid = req.body.JobId;
+  var query = "UPDATE [posts] SET sentiment = " + sentiment + ", profanity = " + profanity + ", langauge = '" + language + "', pii = " + pii + ", review = " +
+      review + " WHERE jobID = '" + jobid + "';";
+  queryGet(response => console.log(response), query);
+  res.end();
+});
+
 //POST API
 app.post("/backend/createpost", function(req, res) {
   var random = crypto.randomBytes(20).toString("hex");
-
-  // var query =
-  //   "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES (?, ?, 1, ?)";
-  // var inserts = [req.body.pageid, req.body.postText, random];
-  // query = mysql.format(query, inserts);
-  // console.log(query);
-
+  submitForReview(req.param("postText"), random);
   var query =
     "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
     escapeQuotations(req.body.pageid) +
