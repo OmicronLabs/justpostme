@@ -309,29 +309,9 @@ app.get("/backend/newreview", function(req, res) {
 });
 
 //POST API
-app.post("/backend/newpost", function(req, res) {
-  var random = crypto.randomBytes(20).toString("hex");
-  submitForReview(req.param("postText"), random);
-  var query =
-    "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
-    escapeQuotations(req.param("pageid")) +
-    "' , '" +
-    escapeQuotations(req.param("postText")) +
-    "', 1, '" +
-    escapeQuotations(random) +
-    "')";
-
-  queryGet(response => incrementPosts(res, req.param("pageid")), query);
-  res.end(
-    '{"success" : "Updated Successfully", "status" : 200, "posthash" : "' +
-      random +
-      '"}'
-  );
-});
-
-//POST API
 app.post("/backend/createpost", function(req, res) {
   var random = crypto.randomBytes(20).toString("hex");
+  submitForReview(req.param("postText"), random);
   var query =
     "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
     escapeQuotations(req.body.pageid) +
@@ -347,6 +327,16 @@ app.post("/backend/createpost", function(req, res) {
       random +
       '"}'
   );
+});
+
+//POST API
+app.post("/backend/removepost", function(req, res) {
+  var query =
+    "UPDATE [posts] SET pending = 0 WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
+  console.log(query);
+  executeQuery(res, query);
 });
 
 //POST API
