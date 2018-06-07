@@ -12,21 +12,21 @@ const initialState = {
 
 const currentSubmission = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_PAGE_BEGIN:
+    case FETCH_SUBMISSION_BEGIN:
       return {
         ...state,
         loading: true,
         error: null
       };
 
-    case FETCH_PAGE_SUCCESS:
+    case FETCH_SUBMISSION_SUCCESS:
       return {
         ...state,
         loading: false,
-        page: action.payload.submission
+        submission: action.payload.submission
       };
 
-    case FETCH_PAGE_ERROR:
+    case FETCH_SUBMISSION_ERROR:
       return {
         ...state,
         loading: false,

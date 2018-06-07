@@ -27,16 +27,17 @@ export function fetchCurrentSubmission(submissionHash: string) {
       .then(res => res.json())
       .then(json => {
         const records = json.recordset;
-        debugger;
-        const page = records.map(record => ({
-          name: record.name,
-          databaseId: record.ID,
-          pageID: record.pageId,
-          pendingPosts: record.pendingPosts,
-          scheduledPosts: record.scheduledPosts
+        const submission = records.map(record => ({
+          pending: record.pending,
+          pii: record.pii,
+          postText: record.postText,
+          profanity: record.profanity,
+          review: record.review,
+          sentiment: record.sentiment,
+          timePosted: record.timePosted
         }))[0];
-        dispatch(fetchSubmissionSuccess(page));
-        return page;
+        dispatch(fetchSubmissionSuccess(submission));
+        return submission;
       })
       .catch(error => dispatch(fetchSubmissionError(error)));
   };

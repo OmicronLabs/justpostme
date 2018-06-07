@@ -18,6 +18,7 @@ import { Box, BoxWrapper } from "../common/Box";
 import { LargeThemedButton, TopMenuButton } from "../common/Buttons";
 import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
+import { fetchCurrentSubmission } from "../../actions/currentSubmission";
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -113,23 +114,31 @@ function openInNewTab(url) {
   win.focus();
 }
 
-type Props = {};
+type Props = {
+  loading: boolean,
+  error: boolean,
+  submission: any,
+  fetchCurrentSubmission: Function
+};
 
 class SubmissionForm extends React.Component<Props> {
-  constructor(props) {
-    super(props);
-    this.state = { submissionText: "" };
-  }
-
   componentDidMount() {
-    const { fetchCurrentPage, match } = this.props;
-    fetchCurrentPage(match.params.id);
+    const { fetchCurrentSubmission, match } = this.props;
+    fetchCurrentSubmission(match.params.id);
   }
 
   _renderInfo() {
-    const { currentSubmission } = this.props;
-    return (
-      
+    const { submission } = this.props;
+
+    return submission.profanity !== null ? (
+      <div>
+        <p> Your submission: </p>
+        <p> {submission.postText} </p>
+        <p> Submission status: </p>
+        <p> {submission.pending ? "PENDING" : "ACCEPTED"} </p>
+      </div>
+    ) : (
+      <p> Your submission is being processed</p>
     );
   }
 
@@ -141,37 +150,8 @@ class SubmissionForm extends React.Component<Props> {
     return <ErrorText>Error, link is broken :( </ErrorText>;
   }
 
-  _renderSubmissionSuccess() {
-    const { postHash, currentPage } = this.props;
-    const trackingLink = `https://justpostme.tech/submission/${postHash}`;
-    return (
-      <Form>
-        <PageInfoWrapper>
-          <PageInfoFirstRow>
-            <PageImage src={currentPage.backgroundImgURL} />
-            <PageName>{currentPage.name}</PageName>
-          </PageInfoFirstRow>
-        </PageInfoWrapper>
-        <SubTitle> Your form has been submitted successfully! </SubTitle>
-        <p> Your unique tracking link is: </p>
-        <Link
-          onClick={() => {
-            openInNewTab(trackingLink);
-          }}
-        >
-          {trackingLink}
-        </Link>
-      </Form>
-    );
-  }
-
   render() {
-    const {
-      currentPage,
-      currentPageError,
-      currentPageLoading,
-      postHash
-    } = this.props;
+    const { loading, submission } = this.props;
 
     return (
       <FrontDoorRelative>
@@ -199,9 +179,9 @@ class SubmissionForm extends React.Component<Props> {
               minHeight: "350px"
             }}
           >
-            {currentPageLoading
+            {loading
               ? this._renderLoading()
-              : currentPage
+              : submission
                 ? this._renderInfo()
                 : this._renderError()}
           </WelcomePageBox>
