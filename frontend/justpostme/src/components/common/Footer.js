@@ -6,6 +6,7 @@ import { IconButton } from "./Buttons";
 
 export const SimpleFooter = styled.footer`
   position: fixed;
+  z-index: -10;
   width: 100%;
   height: 30px;
   text-align: center;
