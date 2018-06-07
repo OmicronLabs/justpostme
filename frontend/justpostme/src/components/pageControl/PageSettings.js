@@ -42,7 +42,8 @@ export const SettingsRow = styled.div`
 
 type Props = {
   fetchPageSettings: Function,
-  postPageSettings: Function
+  postPageSettings: Function,
+  pageId: stirng
 };
 
 class PageSettings extends React.Component<Props> {
@@ -52,12 +53,15 @@ class PageSettings extends React.Component<Props> {
   }
 
   _settingsDisplay = () => {
+    const { pageId } = this.props;
     return (
       <SubmissionsDisplayWrapper>
         <SubmissionsWrapper>
           <SettingsRow>
             <p>Your annonymous submission link: </p>
-            <p> https://justpostme.tech/some_link</p>
+            <a href={`https://justpostme.tech/form/${pageId}`}>
+              {`https://justpostme.tech/form/${pageId}`}
+            </a>
           </SettingsRow>
           <SettingsRow>
             <p>Pre-submission text: </p>
