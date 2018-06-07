@@ -74,7 +74,7 @@ const SubmissionCard = (props: Props) => {
 
   const isGreen = displayId % 2 === 1;
   const rowStyle = isGreen
-    ? { background: "rgba(127, 255, 0, 0.1)" }
+    ? { background: "rgba(140, 195, 78, 0.12)" }
     : { background: "white" };
 
   return (
