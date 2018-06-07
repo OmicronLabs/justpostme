@@ -26,7 +26,8 @@ type Props = {
   pageId: string,
   postToFbInstant: Function,
   deletePendingSubmission: Function,
-  displayId: string
+  displayId: string,
+  match: any
 };
 
 const SubmissionId = styled.p`
@@ -63,13 +64,18 @@ const SubmissionControls = styled.div`
   align-content: center;
 `;
 
+const displayWarning = submission => {
+  return submission.pii || submission.review;
+};
+
 const SubmissionCard = (props: Props) => {
   const {
     postToFbInstant,
     submission,
     pageId,
     deletePendingSubmission,
-    displayId
+    displayId,
+    history
   } = props;
 
   const isGreen = displayId % 2 === 1;
@@ -80,7 +86,15 @@ const SubmissionCard = (props: Props) => {
   return (
     <Wrapper>
       <SubmissionId style={rowStyle}>{displayId}</SubmissionId>
-      <SubmissionBody style={rowStyle}>{submission.postText}</SubmissionBody>
+      <SubmissionBody
+        style={rowStyle}
+        onClick={() => {
+          alert(`page/${pageId}/pending/${submission.postHash}`);
+          history.push(`page/${pageId}/pending/${submission.postHash}`);
+        }}
+      >
+        {submission.postText}
+      </SubmissionBody>
       <SubmissionControls style={rowStyle}>
         <button
           onClick={() => {
@@ -90,6 +104,7 @@ const SubmissionCard = (props: Props) => {
         >
           Click me to post!!!
         </button>
+        {displayWarning(submission) ? <p>FLAG</p> : null}
       </SubmissionControls>
     </Wrapper>
   );

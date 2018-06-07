@@ -13,6 +13,7 @@ import "font-awesome/css/font-awesome.min.css";
 
 import PendingSubmissionsContainer from "../../containers/pageControl/PendingSubmissionsContainer";
 import PageSettings from "./PageSettings";
+import SubmissionControl from "../../containers/pageControl/SubmissionControlContainer";
 import { fetchCurrentPage } from "../../actions/currentPage";
 
 type RouteType = {
@@ -168,8 +169,8 @@ class PageControl extends React.Component<Props> {
               render={() => <PendingSubmissionsContainer pageId={id} />}
             />
             <Route
-              path={`${path}/pending/:submissionid`}
-              render={() => <PendingSubmissionsContainer pageId={id} />}
+              path={`page/:id/pending/:submissionid`}
+              render={() => <SubmissionControl />}
             />
             <Route
               path={`${path}/approved`}

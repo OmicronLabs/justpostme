@@ -41,7 +41,8 @@ export function fetchPendingSubmissions(pageid: string) {
           profanity: record.profanity,
           review: record.review,
           sentiment: record.sentiment,
-          timePosted: record.timePosted
+          timePosted: record.timePosted,
+          postHash: record.posthash
         }));
         dispatch(fetchPendingSuccess(submissions));
         return submissions;
