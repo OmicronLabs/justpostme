@@ -39,7 +39,6 @@ export function submitForm(pageid: string, text: string) {
       .then(res => res.json())
       .then(json => {
         dispatch(submitFormSuccess(json.posthash));
-        alert(json.posthash);
         return json.posthash;
       })
       .catch(error => dispatch(submitFormError(error)));
