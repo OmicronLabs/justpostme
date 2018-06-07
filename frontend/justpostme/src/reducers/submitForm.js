@@ -6,7 +6,8 @@ import {
 
 const initialState = {
   loading: false,
-  error: false
+  error: false,
+  postId: null
 };
 
 const submitForm = (state = initialState, action) => {
@@ -21,7 +22,8 @@ const submitForm = (state = initialState, action) => {
     case SUBMIT_FORM_SUCCESS:
       return {
         ...state,
-        loading: false
+        loading: false,
+        postId: action.payload.postId
       };
 
     case SUBMIT_FORM_ERROR:

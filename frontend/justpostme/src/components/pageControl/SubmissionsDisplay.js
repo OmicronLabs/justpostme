@@ -89,7 +89,7 @@ const SubmissionDisplay = (props: Props) => {
               pageId={props.pageId}
               submission={{ id: post.databaseId, text: post.name }}
               token={props.token}
-              displayId={index}
+              displayId={index + 1}
             />
           ))
         )}
