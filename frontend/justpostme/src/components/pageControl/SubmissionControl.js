@@ -1,6 +1,7 @@
 //@flow
 
 import React from "react";
+import { Box, BoxWrapper } from "../common/Box";
 
 type Props = {
   loading: boolean,
@@ -16,16 +17,18 @@ class SubmissionControl extends React.Component<Props> {
     fetchCurrentSubmission(match.params.submissionid);
   }
 
-  render() {
+  _renderSubmissionControl() {
     const { submission, loading, error } = this.props;
 
-
-    return loading ? (
-      <p> Loading </p>
-    ) : !submission ? (
-      <p> Error </p>
-    ) : (
-      <div>
+    return (
+      <Box
+        style={{
+          width: "1024px",
+          maxWidth: "85%",
+          minHeight: "600px",
+          marginTop: "10px"
+        }}
+      >
         <p> Submission: </p>
         <p>{submission.postText}</p>
         <p> should review: </p>
@@ -34,8 +37,26 @@ class SubmissionControl extends React.Component<Props> {
         <p>{submission.pii === true ? "true" : "false"}</p>
         <p> Profanity: </p>
         <p> {submission.profanity === true ? "true" : "false"} </p>
-      </div>
+      </Box>
     );
+  }
+
+  _renderError() {
+    return <p> Error </p>;
+  }
+
+  _renderLoading() {
+    return <p> Loading </p>;
+  }
+
+  render() {
+    const { submission, loading, error } = this.props;
+
+    return loading
+      ? this._renderLoading()
+      : !submission
+        ? this._renderError()
+        : this._renderSubmissionControl();
   }
 }
 

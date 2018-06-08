@@ -118,7 +118,10 @@ class PageControl extends React.Component<Props> {
   render() {
     const { url } = this.props.match;
     const path = url;
-    const { id, submissionid } = this.props.match.params;
+    const { id } = this.props.match.params;
+
+    const displaySubmission =
+      this.props.location.pathname.indexOf("submission") !== -1;
 
     const { managedPages, currentPage, history } = this.props;
 
@@ -161,8 +164,21 @@ class PageControl extends React.Component<Props> {
             >
               {currentPage ? currentPage.name : "Page"}
             </ClickablePageOverviewText>
+            {displaySubmission
+              ? [
+                  <PageOverviewText
+                    style={{ margin: "0 10px", fontSize: "25px" }}
+                  >
+                    <i class="fa fa-caret-right" />
+                  </PageOverviewText>,
+
+                  <ClickablePageOverviewText onClick={() => {}}>
+                    {"Submission"}
+                  </ClickablePageOverviewText>
+                ]
+              : null}
           </PageOverviewWrapper>
-          <RouteTabs routes={tabBarNavRoutes} />
+          {displaySubmission ? null : <RouteTabs routes={tabBarNavRoutes} />}
           <Switch>
             <Route
               path={`${path}/pending`}
@@ -174,11 +190,11 @@ class PageControl extends React.Component<Props> {
             />
             <Route
               path={`${path}/approved`}
-              render={() => <p>Borys to chuj</p>}
+              render={() => <p>Borys to Borys</p>}
             />
             <Route
               path={`${path}/moderation`}
-              render={() => <p>Borys to pizda</p>}
+              render={() => <p>Borys to Borys</p>}
             />
             <Route
               path={`${path}/insights`}
