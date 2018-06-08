@@ -178,6 +178,15 @@ app.get("/backend/user", function(req, res) {
 });
 
 //GET API
+app.get("/backend/post", function(req, res) {
+  var query =
+    "select * from [posts] WHERE posthash = '" +
+    escapeQuotations(req.param("postHash")) +
+    "';";
+  executeQuery(res, query);
+});
+
+//GET API
 app.get("/backend/managedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
@@ -246,22 +255,21 @@ app.post("/backend/postit", function(req, res) {
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
-  console.log(query);
   queryGet(response => postToFacebook(res, response), query);
   res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
 
 var postToFacebook = function(res, response) {
-  pageId = response.recordset[0].pageId[0];
-  postText = response.recordset[0].postText;
-  postId = response.recordset[0].ID[1];
-  pageAccessToken = response.recordset[0].pageAccessToken;
+  var pageId = response.recordset[0].pageId[0];
+  var postText = response.recordset[0].postText;
+  var postid = response.recordset[0].ID[1] + "";
+  var pageAccessToken = response.recordset[0].pageAccessToken;
 
   var query =
     "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = '" +
-    escapeQuotations(postId) +
+    escapeQuotations(postid) +
     "';\n" +
-    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageId = '" +
+    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageid = '" +
     escapeQuotations(pageId) +
     "';";
   queryGet(response => console.log(response), query);
@@ -286,17 +294,21 @@ var incrementPosts = function(res, pageId) {
   queryGet(response => console.log(response), query);
 };
 
-
 function submitForReview(text, hash) {
   request.post({
     url: `https://westeurope.api.cognitive.microsoft.com/contentmoderator/review/v1.0/teams/webapps/jobs?ContentType=Text&ContentId=abc&WorkflowName=text&CallBackEndpoint=https://justpostme.tech:6069/backend/newreview`,
-    headers: {'Ocp-Apim-Subscription-Key': process.env.AZACCESS},
+    headers: { "Ocp-Apim-Subscription-Key": process.env.AZACCESS },
     body: '{\n "ContentValue": "' + text + '" \n}',
     callback: function(error, response, body) {
       body = JSON.parse(body);
       if (!error && response.statusCode == 200) {
         console.log(body.JobId);
-        var query = "UPDATE [posts] SET jobID = '" + body.JobId + "' WHERE posthash = '" + hash + "';";
+        var query =
+          "UPDATE [posts] SET jobID = '" +
+          body.JobId +
+          "' WHERE posthash = '" +
+          hash +
+          "';";
         queryGet(response => console.log(response), query);
       }
     }
@@ -306,13 +318,25 @@ function submitForReview(text, hash) {
 app.post("/backend/newreview", function(req, res) {
   console.log(req.body);
   var sentiment = req.body.Metadata["sentiment.score"];
-  var profanity = +(req.body.Metadata["text.hasprofanity"] == 'True');
+  var profanity = +(req.body.Metadata["text.hasprofanity"] == "True");
   var language = req.body.Metadata["text.language"];
-  var pii = +(req.body.Metadata["text.haspii"] == 'True');
-  var review = +(req.body.Metadata["text.reviewrecommended"] == 'True');
+  var pii = +(req.body.Metadata["text.haspii"] == "True");
+  var review = +(req.body.Metadata["text.reviewrecommended"] == "True");
   var jobid = req.body.JobId;
-  var query = "UPDATE [posts] SET sentiment = " + sentiment + ", profanity = " + profanity + ", language = '" + language + "', pii = " + pii + ", review = " +
-      review + " WHERE jobID = '" + jobid + "';";
+  var query =
+    "UPDATE [posts] SET sentiment = " +
+    sentiment +
+    ", profanity = " +
+    profanity +
+    ", language = '" +
+    language +
+    "', pii = " +
+    pii +
+    ", review = " +
+    review +
+    " WHERE jobID = '" +
+    jobid +
+    "';";
   queryGet(response => console.log(response), query);
   res.end();
 });
