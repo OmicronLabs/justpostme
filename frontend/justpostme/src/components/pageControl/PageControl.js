@@ -118,7 +118,7 @@ class PageControl extends React.Component<Props> {
   render() {
     const { url } = this.props.match;
     const path = url;
-    const { id } = this.props.match.params;
+    const { id, submissionid } = this.props.match.params;
 
     const { managedPages, currentPage, history } = this.props;
 
@@ -169,7 +169,7 @@ class PageControl extends React.Component<Props> {
               render={() => <PendingSubmissionsContainer pageId={id} />}
             />
             <Route
-              path={`page/:id/pending/:submissionid`}
+              path={`${path}/submission/:submissionid`}
               render={() => <SubmissionControl />}
             />
             <Route
