@@ -19,6 +19,7 @@ class SubmissionControl extends React.Component<Props> {
   render() {
     const { submission, loading, error } = this.props;
 
+
     return loading ? (
       <p> Loading </p>
     ) : !submission ? (
