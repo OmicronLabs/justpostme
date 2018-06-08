@@ -89,8 +89,7 @@ const SubmissionCard = (props: Props) => {
       <SubmissionBody
         style={rowStyle}
         onClick={() => {
-          alert(`page/${pageId}/pending/${submission.postHash}`);
-          history.push(`page/${pageId}/pending/${submission.postHash}`);
+          history.push(`/page/${pageId}/submission/${submission.postHash}`);
         }}
       >
         {submission.postText}

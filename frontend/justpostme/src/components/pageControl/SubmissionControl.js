@@ -18,20 +18,22 @@ class SubmissionControl extends React.Component<Props> {
 
   render() {
     const { submission, loading, error } = this.props;
+
+
     return loading ? (
       <p> Loading </p>
-    ) : error ? (
+    ) : !submission ? (
       <p> Error </p>
     ) : (
       <div>
         <p> Submission: </p>
         <p>{submission.postText}</p>
         <p> should review: </p>
-        <p>{submission.review}</p>
+        <p>{submission.review === true ? "true" : "false"}</p>
         <p> personal info: </p>
-        <p>{submission.pii}</p>
-        <p> Should review: </p>
-        <p> {submission.review} </p>
+        <p>{submission.pii === true ? "true" : "false"}</p>
+        <p> Profanity: </p>
+        <p> {submission.profanity === true ? "true" : "false"} </p>
       </div>
     );
   }
