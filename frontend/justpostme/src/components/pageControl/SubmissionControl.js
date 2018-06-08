@@ -19,6 +19,7 @@ class SubmissionControl extends React.Component<Props> {
 
   _renderSubmissionControl() {
     const { submission, loading, error } = this.props;
+
     return (
       <Box
         style={{
