@@ -59,18 +59,19 @@ const ButtonRow = styled.div`
 `;
 
 const ButtonText = styled.div`
-  margin: 5px;
+  margin: 5px 10px;
 `;
 
 const Button = styled.div`
-  background: rgb(76, 175, 80);
+  background: ${props =>
+    props.warning === true ? "orange" : "rgb(76, 175, 80)"};
   color: white;
   select: none;
   border-radius: 3px;
   cursor: pointer;
   margin: 10px 10px 10px 0;
   &:hover {
-    background: green;
+    background: ${props => (props.warning === true ? "darkorange" : "green")};
   }
 `;
 
@@ -115,10 +116,73 @@ const SubmissionWarning = () => (
   </ButtonRow>
 );
 
+const MessageBox = styled.div`
+  height: 80px;
+  box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
+  border-radius: 20px;
+  width: 80%;
+  padding: 0 10px;
+  margin-left: 20px;
+`;
+
+const Sender = styled.div`
+  height: 80px;
+  display: flex;
+  justify-content: left;
+  flex-direction: row;
+  align-items: center;
+  margin: 20px 0;
+`;
+
+const Avatar = styled.img`
+  height: 80px;
+  width: 80px;
+`;
+
+const AvatarContainer = styled.div`
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border: 1px solid rgb(76, 175, 80);
+  overflow: hidden;
+`;
+
+const Message = styled.textarea`
+  width: 80%;
+  box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
+  border-radius: 20px;
+  padding: 5px;
+  border: none;
+  outline: none;
+  margin-left: 20px;
+  &:focus {
+    box-shadow: 0px 0px 4px 3px rgb(76, 175, 80);
+  }
+`;
+
+const SenderBox = props => (
+  <Sender>
+    <AvatarContainer>
+      <Avatar src="http://marketline.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" />
+    </AvatarContainer>
+    <Message
+      rows="6"
+      placeholder="Type your message to user here ..."
+      value={props.currentMessage}
+      onChange={props.onChange}
+    />
+  </Sender>
+);
+
 class SubmissionControl extends React.Component<Props> {
   constructor(props) {
     super(props);
-    this.state = { submissionText: "", editing: false, tempSubmissionText: "" };
+    this.state = {
+      submissionText: "",
+      editing: false,
+      tempSubmissionText: "",
+      currentMessage: ""
+    };
   }
 
   componentDidMount() {
@@ -219,6 +283,25 @@ class SubmissionControl extends React.Component<Props> {
               </Button>
             </ButtonRow>
           )}
+
+          <SubTitle>Request moderation: </SubTitle>
+          <SenderBox
+            currentMessage={this.state.currentMessage}
+            onChange={event =>
+              this.setState({ currentMessage: event.target.value })
+            }
+          />
+          <ButtonRow>
+            <Button warning onClick={() => {}}>
+              <ButtonText>Request moderation</ButtonText>
+            </Button>
+            <Button onClick={() => {}}>
+              <ButtonText>Publish now</ButtonText>
+            </Button>
+            <Button onClick={() => {}}>
+              <ButtonText>Schedule</ButtonText>
+            </Button>
+          </ButtonRow>
         </ContentWrapper>
       </Box>
     );
