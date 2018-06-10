@@ -158,8 +158,8 @@ const NoWarningComponent = () => (
   </WarningOK>
 );
 
-const DeleteComponent = () => (
-  <DeleteContainer title="Delete" onClick={() => {}}>
+const DeleteComponent = props => (
+  <DeleteContainer title="Delete" onClick={() => props.delete()}>
     <i className="fa fa-trash" />
   </DeleteContainer>
 );
@@ -211,7 +211,6 @@ const SubmissionCard = (props: Props) => {
         />
         <ScheduleComponent
           schedule={() => {
-            // ostToFbInstant(submission.databaseId, pageId);
             deletePendingSubmission(submission.databaseId);
           }}
         />

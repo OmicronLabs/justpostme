@@ -86,7 +86,7 @@ const SubmissionDisplay = (props: Props) => {
         <SubmissionsLegend>
           <PostId>Index</PostId>
           <PostContent>Body</PostContent>
-          <TimeStamp>Timestamp</TimeStamp>
+          <TimeStamp>Submitted</TimeStamp>
           <PostControls>Post Controls</PostControls>
           <PostWarning>Warnings</PostWarning>
         </SubmissionsLegend>

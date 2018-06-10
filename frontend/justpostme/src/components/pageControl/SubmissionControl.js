@@ -118,7 +118,7 @@ const SubmissionWarning = () => (
 class SubmissionControl extends React.Component<Props> {
   constructor(props) {
     super(props);
-    this.state = { submissionText: "", editing: false };
+    this.state = { submissionText: "", editing: false, tempSubmissionText: "" };
   }
 
   componentDidMount() {
@@ -132,7 +132,10 @@ class SubmissionControl extends React.Component<Props> {
     const newSubmission = nextProps.submission;
 
     if (loading && !newLoading) {
-      this.setState({ submissionText: newSubmission.postText });
+      this.setState({
+        submissionText: newSubmission.postText,
+        tempSubmissionText: newSubmission.postText
+      });
     }
   }
 
@@ -175,14 +178,14 @@ class SubmissionControl extends React.Component<Props> {
           <SubTitle> Submission: </SubTitle>
           {!this.state.editing ? (
             <DisplaySubmission>
-              <p>{submission.postText}</p>
+              <p>{this.state.submissionText}</p>
             </DisplaySubmission>
           ) : (
             <InputField
               rows="11"
-              value={this.state.submissionText}
+              value={this.state.tempSubmissionText}
               onChange={event =>
-                this.setState({ submissionText: event.target.value })
+                this.setState({ tempSubmissionText: event.target.value })
               }
             />
           )}
@@ -194,10 +197,24 @@ class SubmissionControl extends React.Component<Props> {
             </ButtonRow>
           ) : (
             <ButtonRow>
-              <Button onClick={() => this.setState({ editing: false })}>
+              <Button
+                onClick={() =>
+                  this.setState(state => ({
+                    editing: false,
+                    submissionText: state.tempSubmissionText
+                  }))
+                }
+              >
                 <ButtonText>Save</ButtonText>
               </Button>
-              <Button onClick={() => this.setState({ editing: false })}>
+              <Button
+                onClick={() =>
+                  this.setState(state => ({
+                    editing: false,
+                    tempSubmissionText: state.submissionText
+                  }))
+                }
+              >
                 <ButtonText>Cancel</ButtonText>
               </Button>
             </ButtonRow>
