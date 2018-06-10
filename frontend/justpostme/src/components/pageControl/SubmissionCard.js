@@ -2,6 +2,7 @@
 
 import React from "react";
 import styled from "styled-components";
+import "font-awesome/css/font-awesome.min.css";
 
 import { serverDomain } from "../../const/serverURL";
 import { postToFbInstant } from "../../actions/postSubmission";
@@ -31,8 +32,8 @@ type Props = {
 };
 
 const SubmissionId = styled.p`
-  width: 20%;
-  max-width: 20%;
+  width: 7%;
+  max-width: 7%;
   text-align: center;
   line-height: 50px;
   margin: 0;
@@ -43,18 +44,19 @@ const SubmissionBody = styled.p`
   width: 50%;
   max-width: 50%;
   height: 50px;
-  align: center;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: left;
   margin: 0;
   padding: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 50px;
+  padding-left: 12px;
 `;
 
 const SubmissionControls = styled.div`
-  width: 30%;
-  max-width: 30%;
+  width: 33%;
+  max-width: 33%;
   height: 50px;
   background: rgba(127, 255, 0, 0.1);
   align: center;
@@ -64,9 +66,45 @@ const SubmissionControls = styled.div`
   align-content: center;
 `;
 
+const SubmissionWarnings = styled.div`
+  width: 10%;
+  max-width: 10%;
+  height: 50px;
+  background: rgba(127, 255, 0, 0.1);
+  align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+`;
+
 const displayWarning = submission => {
   return submission.pii || submission.review;
 };
+
+const Warning = styled.i`
+  color: orange;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+`;
+
+const WarningOK = Warning.extend`
+  color: green;
+`;
+
+const WarningComponent = () => (
+  <Warning onHover={() => {}}>
+    <i className="fa fa-exclamation-triangle" />
+  </Warning>
+);
+
+const NoWarningComponent = () => (
+  <WarningOK onHover={() => {}}>
+    <i className="fa fa-check-circle" />
+  </WarningOK>
+);
 
 const SubmissionCard = (props: Props) => {
   const {
@@ -101,10 +139,24 @@ const SubmissionCard = (props: Props) => {
             deletePendingSubmission(submission.databaseId);
           }}
         >
-          Click me to post!!!
+          Publish now
         </button>
-        {displayWarning(submission) ? <p>FLAG</p> : null}
+        <button
+          onClick={() => {
+            postToFbInstant(submission.databaseId, pageId);
+            deletePendingSubmission(submission.databaseId);
+          }}
+        >
+          Schedule
+        </button>
       </SubmissionControls>
+      <SubmissionWarnings style={rowStyle}>
+        {displayWarning(submission) ? (
+          <WarningComponent />
+        ) : (
+          <NoWarningComponent />
+        )}
+      </SubmissionWarnings>
     </Wrapper>
   );
 };
