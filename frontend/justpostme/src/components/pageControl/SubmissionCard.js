@@ -201,7 +201,7 @@ const SubmissionCard = (props: Props) => {
       >
         {submission.postText}
       </SubmissionBody>
-      <Timestamp> 22-03-2016T18:13 </Timestamp>
+      <Timestamp> {submission.timePosted} </Timestamp>
       <SubmissionControls>
         <PublishNowComponent
           publishNow={() => {
