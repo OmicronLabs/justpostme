@@ -52,9 +52,15 @@ const PostContent = LegendItem.extend`
   border-right: 2px solid white;
 `;
 
+const TimeStamp = LegendItem.extend`
+  width: 20%;
+  max-width: 20%;
+  border-right: 2px solid white;
+`;
+
 const PostControls = LegendItem.extend`
-  width: 33%;
-  max-width: 33%;
+  width: 13%;
+  max-width: 13%;
   border-right: 2px solid white;
 `;
 
@@ -80,6 +86,7 @@ const SubmissionDisplay = (props: Props) => {
         <SubmissionsLegend>
           <PostId>Index</PostId>
           <PostContent>Body</PostContent>
+          <TimeStamp>Timestamp</TimeStamp>
           <PostControls>Post Controls</PostControls>
           <PostWarning>Warnings</PostWarning>
         </SubmissionsLegend>

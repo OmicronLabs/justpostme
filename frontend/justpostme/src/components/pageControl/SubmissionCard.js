@@ -14,6 +14,12 @@ const Wrapper = styled.div`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  cursor: pointer;
+  background: ${props =>
+    props.isGreen === true ? "rgba(140, 195, 78, 0.12)" : "white"};
+  &:hover {
+    background: rgba(140, 195, 78, 0.5);
+  }
 `;
 
 type Submission = {
@@ -55,22 +61,31 @@ const SubmissionBody = styled.p`
 `;
 
 const SubmissionControls = styled.div`
-  width: 33%;
-  max-width: 33%;
+  width: 13%;
+  max-width: 13%;
   height: 50px;
-  background: rgba(127, 255, 0, 0.1);
   align: center;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-content: center;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const Timestamp = styled.div`
+  width: 20%;
+  max-width: 20%;
+  height: 50px;
+  align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SubmissionWarnings = styled.div`
   width: 10%;
   max-width: 10%;
   height: 50px;
-  background: rgba(127, 255, 0, 0.1);
   align: center;
   display: flex;
   flex-direction: row;
@@ -94,16 +109,74 @@ const WarningOK = Warning.extend`
   color: green;
 `;
 
+const DeleteContainer = Warning.extend`
+  font-size: 22px;
+  color: silver;
+  &:hover {
+    color: red;
+  }
+`;
+
+const PublishContainer = Warning.extend`
+  font-size: 22px;
+  color: silver;
+  &:hover {
+    color: green;
+  }
+`;
+
+const ControlButton = styled.div`
+  background: silver;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  height: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 5px;
+  cursor: pointer;
+  &:hover {
+    background: green;
+  }
+`;
+
+const ControlButtonText = styled.a`
+  margin: 4px 6px;
+`;
+
 const WarningComponent = () => (
-  <Warning onHover={() => {}}>
+  <Warning title="Post may contain sensitive content">
     <i className="fa fa-exclamation-triangle" />
   </Warning>
 );
 
 const NoWarningComponent = () => (
-  <WarningOK onHover={() => {}}>
+  <WarningOK title="Post passed automated checks, no sensitive content">
     <i className="fa fa-check-circle" />
   </WarningOK>
+);
+
+const DeleteComponent = () => (
+  <DeleteContainer title="Delete" onClick={() => {}}>
+    <i className="fa fa-trash" />
+  </DeleteContainer>
+);
+
+const PublishNowComponent = props => (
+  <PublishContainer title="Publish now" onClick={() => props.publishNow()}>
+    <i className="fa fa-paper-plane" />
+  </PublishContainer>
+);
+
+const ScheduleComponent = props => (
+  <PublishContainer
+    title="Schedule for publication"
+    onClick={() => props.schedule()}
+  >
+    <i className="fa fa-clock-o" />
+  </PublishContainer>
 );
 
 const SubmissionCard = (props: Props) => {
@@ -117,40 +190,39 @@ const SubmissionCard = (props: Props) => {
   } = props;
 
   const isGreen = displayId % 2 === 1;
-  const rowStyle = isGreen
-    ? { background: "rgba(140, 195, 78, 0.12)" }
-    : { background: "white" };
 
   return (
-    <Wrapper>
-      <SubmissionId style={rowStyle}>{displayId}</SubmissionId>
+    <Wrapper isGreen={isGreen}>
+      <SubmissionId>{displayId}</SubmissionId>
       <SubmissionBody
-        style={rowStyle}
         onClick={() => {
           history.push(`/page/${pageId}/submission/${submission.postHash}`);
         }}
       >
         {submission.postText}
       </SubmissionBody>
-      <SubmissionControls style={rowStyle}>
-        <button
-          onClick={() => {
+      <Timestamp> 22-03-2016T18:13 </Timestamp>
+      <SubmissionControls>
+        <PublishNowComponent
+          publishNow={() => {
             postToFbInstant(submission.databaseId, pageId);
             deletePendingSubmission(submission.databaseId);
           }}
-        >
-          Publish now
-        </button>
-        <button
-          onClick={() => {
-            postToFbInstant(submission.databaseId, pageId);
+        />
+        <ScheduleComponent
+          schedule={() => {
+            // ostToFbInstant(submission.databaseId, pageId);
             deletePendingSubmission(submission.databaseId);
           }}
-        >
-          Schedule
-        </button>
+        />
+
+        <DeleteComponent
+          delete={() => {
+            deletePendingSubmission(submission.databaseId);
+          }}
+        />
       </SubmissionControls>
-      <SubmissionWarnings style={rowStyle}>
+      <SubmissionWarnings>
         {displayWarning(submission) ? (
           <WarningComponent />
         ) : (
