@@ -1,6 +1,6 @@
 {
   "name": "justpostme",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "dependencies": {
     "enzyme": "^3.3.0",
