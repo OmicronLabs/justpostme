@@ -132,8 +132,8 @@ class PageControl extends React.Component<Props> {
         number: managedPages ? managedPages : 0
       },
       {
-        to: `${path}/approved`,
-        name: `Approved (${currentPage ? currentPage.scheduledPosts : 0})`,
+        to: `${path}/scheduled`,
+        name: `Scheduled (${currentPage ? currentPage.scheduledPosts : 0})`,
         number: managedPages ? managedPages : 0
       },
       { to: `${path}/moderation`, name: `Moderation (${0})`, number: 0 },
@@ -189,7 +189,7 @@ class PageControl extends React.Component<Props> {
               render={() => <SubmissionControl />}
             />
             <Route
-              path={`${path}/approved`}
+              path={`${path}/scheduled`}
               render={() => <p>Borys to Borys</p>}
             />
             <Route

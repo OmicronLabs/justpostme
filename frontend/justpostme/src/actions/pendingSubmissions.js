@@ -42,7 +42,8 @@ export function fetchPendingSubmissions(pageid: string) {
           review: record.review,
           sentiment: record.sentiment,
           timePosted: record.timePosted,
-          postHash: record.posthash
+          postHash: record.posthash,
+          timeSubmitted: record.timeSubmitted
         }));
         dispatch(fetchPendingSuccess(submissions));
         return submissions;

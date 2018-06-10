@@ -41,18 +41,32 @@ const LegendItem = styled.p`
 `;
 
 const PostId = LegendItem.extend`
-  width: 20%;
-  max-width: 20%;
+  width: 7%;
+  max-width: 7%;
+  border-right: 2px solid white;
 `;
 
 const PostContent = LegendItem.extend`
   width: 50%;
   max-width: 50%;
+  border-right: 2px solid white;
+`;
+
+const TimeStamp = LegendItem.extend`
+  width: 20%;
+  max-width: 20%;
+  border-right: 2px solid white;
 `;
 
 const PostControls = LegendItem.extend`
-  width: 30%;
-  max-width: 30%;
+  width: 13%;
+  max-width: 13%;
+  border-right: 2px solid white;
+`;
+
+const PostWarning = LegendItem.extend`
+  width: 10%;
+  max-width: 10%;
 `;
 
 type Props = {
@@ -72,7 +86,9 @@ const SubmissionDisplay = (props: Props) => {
         <SubmissionsLegend>
           <PostId>Index</PostId>
           <PostContent>Body</PostContent>
+          <TimeStamp>Submitted</TimeStamp>
           <PostControls>Post Controls</PostControls>
+          <PostWarning>Warnings</PostWarning>
         </SubmissionsLegend>
       )}
 
