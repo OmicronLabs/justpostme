@@ -160,6 +160,12 @@ const Message = styled.textarea`
   }
 `;
 
+const SubmissionText = styled.p`
+  margin: 7px;
+  padding: 0;
+  white-space: pre-wrap;
+`;
+
 const SenderBox = props => (
   <Sender>
     <AvatarContainer>
@@ -242,7 +248,7 @@ class SubmissionControl extends React.Component<Props> {
           <SubTitle> Submission: </SubTitle>
           {!this.state.editing ? (
             <DisplaySubmission>
-              <p>{this.state.submissionText}</p>
+              <SubmissionText>{this.state.submissionText}</SubmissionText>
             </DisplaySubmission>
           ) : (
             <InputField
