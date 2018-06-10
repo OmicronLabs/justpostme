@@ -26,18 +26,18 @@ const PageInfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const ContentWrapper = styled.div`
   width: 85%;
 `;
 
-const SubTitle = styled.div`
+const SubTitle = styled.p`
   font-size: 20px;
   font-weight: bold;
-  color: gray;
-  margin: 5px 0;
+  color: rgb(76, 175, 80);
+  margin: 10px 0;
 `;
 
 const InputField = styled.textarea`
@@ -74,7 +74,46 @@ const Button = styled.div`
   }
 `;
 
-const SubmissionOk = () => {};
+const InfoText = styled.p`
+  margin: 10px 0;
+`;
+
+const Icon = styled.i`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+`;
+
+const IconOk = Icon.extend`
+  color: green;
+  margin-right: 10px;
+`;
+
+const IconWarning = Icon.extend`
+  color: orange;
+  margin-right: 10px;
+`;
+
+const SubmissionOk = () => (
+  <ButtonRow>
+    <IconOk>
+      <i className="fa fa-check-circle" />
+    </IconOk>
+    <InfoText>
+      This post has passed our automated checks for sensitive content
+    </InfoText>
+  </ButtonRow>
+);
+
+const SubmissionWarning = () => (
+  <ButtonRow>
+    <IconWarning>
+      <i className="fa fa-exclamation-triangle" />
+    </IconWarning>
+    <InfoText>This post has been flagged and needs an admin review</InfoText>
+  </ButtonRow>
+);
 
 class SubmissionControl extends React.Component<Props> {
   constructor(props) {
@@ -117,6 +156,22 @@ class SubmissionControl extends React.Component<Props> {
           <PageInfoWrapper>
             <Title>Submission control panel</Title>
           </PageInfoWrapper>
+          {!submission.review ? (
+            <SubmissionOk />
+          ) : (
+            <div>
+              <SubmissionWarning />
+              {submission.pii || submission.profanity ? (
+                <div>
+                  <p>Post has been flagged for following reasons</p>
+                  <ul>
+                    {submission.profanity ? <li>Profanity</li> : null}
+                    {submission.pii ? <li>Personal information</li> : null}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          )}
           <SubTitle> Submission: </SubTitle>
           {!this.state.editing ? (
             <DisplaySubmission>
@@ -147,13 +202,6 @@ class SubmissionControl extends React.Component<Props> {
               </Button>
             </ButtonRow>
           )}
-
-          <p> should review: </p>
-          <p>{submission.review === true ? "true" : "false"}</p>
-          <p> personal info: </p>
-          <p>{submission.pii === true ? "true" : "false"}</p>
-          <p> Profanity: </p>
-          <p> {submission.profanity === true ? "true" : "false"} </p>
         </ContentWrapper>
       </Box>
     );
