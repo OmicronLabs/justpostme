@@ -228,7 +228,7 @@ app.post("/backend/postcomment", function(req, res) {
   var query =
     "INSERT INTO [comments] (postHash, text, timeCommented) VALUES('" +
     escapeQuotations(req.param("posthash")) +
-    "', '" + escapeQuotations(req.param("text")) +"', GETUTCDATE()) ;
+    "', '" + escapeQuotations(req.param("text")) + "', GETUTCDATE())";
   executeQuery(res, query);
 });
 
