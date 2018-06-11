@@ -67,7 +67,7 @@ const Button = styled.div`
     props.warning === true ? "orange" : "rgb(76, 175, 80)"};
   color: white;
   select: none;
-  border-radius: 3px;
+  border-radius: 8px;
   cursor: pointer;
   margin: 10px 10px 10px 0;
   &:hover {
@@ -102,7 +102,7 @@ const SubmissionOk = () => (
       <i className="fa fa-check-circle" />
     </IconOk>
     <InfoText>
-      This post has passed our automated checks for sensitive content
+      This post has passed our automated checks for inappropriate content
     </InfoText>
   </ButtonRow>
 );
@@ -166,7 +166,7 @@ const SubmissionText = styled.p`
   white-space: pre-wrap;
 `;
 
-const SenderBox = props => (
+export const SenderBox = props => (
   <Sender>
     <AvatarContainer>
       <Avatar src="http://marketline.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" />
