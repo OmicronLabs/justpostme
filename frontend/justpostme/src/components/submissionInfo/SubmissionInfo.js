@@ -260,18 +260,23 @@ class SubmissionForm extends React.Component<Props> {
           <p> {submission.pending ? "PENDING" : "ACCEPTED"} </p>
         </ButtonRow>
         <SubTitle>
-          Your submission (you can edit it while it is pending)
+          Your submission (you can edit it while it is pending or under
+          moderation)
         </SubTitle>
         {submission.pending
           ? this._renderEditSubmission()
           : this._renderSubmission()}
-        <SubTitle>Moderation messages</SubTitle>
-        <SenderBox
-          currentMessage={this.state.currentMessage}
-          onChange={event =>
-            this.setState({ currentMessage: event.target.value })
-          }
-        />
+        {submission.moderation
+          ? [
+              <SubTitle>Moderation messages</SubTitle>,
+              <SenderBox
+                currentMessage={this.state.currentMessage}
+                onChange={event =>
+                  this.setState({ currentMessage: event.target.value })
+                }
+              />
+            ]
+          : null}
       </ContentWrapper>
     ) : (
       <ContentWrapper>
@@ -319,7 +324,8 @@ class SubmissionForm extends React.Component<Props> {
               padding: "0",
               display: "flex",
               height: "100%",
-              minHeight: "350px"
+              minHeight: "350px",
+              paddingBottom: "20px"
             }}
           >
             {loading

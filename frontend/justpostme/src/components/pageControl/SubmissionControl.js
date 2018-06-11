@@ -229,14 +229,13 @@ class SubmissionControl extends React.Component<Props> {
         style={{
           width: "1024px",
           maxWidth: "85%",
-          height: "80%",
-          maxHeight: "90%",
           marginTop: "10px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "flex-start",
-          overflow: "scroll"
+          overflow: "scroll",
+          paddingBottom: "10px"
         }}
       >
         <ContentWrapper>
@@ -313,7 +312,7 @@ class SubmissionControl extends React.Component<Props> {
           ) : null}
           {this.state.moderation
             ? [
-                <SubTitle>Request moderation: </SubTitle>,
+                <SubTitle>Send (optional) message to the submitter: </SubTitle>,
                 <SenderBox
                   currentMessage={this.state.currentMessage}
                   onChange={event =>
