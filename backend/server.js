@@ -259,6 +259,15 @@ app.get("/backend/getpending", function(req, res) {
   executeQuery(res, query);
 });
 
+//GET API
+app.get("/backend/getmoderating", function(req, res) {
+  var query =
+    "SELECT * from [posts] WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "' AND pending = 1 AND underModeration = 1;";
+  executeQuery(res, query);
+});
+
 //POST API
 app.post("/backend/postit", function(req, res) {
   var query =
