@@ -205,6 +205,16 @@ app.get("/backend/unmanagedpages", function(req, res) {
 });
 
 //GET API
+app.get("/backend/postcomments", function(req, res) {
+  var query =
+    "SELECT * from [comments] WHERE postHash = '" +
+    escapeQuotations(req.param("posthash")) +
+    "'";
+  executeQuery(res, query);
+});
+
+
+//GET API
 app.get("/backend/page", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE pageId = '" +
