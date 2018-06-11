@@ -224,6 +224,15 @@ app.get("/backend/page", function(req, res) {
 });
 
 //POST API
+app.post("/backend/postcomment", function(req, res) {
+  var query =
+    "INSERT INTO [comments] (postHash, text, timeCommented) VALUES('" +
+    escapeQuotations(req.param("posthash")) +
+    "', '" + escapeQuotations(req.param("text")) +"', GETUTCDATE()) ;
+  executeQuery(res, query);
+});
+
+//POST API
 app.post("/backend/user", function(req, res) {
   var query =
     "DELETE FROM [users] where userid = '" +
