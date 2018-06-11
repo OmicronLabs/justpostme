@@ -162,10 +162,10 @@ const Message = styled.textarea`
   width: 80%;
   box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
   border-radius: 20px;
-  padding: 5px;
+  padding: 20px;
   border: none;
   outline: none;
-  margin-left: 20px;
+  margin-left: 10px;
   &:focus {
     box-shadow: 0px 0px 4px 3px rgb(76, 175, 80);
   }
@@ -183,8 +183,8 @@ export const SenderBox = props => (
       <Avatar src="http://marketline.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" />
     </AvatarContainer>
     <Message
-      rows="6"
-      placeholder="Type your message to user here ..."
+      rows="4"
+      placeholder="Type your message the sumitter here ..."
       value={props.currentMessage}
       onChange={props.onChange}
     />
@@ -272,44 +272,44 @@ class SubmissionControl extends React.Component<Props> {
               }
             />
           )}
-          {!this.state.moderation ? (
-            !this.state.editing ? (
-              <ButtonRow>
-                <Button onClick={() => this.setState({ editing: true })}>
-                  <ButtonText>Edit</ButtonText>
-                </Button>
+          {!this.state.editing ? (
+            <ButtonRow>
+              <Button onClick={() => this.setState({ editing: true })}>
+                <ButtonText>Edit</ButtonText>
+              </Button>
+              {!this.state.moderation ? (
                 <Button
                   warning
                   onClick={() => this.setState({ moderation: true })}
                 >
                   <ButtonText>Request modification</ButtonText>
                 </Button>
-              </ButtonRow>
-            ) : (
-              <ButtonRow>
-                <Button
-                  onClick={() =>
-                    this.setState(state => ({
-                      editing: false,
-                      submissionText: state.tempSubmissionText
-                    }))
-                  }
-                >
-                  <ButtonText>Save</ButtonText>
-                </Button>
-                <Button
-                  onClick={() =>
-                    this.setState(state => ({
-                      editing: false,
-                      tempSubmissionText: state.submissionText
-                    }))
-                  }
-                >
-                  <ButtonText>Cancel</ButtonText>
-                </Button>
-              </ButtonRow>
-            )
-          ) : null}
+              ) : null}
+            </ButtonRow>
+          ) : (
+            <ButtonRow>
+              <Button
+                onClick={() =>
+                  this.setState(state => ({
+                    editing: false,
+                    submissionText: state.tempSubmissionText
+                  }))
+                }
+              >
+                <ButtonText>Save</ButtonText>
+              </Button>
+              <Button
+                onClick={() =>
+                  this.setState(state => ({
+                    editing: false,
+                    tempSubmissionText: state.submissionText
+                  }))
+                }
+              >
+                <ButtonText>Cancel</ButtonText>
+              </Button>
+            </ButtonRow>
+          )}
           {this.state.moderation
             ? [
                 <SubTitle>Send (optional) message to the submitter: </SubTitle>,
@@ -320,12 +320,6 @@ class SubmissionControl extends React.Component<Props> {
                   }
                 />,
                 <ButtonRow>
-                  <Button
-                    warning
-                    onClick={() => this.setState({ moderation: false })}
-                  >
-                    <ButtonText>Cancel</ButtonText>
-                  </Button>
                   <Button onClick={() => {}}>
                     <ButtonText>Send</ButtonText>
                   </Button>
