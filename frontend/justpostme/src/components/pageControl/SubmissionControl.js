@@ -29,6 +29,16 @@ const PageInfoWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
+const PageFooter = styled.div`
+  width: 100%;
+  border-top: 2px solid rgb(76, 175, 80);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+`;
+
 const ContentWrapper = styled.div`
   width: 85%;
 `;
@@ -64,14 +74,15 @@ const ButtonText = styled.div`
 
 const Button = styled.div`
   background: ${props =>
-    props.warning === true ? "orange" : "rgb(76, 175, 80)"};
+    props.alert ? "red" : props.warning ? "orange" : "rgb(76, 175, 80)"};
   color: white;
   select: none;
   border-radius: 8px;
   cursor: pointer;
   margin: 10px 10px 10px 0;
   &:hover {
-    background: ${props => (props.warning === true ? "darkorange" : "green")};
+    background: ${props =>
+      props.alert ? "darkred" : props.warning ? "darkorange" : "green"};
   }
 `;
 
@@ -131,7 +142,7 @@ const Sender = styled.div`
   justify-content: left;
   flex-direction: row;
   align-items: center;
-  margin: 20px 0;
+  margin: 20px 0 40px;
 `;
 
 const Avatar = styled.img`
@@ -187,7 +198,8 @@ class SubmissionControl extends React.Component<Props> {
       submissionText: "",
       editing: false,
       tempSubmissionText: "",
-      currentMessage: ""
+      currentMessage: "",
+      moderation: false
     };
   }
 
@@ -217,12 +229,14 @@ class SubmissionControl extends React.Component<Props> {
         style={{
           width: "1024px",
           maxWidth: "85%",
-          minHeight: "600px",
+          height: "80%",
+          maxHeight: "90%",
           marginTop: "10px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "flex-start"
+          justifyContent: "flex-start",
+          overflow: "scroll"
         }}
       >
         <ContentWrapper>
@@ -259,55 +273,79 @@ class SubmissionControl extends React.Component<Props> {
               }
             />
           )}
-          {!this.state.editing ? (
+          {!this.state.moderation ? (
+            !this.state.editing ? (
+              <ButtonRow>
+                <Button onClick={() => this.setState({ editing: true })}>
+                  <ButtonText>Edit</ButtonText>
+                </Button>
+                <Button
+                  warning
+                  onClick={() => this.setState({ moderation: true })}
+                >
+                  <ButtonText>Request modification</ButtonText>
+                </Button>
+              </ButtonRow>
+            ) : (
+              <ButtonRow>
+                <Button
+                  onClick={() =>
+                    this.setState(state => ({
+                      editing: false,
+                      submissionText: state.tempSubmissionText
+                    }))
+                  }
+                >
+                  <ButtonText>Save</ButtonText>
+                </Button>
+                <Button
+                  onClick={() =>
+                    this.setState(state => ({
+                      editing: false,
+                      tempSubmissionText: state.submissionText
+                    }))
+                  }
+                >
+                  <ButtonText>Cancel</ButtonText>
+                </Button>
+              </ButtonRow>
+            )
+          ) : null}
+          {this.state.moderation
+            ? [
+                <SubTitle>Request moderation: </SubTitle>,
+                <SenderBox
+                  currentMessage={this.state.currentMessage}
+                  onChange={event =>
+                    this.setState({ currentMessage: event.target.value })
+                  }
+                />,
+                <ButtonRow>
+                  <Button
+                    warning
+                    onClick={() => this.setState({ moderation: false })}
+                  >
+                    <ButtonText>Cancel</ButtonText>
+                  </Button>
+                  <Button onClick={() => {}}>
+                    <ButtonText>Send</ButtonText>
+                  </Button>
+                </ButtonRow>
+              ]
+            : null}
+          <PageFooter>
             <ButtonRow>
-              <Button onClick={() => this.setState({ editing: true })}>
-                <ButtonText>Edit</ButtonText>
+              <Button onClick={() => {}}>
+                <ButtonText>Publish now</ButtonText>
+              </Button>
+              <Button onClick={() => {}}>
+                <ButtonText>Schedule</ButtonText>
+              </Button>
+              <Button alert onClick={() => {}}>
+                <ButtonText>Delete</ButtonText>
               </Button>
             </ButtonRow>
-          ) : (
-            <ButtonRow>
-              <Button
-                onClick={() =>
-                  this.setState(state => ({
-                    editing: false,
-                    submissionText: state.tempSubmissionText
-                  }))
-                }
-              >
-                <ButtonText>Save</ButtonText>
-              </Button>
-              <Button
-                onClick={() =>
-                  this.setState(state => ({
-                    editing: false,
-                    tempSubmissionText: state.submissionText
-                  }))
-                }
-              >
-                <ButtonText>Cancel</ButtonText>
-              </Button>
-            </ButtonRow>
-          )}
-
-          <SubTitle>Request moderation: </SubTitle>
-          <SenderBox
-            currentMessage={this.state.currentMessage}
-            onChange={event =>
-              this.setState({ currentMessage: event.target.value })
-            }
-          />
-          <ButtonRow>
-            <Button warning onClick={() => {}}>
-              <ButtonText>Request moderation</ButtonText>
-            </Button>
-            <Button onClick={() => {}}>
-              <ButtonText>Publish now</ButtonText>
-            </Button>
-            <Button onClick={() => {}}>
-              <ButtonText>Schedule</ButtonText>
-            </Button>
-          </ButtonRow>
+          </PageFooter>
         </ContentWrapper>
       </Box>
     );
