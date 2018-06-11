@@ -379,6 +379,24 @@ app.post("/backend/newreview", function(req, res) {
 });
 
 //POST API
+app.post("/backend/updatepost", function(req, res) {
+  submitForReview(req.param("postText"), escapeQuotations(req.body.postHash));
+  var query =
+    "UPDATE [posts] SET postText = '" +
+    escapeQuotations(req.body.postText) +
+    "' WHERE posthash = '" +
+    escapeQuotations(req.body.postHash) +
+    "'";
+
+  queryGet(response => console.log(response), query);
+  res.end(
+    '{"success" : "Updated Successfully", "status" : 200}'
+  );
+});
+
+
+
+//POST API
 app.post("/backend/createpost", function(req, res) {
   var random = crypto.randomBytes(20).toString("hex");
   submitForReview(req.param("postText"), random);
