@@ -269,6 +269,15 @@ app.get("/backend/getmoderating", function(req, res) {
 });
 
 //POST API
+app.post("/backend/setmoderating", function(req, res) {
+  var query =
+    "UPDATE [posts] SET underModeration = 1 WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "';";
+  executeQuery(res, query);
+});
+
+//POST API
 app.post("/backend/postit", function(req, res) {
   var query =
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
