@@ -34,7 +34,8 @@ type Props = {
   postToFbInstant: Function,
   deletePendingSubmission: Function,
   displayId: string,
-  match: any
+  match: any,
+  isPending: boolean
 };
 
 const SubmissionId = styled.p`
@@ -186,7 +187,8 @@ const SubmissionCard = (props: Props) => {
     pageId,
     deletePendingSubmission,
     displayId,
-    history
+    history,
+    isPending
   } = props;
 
   const isGreen = displayId % 2 === 1;
@@ -202,25 +204,28 @@ const SubmissionCard = (props: Props) => {
         {submission.postText}
       </SubmissionBody>
       <Timestamp> {submission.timePosted} </Timestamp>
-      <SubmissionControls>
-        <PublishNowComponent
-          publishNow={() => {
-            postToFbInstant(submission.databaseId, pageId);
-            deletePendingSubmission(submission.databaseId);
-          }}
-        />
-        <ScheduleComponent
-          schedule={() => {
-            deletePendingSubmission(submission.databaseId);
-          }}
-        />
+      {props.isPending ? (
+        <SubmissionControls>
+          <PublishNowComponent
+            publishNow={() => {
+              postToFbInstant(submission.databaseId, pageId);
+              deletePendingSubmission(submission.databaseId);
+            }}
+          />
+          <ScheduleComponent
+            schedule={() => {
+              deletePendingSubmission(submission.databaseId);
+            }}
+          />
 
-        <DeleteComponent
-          delete={() => {
-            deletePendingSubmission(submission.databaseId);
-          }}
-        />
-      </SubmissionControls>
+          <DeleteComponent
+            delete={() => {
+              deletePendingSubmission(submission.databaseId);
+            }}
+          />
+        </SubmissionControls>
+      ) : null}
+
       <SubmissionWarnings>
         {displayWarning(submission) ? (
           <WarningComponent />

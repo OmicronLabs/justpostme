@@ -117,6 +117,7 @@ const SubmissionDisplay = (props: Props) => {
               submission={post}
               token={props.token}
               displayId={index + 1}
+              isPending={props.isPending}
             />
           ))
         )}
