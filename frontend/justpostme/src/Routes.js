@@ -14,7 +14,12 @@ class Routes extends React.Component {
 
     return (
       <Switch>
-        <Route path="/login" component={WelcomePage} />
+        <Route
+          path="/login"
+          component={props => {
+            return loggedIn ? <ManagePages /> : <WelcomePage />;
+          }}
+        />
         <Route path="/about" component={AboutPage} />
         <Route
           path="/pages"

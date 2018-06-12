@@ -8,6 +8,7 @@ export const RoundButton = styled.a`
   padding: 0.25em 1em;
   border: 2px solid;
   border-radius: 30px;
+  cursor: pointer;
 `;
 
 export const TopMenuButton = RoundButton.extend`
@@ -51,6 +52,7 @@ export const DropdownButton = RoundButton.extend`
   align-content: center;
   justify-content: space-around;
   border-radius: 0px;
+  cursor: pointer;
   &:hover {
     color: black;
     background: whitesmoke;
