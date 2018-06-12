@@ -17,14 +17,13 @@ const SpinnerWrapper = PagesDisplayWrapper.extend`
 
 export const SubmissionsDisplayWrapper = styled.div`
   margin-top: 30px;
-  width: 500px;
+  width: 800px;
   max-width: 85%;
-  margin-bottom: 90px;
+  margin-bottom: 80px;
   display: flex;
   flex-direction: column;
   align-content: center;
   justify-content: flex-start;
-  overflow: scroll;
 `;
 
 export const SubmissionsWrapper = styled.div`
@@ -49,12 +48,17 @@ const InputBox = styled.input`
   height: 20px;
 `;
 
+const SettingName = styled.p`
+  color: gray;
+`;
+
 export const Link = styled.a`
   color: green;
   text-decoration: underline;
   cursor: pointer;
 `;
 const SettingsBox = Box.extend`
+  padding: 30px;
   display: flex;
   flex-direction: column;
   align-content: flex-start;
@@ -62,11 +66,13 @@ const SettingsBox = Box.extend`
 
 const SettingsBoxWrapper = BoxWrapper.extend`
   position: relative;
-  padding: 20px;
 `;
 
 const SaveButton = LargeThemedButton.extend`
   border: none;
+  &:hover {
+    border: none;
+  }
 `;
 
 type Props = {
@@ -91,33 +97,37 @@ class PageSettings extends React.Component<Props> {
     return (
       <SubmissionsDisplayWrapper>
         <SubmissionsWrapper>
-          <SettingsRow>
-            <p>Your annonymous submission link: </p>
-            <Link
-              onClick={() => {
-                openInNewTab(`https://justpostme.tech/form/${pageId}`);
-              }}
-            >
-              {`https://justpostme.tech/form/${pageId}`}
-            </Link>
-          </SettingsRow>
-          <SettingsRow>
-            <p>Pre-submission text: </p>
-            <InputBox type="text" name="name" />
-          </SettingsRow>
-          <SettingsRow>
-            <p>Post-submission text: </p>
-            <InputBox type="text" name="name" />
-          </SettingsRow>
-          <SettingsRow>
-            <p>Count from: </p>
-            <InputBox type="text" name="name" />
-          </SettingsRow>
+          <SettingsBoxWrapper>
+            <SettingsBox>
+              <SettingsRow>
+                <SettingName>Your annonymous submission link: </SettingName>
+                <Link
+                  onClick={() => {
+                    openInNewTab(`https://justpostme.tech/form/${pageId}`);
+                  }}
+                >
+                  {`https://justpostme.tech/form/${pageId}`}
+                </Link>
+              </SettingsRow>
+              <SettingsRow>
+                <SettingName>Pre-submission text: </SettingName>
+                <InputBox type="text" name="name" />
+              </SettingsRow>
+              <SettingsRow>
+                <SettingName>Post-submission text: </SettingName>
+                <InputBox type="text" name="name" />
+              </SettingsRow>
+              <SettingsRow>
+                <SettingName>Count from: </SettingName>
+                <InputBox type="text" name="name" />
+              </SettingsRow>
 
-          <SaveButton onClick={() => alert("changes saved")}>
-            {" "}
-            <p> Save settings </p>{" "}
-          </SaveButton>
+              <SaveButton onClick={() => alert("changes saved")}>
+                {" "}
+                <p> Save settings </p>{" "}
+              </SaveButton>
+            </SettingsBox>
+          </SettingsBoxWrapper>
         </SubmissionsWrapper>
       </SubmissionsDisplayWrapper>
     );

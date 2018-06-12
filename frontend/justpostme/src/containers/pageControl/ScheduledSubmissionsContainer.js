@@ -3,9 +3,9 @@ import { fetchScheduledSubmissions } from "../../actions/scheduledSubmissions";
 import ScheduledSubmissions from "../../components/pageControl/ScheduledSubmissions";
 
 const mapStateToProps = state => ({
-  submissions: state.pendingSubmissions.submissions,
-  loading: state.pendingSubmissions.loading,
-  error: state.pendingSubmissions.error,
+  submissions: state.scheduledSubmissions.submissions,
+  loading: state.scheduledSubmissions.loading,
+  error: state.scheduledSubmissions.error,
   userID: state.userMeta.id,
   accessToken: state.userMeta.token,
   postingToFb: state.postSubmission.postingLoading,

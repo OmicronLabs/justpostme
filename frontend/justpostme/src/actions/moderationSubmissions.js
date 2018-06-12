@@ -1,36 +1,36 @@
 import { serverDomain } from "../const/serverURL";
 
-export const FETCH_SCHEDULED_BEGIN = "FETCH_SCHEDULED_BEGIN";
-export const FETCH_SCHEDULED_SUCCESS = "FETCH_SCHEDULED_SUCCESS";
-export const FETCH_SCHEDULED_ERROR = "FETCH_SCHEDULED_ERROR";
-export const DELETE_SCHEDULED = "DELETE_SCHEDULED";
+export const FETCH_MODERATION_BEGIN = "FETCH_MODERATION_BEGIN";
+export const FETCH_MODERATION_SUCCESS = "FETCH_MODERATION_SUCCESS";
+export const FETCH_MODERATION_ERROR = "FETCH_MODERATION_ERROR";
+export const DELETE_MODERATION = "DELETE_MODERATION";
 
-export const fetchScheduledBegin = () => ({
-  type: FETCH_SCHEDULED_BEGIN
+export const fetchModerationBegin = () => ({
+  type: FETCH_MODERATION_BEGIN
 });
 
-export const fetchScheduledSuccess = submissions => ({
-  type: FETCH_SCHEDULED_SUCCESS,
+export const fetchModerationSuccess = submissions => ({
+  type: FETCH_MODERATION_SUCCESS,
   payload: { submissions }
 });
 
-export const fetchScheduledError = error => ({
-  type: FETCH_SCHEDULED_ERROR,
+export const fetchModerationError = error => ({
+  type: FETCH_MODERATION_ERROR,
   payload: { error }
 });
 
-export const deleteScheduledSubmission = id => ({
-  type: DELETE_SCHEDULED,
+export const deleteModerationSubmission = id => ({
+  type: DELETE_MODERATION,
   payload: { id }
 });
 
-export function fetchScheduledSubmissions(pageid: string) {
+export function fetchModerationSubmissions(pageid: string) {
   return dispatch => {
-    dispatch(fetchScheduledBegin());
+    dispatch(fetchModerationBegin());
 
     //TODO: what
 
-    return fetch(`${serverDomain}/backend/getscheduled?pageid=${pageid}`)
+    return fetch(`${serverDomain}/backend/getmoderated?pageid=${pageid}`)
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
@@ -47,11 +47,11 @@ export function fetchScheduledSubmissions(pageid: string) {
           postHash: record.posthash,
           timeSubmitted: record.timeSubmitted
         }));
-        dispatch(fetchScheduledSuccess(submissions));
+        dispatch(fetchModerationSuccess(submissions));
         return submissions;
       })
 
-      .catch(error => dispatch(fetchScheduledError(error)));
+      .catch(error => dispatch(fetchModerationError(error)));
   };
 }
 

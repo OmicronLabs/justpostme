@@ -29,10 +29,11 @@ const AboutBox = Box.extend`
   margin-top: 190px;
   width: 760px;
   max-width: 800px;
+
   justify-content: center;
   flex-direction: column;
   align-content: center;
-  overflow: auto;
+  overflow: scroll;
   margin-bottom: 50px;
 `;
 
