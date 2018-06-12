@@ -205,11 +205,30 @@ app.get("/backend/unmanagedpages", function(req, res) {
 });
 
 //GET API
+app.get("/backend/postcomments", function(req, res) {
+  var query =
+    "SELECT * from [comments] WHERE postHash = '" +
+    escapeQuotations(req.param("posthash")) +
+    "'";
+  executeQuery(res, query);
+});
+
+
+//GET API
 app.get("/backend/page", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE pageId = '" +
     escapeQuotations(req.param("pageid")) +
     "';";
+  executeQuery(res, query);
+});
+
+//POST API
+app.post("/backend/postcomment", function(req, res) {
+  var query =
+    "INSERT INTO [comments] (postHash, text, timeCommented) VALUES('" +
+    escapeQuotations(req.param("posthash")) +
+    "', '" + escapeQuotations(req.param("text")) + "', GETUTCDATE())";
   executeQuery(res, query);
 });
 
@@ -246,6 +265,24 @@ app.get("/backend/getpending", function(req, res) {
     "SELECT * from [posts] WHERE pageId = '" +
     escapeQuotations(req.param("pageid")) +
     "' AND pending = 1;";
+  executeQuery(res, query);
+});
+
+//GET API
+app.get("/backend/getmoderating", function(req, res) {
+  var query =
+    "SELECT * from [posts] WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "' AND pending = 1 AND underModeration = 1;";
+  executeQuery(res, query);
+});
+
+//POST API
+app.post("/backend/setmoderating", function(req, res) {
+  var query =
+    "UPDATE [posts] SET underModeration = 1 WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "';";
   executeQuery(res, query);
 });
 
@@ -340,6 +377,24 @@ app.post("/backend/newreview", function(req, res) {
   queryGet(response => console.log(response), query);
   res.end();
 });
+
+//POST API
+app.post("/backend/updatepost", function(req, res) {
+  submitForReview(req.param("postText"), escapeQuotations(req.body.postHash));
+  var query =
+    "UPDATE [posts] SET postText = '" +
+    escapeQuotations(req.body.postText) +
+    "' WHERE posthash = '" +
+    escapeQuotations(req.body.postHash) +
+    "'";
+
+  queryGet(response => console.log(response), query);
+  res.end(
+    '{"success" : "Updated Successfully", "status" : 200}'
+  );
+});
+
+
 
 //POST API
 app.post("/backend/createpost", function(req, res) {
