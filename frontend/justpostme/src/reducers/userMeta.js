@@ -20,6 +20,9 @@ const userMeta = (state = initialState, action) => {
         ...state,
         loggedIn: true
       };
+
+    case "LOG_OUT":
+      return initialState;
     default:
       return state;
   }

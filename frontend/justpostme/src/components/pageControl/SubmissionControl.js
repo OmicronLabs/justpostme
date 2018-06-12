@@ -29,6 +29,16 @@ const PageInfoWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
+const PageFooter = styled.div`
+  width: 100%;
+  border-top: 2px solid rgb(76, 175, 80);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+`;
+
 const ContentWrapper = styled.div`
   width: 85%;
 `;
@@ -64,14 +74,15 @@ const ButtonText = styled.div`
 
 const Button = styled.div`
   background: ${props =>
-    props.warning === true ? "orange" : "rgb(76, 175, 80)"};
+    props.alert ? "red" : props.warning ? "orange" : "rgb(76, 175, 80)"};
   color: white;
   select: none;
-  border-radius: 3px;
+  border-radius: 8px;
   cursor: pointer;
   margin: 10px 10px 10px 0;
   &:hover {
-    background: ${props => (props.warning === true ? "darkorange" : "green")};
+    background: ${props =>
+      props.alert ? "darkred" : props.warning ? "darkorange" : "green"};
   }
 `;
 
@@ -102,7 +113,7 @@ const SubmissionOk = () => (
       <i className="fa fa-check-circle" />
     </IconOk>
     <InfoText>
-      This post has passed our automated checks for sensitive content
+      This post has passed our automated checks for inappropriate content
     </InfoText>
   </ButtonRow>
 );
@@ -131,7 +142,7 @@ const Sender = styled.div`
   justify-content: left;
   flex-direction: row;
   align-items: center;
-  margin: 20px 0;
+  margin: 20px 0 40px;
 `;
 
 const Avatar = styled.img`
@@ -151,10 +162,10 @@ const Message = styled.textarea`
   width: 80%;
   box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
   border-radius: 20px;
-  padding: 5px;
+  padding: 20px;
   border: none;
   outline: none;
-  margin-left: 20px;
+  margin-left: 10px;
   &:focus {
     box-shadow: 0px 0px 4px 3px rgb(76, 175, 80);
   }
@@ -166,14 +177,14 @@ const SubmissionText = styled.p`
   white-space: pre-wrap;
 `;
 
-const SenderBox = props => (
+export const SenderBox = props => (
   <Sender>
     <AvatarContainer>
       <Avatar src="http://marketline.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" />
     </AvatarContainer>
     <Message
-      rows="6"
-      placeholder="Type your message to user here ..."
+      rows="4"
+      placeholder="Type your message the sumitter here ..."
       value={props.currentMessage}
       onChange={props.onChange}
     />
@@ -187,7 +198,8 @@ class SubmissionControl extends React.Component<Props> {
       submissionText: "",
       editing: false,
       tempSubmissionText: "",
-      currentMessage: ""
+      currentMessage: "",
+      moderation: false
     };
   }
 
@@ -217,12 +229,13 @@ class SubmissionControl extends React.Component<Props> {
         style={{
           width: "1024px",
           maxWidth: "85%",
-          minHeight: "600px",
           marginTop: "10px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "flex-start"
+          justifyContent: "flex-start",
+          overflow: "scroll",
+          paddingBottom: "10px"
         }}
       >
         <ContentWrapper>
@@ -264,6 +277,14 @@ class SubmissionControl extends React.Component<Props> {
               <Button onClick={() => this.setState({ editing: true })}>
                 <ButtonText>Edit</ButtonText>
               </Button>
+              {!this.state.moderation ? (
+                <Button
+                  warning
+                  onClick={() => this.setState({ moderation: true })}
+                >
+                  <ButtonText>Request modification</ButtonText>
+                </Button>
+              ) : null}
             </ButtonRow>
           ) : (
             <ButtonRow>
@@ -289,25 +310,35 @@ class SubmissionControl extends React.Component<Props> {
               </Button>
             </ButtonRow>
           )}
-
-          <SubTitle>Request moderation: </SubTitle>
-          <SenderBox
-            currentMessage={this.state.currentMessage}
-            onChange={event =>
-              this.setState({ currentMessage: event.target.value })
-            }
-          />
-          <ButtonRow>
-            <Button warning onClick={() => {}}>
-              <ButtonText>Request moderation</ButtonText>
-            </Button>
-            <Button onClick={() => {}}>
-              <ButtonText>Publish now</ButtonText>
-            </Button>
-            <Button onClick={() => {}}>
-              <ButtonText>Schedule</ButtonText>
-            </Button>
-          </ButtonRow>
+          {this.state.moderation
+            ? [
+                <SubTitle>Send (optional) message to the submitter: </SubTitle>,
+                <SenderBox
+                  currentMessage={this.state.currentMessage}
+                  onChange={event =>
+                    this.setState({ currentMessage: event.target.value })
+                  }
+                />,
+                <ButtonRow>
+                  <Button onClick={() => {}}>
+                    <ButtonText>Send</ButtonText>
+                  </Button>
+                </ButtonRow>
+              ]
+            : null}
+          <PageFooter>
+            <ButtonRow>
+              <Button onClick={() => {}}>
+                <ButtonText>Publish now</ButtonText>
+              </Button>
+              <Button onClick={() => {}}>
+                <ButtonText>Schedule</ButtonText>
+              </Button>
+              <Button alert onClick={() => {}}>
+                <ButtonText>Delete</ButtonText>
+              </Button>
+            </ButtonRow>
+          </PageFooter>
         </ContentWrapper>
       </Box>
     );

@@ -215,7 +215,6 @@ class SubmissionForm extends React.Component<Props> {
         <FrontDoorBackgroundTop>
           <HeaderTopLeft>
             <LogoWhite src={logo} />
-
             <HeaderLogoText>justpost.me</HeaderLogoText>
           </HeaderTopLeft>
           <HeaderTopRight>
