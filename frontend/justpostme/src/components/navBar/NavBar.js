@@ -96,12 +96,13 @@ const DropdownContainer = styled.div`
 
 type Props = {
   userName: string,
-  history: any
+  history: any,
+  logOut: Function
 };
 
 class NavBar extends React.Component<Props> {
   render() {
-    const { userName, history } = this.props;
+    const { userName, history, logOut } = this.props;
     return (
       <NavBarOuter>
         <NavBarInner>
@@ -123,8 +124,9 @@ class NavBar extends React.Component<Props> {
             <DropdownContainer>
               <TopMenuButton href="#">{userName}</TopMenuButton>
               <DropdownMenu>
-                <DropdownButton href="#">Settings</DropdownButton>
-                <DropdownButton href="#">Log out</DropdownButton>
+                <DropdownButton onClick={() => logOut()}>
+                  Log out
+                </DropdownButton>
               </DropdownMenu>
             </DropdownContainer>
           </NavBarMenuContainer>

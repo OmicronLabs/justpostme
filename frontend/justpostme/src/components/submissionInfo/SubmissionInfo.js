@@ -14,44 +14,16 @@ import {
   WelcomePageBox,
   About
 } from "../welcomePage/WelcomePage.style";
+import "font-awesome/css/font-awesome.min.css";
 import { Box, BoxWrapper } from "../common/Box";
 import { LargeThemedButton, TopMenuButton } from "../common/Buttons";
 import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
 import { fetchCurrentSubmission } from "../../actions/currentSubmission";
+import { SenderBox } from "../pageControl/SubmissionControl";
 
-const FormWrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Form = styled.div`
-  height: 100%;
-  max-width: 85%;
-  width: 80%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-direction: column;
-  margin: 20px 0 20px;
-  padding: 0 100px;
-`;
-
-const InputField = styled.textarea`
-  width: 100%;
-`;
-
-const PageImage = styled.img`
-  margin: 10px;
-  border-radius: 10px;
-  height: 60px;
-  min-width: 60px;
-  width: 60px;
-  object-fit: cover;
-  box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
+const ContentWrapper = styled.div`
+  width: 85%;
 `;
 
 const PageInfoWrapper = styled.div`
@@ -61,39 +33,13 @@ const PageInfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-bottom: 10px;
-`;
-
-const PageName = styled.a`
-  font-weight: 800;
-  font-size: 26px;
-  color: grey;
-  margin-left: 5px;
-`;
-
-const PageInfoFirstRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
+  margin-bottom: 20px;
 `;
 
 const Title = styled.p`
   font-size: 18px;
   font-weight: 800;
   color: rgb(76, 175, 80);
-`;
-
-const SubTitle = Title.extend`
-  font-size: 16px;
-`;
-
-const ButtonWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: center;
 `;
 
 const ErrorText = styled.a`
@@ -103,16 +49,94 @@ const ErrorText = styled.a`
   margin-left: 5px;
 `;
 
-const Link = styled.a`
-  color: green;
-  text-decoration: underline;
-  cursor: pointer;
+const InfoText = styled.p`
+  margin: 10px 0;
 `;
 
-function openInNewTab(url) {
-  var win = window.open(url, "_blank");
-  win.focus();
-}
+const Icon = styled.i`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+`;
+
+const IconOk = Icon.extend`
+  color: green;
+  margin-right: 10px;
+`;
+
+const IconWarning = Icon.extend`
+  color: orange;
+  margin-right: 10px;
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+`;
+
+const InputField = styled.textarea`
+  width: 100%;
+`;
+
+const DisplaySubmission = styled.div`
+  border: 1px solid grey;
+  min-height: 150px;
+  width: 100%;
+  overflow: scroll;
+`;
+
+const SubmissionText = styled.p`
+  margin: 7px;
+  padding: 0;
+  white-space: pre-wrap;
+`;
+
+const ButtonText = styled.div`
+  margin: 5px 10px;
+`;
+
+const Button = styled.div`
+  background: ${props =>
+    props.warning === true ? "orange" : "rgb(76, 175, 80)"};
+  color: white;
+  select: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px 10px 10px 0;
+  &:hover {
+    background: ${props => (props.warning === true ? "darkorange" : "green")};
+  }
+`;
+
+const SubTitle = styled.p`
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(76, 175, 80);
+  margin: 10px 0;
+`;
+
+const SubmissionOk = () => (
+  <ButtonRow>
+    <IconOk>
+      <i className="fa fa-check-circle" />
+    </IconOk>
+    <InfoText>
+      This post has passed our automated checks for inappropriate content
+    </InfoText>
+  </ButtonRow>
+);
+
+const SubmissionWarning = () => (
+  <ButtonRow>
+    <IconWarning>
+      <i className="fa fa-exclamation-triangle" />
+    </IconWarning>
+    <InfoText>This post has been flagged and needs an admin review</InfoText>
+  </ButtonRow>
+);
 
 type Props = {
   loading: boolean,
@@ -122,23 +146,145 @@ type Props = {
 };
 
 class SubmissionForm extends React.Component<Props> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      submissionText: "",
+      editing: false,
+      tempSubmissionText: ""
+    };
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { loading } = this.props;
+    const newLoading = nextProps.loading;
+    const newSubmission = nextProps.submission;
+
+    if (loading && !newLoading) {
+      this.setState({
+        submissionText: newSubmission.postText,
+        tempSubmissionText: newSubmission.postText
+      });
+    }
+  }
+
   componentDidMount() {
     const { fetchCurrentSubmission, match } = this.props;
     fetchCurrentSubmission(match.params.id);
+  }
+
+  _renderButtons() {
+    return !this.state.editing ? (
+      <ButtonRow>
+        <Button onClick={() => this.setState({ editing: true })}>
+          <ButtonText>Edit</ButtonText>
+        </Button>
+      </ButtonRow>
+    ) : (
+      <ButtonRow>
+        <Button
+          onClick={() =>
+            this.setState(state => ({
+              editing: false,
+              submissionText: state.tempSubmissionText
+            }))
+          }
+        >
+          <ButtonText>Save</ButtonText>
+        </Button>
+        <Button
+          onClick={() =>
+            this.setState(state => ({
+              editing: false,
+              tempSubmissionText: state.submissionText
+            }))
+          }
+        >
+          <ButtonText>Cancel</ButtonText>
+        </Button>
+      </ButtonRow>
+    );
+  }
+
+  _renderEditSubmission() {
+    return [
+      this.state.editing ? (
+        <InputField
+          rows="11"
+          value={this.state.tempSubmissionText}
+          onChange={event =>
+            this.setState({ tempSubmissionText: event.target.value })
+          }
+        />
+      ) : (
+        this._renderSubmission()
+      ),
+      this._renderButtons()
+    ];
+  }
+
+  _renderSubmission() {
+    return (
+      <DisplaySubmission>
+        <SubmissionText>{this.state.submissionText}</SubmissionText>
+      </DisplaySubmission>
+    );
   }
 
   _renderInfo() {
     const { submission } = this.props;
 
     return submission.profanity !== null ? (
-      <div>
-        <p> Your submission: </p>
-        <p> {submission.postText} </p>
-        <p> Submission status: </p>
-        <p> {submission.pending ? "PENDING" : "ACCEPTED"} </p>
-      </div>
+      <ContentWrapper>
+        <PageInfoWrapper>
+          <Title>Submission tracking panel</Title>
+        </PageInfoWrapper>
+        {!submission.review ? (
+          <SubmissionOk />
+        ) : (
+          <div>
+            <SubmissionWarning />
+            {submission.pii || submission.profanity ? (
+              <div>
+                <p>Post has been flagged for following reasons</p>
+                <ul>
+                  {submission.profanity ? <li>Profanity</li> : null}
+                  {submission.pii ? <li>Personal information</li> : null}
+                </ul>
+              </div>
+            ) : null}
+          </div>
+        )}
+        <ButtonRow>
+          <p> Submission status: </p>
+          <p> {submission.pending ? "PENDING" : "ACCEPTED"} </p>
+        </ButtonRow>
+        <SubTitle>
+          Your submission (you can edit it while it is pending or under
+          moderation)
+        </SubTitle>
+        {submission.pending
+          ? this._renderEditSubmission()
+          : this._renderSubmission()}
+        {submission.moderation
+          ? [
+              <SubTitle>Moderation messages</SubTitle>,
+              <SenderBox
+                currentMessage={this.state.currentMessage}
+                onChange={event =>
+                  this.setState({ currentMessage: event.target.value })
+                }
+              />
+            ]
+          : null}
+      </ContentWrapper>
     ) : (
-      <p> Your submission is being processed</p>
+      <ContentWrapper>
+        <PageInfoWrapper>
+          <Title>Submission tracking panel</Title>
+        </PageInfoWrapper>
+        <p> Your submission is being processed</p>
+      </ContentWrapper>
     );
   }
 
@@ -167,7 +313,9 @@ class SubmissionForm extends React.Component<Props> {
         </FrontDoorBackgroundTop>
         <BackgroundShape src={background} className="" />
         <FrontDoorBackgroundBottom />
-        <BoxWrapper style={{ overflow: "scroll" }}>
+        <BoxWrapper
+          style={{ overflow: "scroll", justifyContent: "flex-start" }}
+        >
           <WelcomePageBox
             style={{
               width: "940px",
@@ -175,8 +323,9 @@ class SubmissionForm extends React.Component<Props> {
               margin: "100px 0",
               padding: "0",
               display: "flex",
-              height: "auto",
-              minHeight: "350px"
+              height: "100%",
+              minHeight: "350px",
+              paddingBottom: "20px"
             }}
           >
             {loading

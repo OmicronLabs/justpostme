@@ -9,3 +9,7 @@ export const addUser = (userID: string, userToken: string, name: string) => ({
 export const logIn = () => ({
   type: "LOG_IN"
 });
+
+export const logOut = () => ({
+  type: "LOG_OUT"
+});
