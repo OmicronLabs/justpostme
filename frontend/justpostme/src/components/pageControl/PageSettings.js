@@ -6,6 +6,9 @@ import styled from "styled-components";
 import Spinner from "../loadingSpinner/LoadingSpinner";
 import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
+import { Box, BoxWrapper } from "../common/Box";
+import { LargeThemedButton } from "../common/Buttons";
+
 const SpinnerWrapper = PagesDisplayWrapper.extend`
   display: flex;
   justify-content: center;
@@ -14,7 +17,7 @@ const SpinnerWrapper = PagesDisplayWrapper.extend`
 
 export const SubmissionsDisplayWrapper = styled.div`
   margin-top: 30px;
-  width: 1024px;
+  width: 500px;
   max-width: 85%;
   margin-bottom: 90px;
   display: flex;
@@ -32,12 +35,18 @@ export const SubmissionsWrapper = styled.div`
 `;
 
 export const SettingsRow = styled.div`
-    display: flex;
-    flex-direction: row,
-    align-items: center;
-    justify-content: space-between;
-    width: 800px;
-    margin: 5px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 5px 0;
+`;
+
+const InputBox = styled.input`
+  width: 350px;
+  max-width: 350px;
+  height: 20px;
 `;
 
 export const Link = styled.a`
@@ -45,11 +54,25 @@ export const Link = styled.a`
   text-decoration: underline;
   cursor: pointer;
 `;
+const SettingsBox = Box.extend`
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+`;
+
+const SettingsBoxWrapper = BoxWrapper.extend`
+  position: relative;
+  padding: 20px;
+`;
+
+const SaveButton = LargeThemedButton.extend`
+  border: none;
+`;
 
 type Props = {
   fetchPageSettings: Function,
   postPageSettings: Function,
-  pageId: stirng
+  pageId: string
 };
 
 function openInNewTab(url) {
@@ -80,21 +103,21 @@ class PageSettings extends React.Component<Props> {
           </SettingsRow>
           <SettingsRow>
             <p>Pre-submission text: </p>
-            <input type="text" name="name" />
+            <InputBox type="text" name="name" />
           </SettingsRow>
           <SettingsRow>
             <p>Post-submission text: </p>
-            <input type="text" name="name" />
+            <InputBox type="text" name="name" />
           </SettingsRow>
           <SettingsRow>
             <p>Count from: </p>
-            <input type="text" name="name" />
+            <InputBox type="text" name="name" />
           </SettingsRow>
 
-          <button onClick={() => alert("changes saved")}>
+          <SaveButton onClick={() => alert("changes saved")}>
             {" "}
             <p> Save settings </p>{" "}
-          </button>
+          </SaveButton>
         </SubmissionsWrapper>
       </SubmissionsDisplayWrapper>
     );
