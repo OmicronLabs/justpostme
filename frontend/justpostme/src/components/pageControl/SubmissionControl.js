@@ -4,13 +4,18 @@ import React from "react";
 import { Box, BoxWrapper } from "../common/Box";
 import styled from "styled-components";
 import "font-awesome/css/font-awesome.min.css";
+import { removeSubmission } from "../../actions/removeSubmission";
 
 type Props = {
   loading: boolean,
   error: boolean,
   submission: any,
   fetchCurrentSubmission: Function,
-  match: any
+  removeSubmission: Function,
+  match: any,
+  history: any,
+  removeLoading: boolean,
+  removeError: boolean
 };
 
 const Title = styled.p`
@@ -209,20 +214,35 @@ class SubmissionControl extends React.Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { loading } = this.props;
+    const { loading, removeLoading, history } = this.props;
     const newLoading = nextProps.loading;
     const newSubmission = nextProps.submission;
 
+    // Fetching submission
     if (loading && !newLoading) {
       this.setState({
         submissionText: newSubmission.postText,
         tempSubmissionText: newSubmission.postText
       });
     }
+
+    const newRemoveLoading = nextProps.removeLoading;
+    const newRemoveError = nextProps.removeError;
+
+    // Deleting the submission
+    if (removeLoading && !newRemoveLoading && !newRemoveError) {
+      history.goBack();
+    }
   }
 
   _renderSubmissionControl() {
-    const { submission, loading, error } = this.props;
+    const {
+      submission,
+      loading,
+      error,
+      removeSubmission,
+      history
+    } = this.props;
 
     return (
       <Box
@@ -334,7 +354,12 @@ class SubmissionControl extends React.Component<Props> {
               <Button onClick={() => {}}>
                 <ButtonText>Schedule</ButtonText>
               </Button>
-              <Button alert onClick={() => {}}>
+              <Button
+                alert
+                onClick={() => {
+                  removeSubmission(submission.databasId);
+                }}
+              >
                 <ButtonText>Delete</ButtonText>
               </Button>
             </ButtonRow>

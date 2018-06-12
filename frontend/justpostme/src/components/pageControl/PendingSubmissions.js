@@ -4,6 +4,7 @@ import styled from "styled-components";
 import SubmissionDisplay from "./SubmissionsDisplay";
 import Spinner from "../loadingSpinner/LoadingSpinner";
 import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
+import { removeSubmission } from "../../actions/removeSubmission";
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
   display: flex;
@@ -20,7 +21,9 @@ type Props = {
   pageId: string,
   token: string,
   errorToFb: boolean,
-  postingToFb: boolean
+  postingToFb: boolean,
+  removeSubmissionError: boolean,
+  removeSubmissionLoading: boolean
 };
 
 class PendingSubmissions extends React.Component<Props> {
@@ -30,12 +33,28 @@ class PendingSubmissions extends React.Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { postingToFb, pageId, fetchPendingSubmissions } = this.props;
+    const {
+      postingToFb,
+      pageId,
+      fetchPendingSubmissions,
+      removeSubmissionLoading
+    } = this.props;
     const newPostingToFb = nextProps.postingToFb;
-
     const errorToFb = nextProps.errorToFb;
+    const newRemoveSubmissionLoading = nextProps.removeSubmissionLoading;
+    const newRemoveSubmissionError = nextProps.removeSubmissionError;
 
+    // Error on posting
     if (postingToFb && !newPostingToFb && errorToFb) {
+      fetchPendingSubmissions(pageId);
+    }
+
+    // Error on deletion
+    if (
+      removeSubmissionLoading &&
+      !newRemoveSubmissionLoading &&
+      newRemoveSubmissionError
+    ) {
       fetchPendingSubmissions(pageId);
     }
   }

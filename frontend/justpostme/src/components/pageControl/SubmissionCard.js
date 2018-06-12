@@ -6,6 +6,7 @@ import "font-awesome/css/font-awesome.min.css";
 
 import { serverDomain } from "../../const/serverURL";
 import { postToFbInstant } from "../../actions/postSubmission";
+import { removeSubmission } from "../../actions/removeSubmission";
 
 const Wrapper = styled.div`
   height: 50px;
@@ -33,8 +34,10 @@ type Props = {
   pageId: string,
   postToFbInstant: Function,
   deletePendingSubmission: Function,
+  removeSubmission: Function,
   displayId: string,
-  match: any
+  match: any,
+  history: any
 };
 
 const SubmissionId = styled.p`
@@ -186,7 +189,8 @@ const SubmissionCard = (props: Props) => {
     pageId,
     deletePendingSubmission,
     displayId,
-    history
+    history,
+    removeSubmission
   } = props;
 
   const isGreen = displayId % 2 === 1;
@@ -214,9 +218,9 @@ const SubmissionCard = (props: Props) => {
             deletePendingSubmission(submission.databaseId);
           }}
         />
-
         <DeleteComponent
           delete={() => {
+            removeSubmission(submission.databaseId);
             deletePendingSubmission(submission.databaseId);
           }}
         />
