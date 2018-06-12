@@ -213,7 +213,6 @@ app.get("/backend/postcomments", function(req, res) {
   executeQuery(res, query);
 });
 
-
 //GET API
 app.get("/backend/page", function(req, res) {
   var query =
@@ -228,7 +227,9 @@ app.post("/backend/postcomment", function(req, res) {
   var query =
     "INSERT INTO [comments] (postHash, text, timeCommented) VALUES('" +
     escapeQuotations(req.param("posthash")) +
-    "', '" + escapeQuotations(req.param("text")) + "', GETUTCDATE())";
+    "', '" +
+    escapeQuotations(req.param("text")) +
+    "', GETUTCDATE())";
   executeQuery(res, query);
 });
 
@@ -280,10 +281,32 @@ app.get("/backend/getmoderating", function(req, res) {
 //POST API
 app.post("/backend/setmoderating", function(req, res) {
   var query =
-    "UPDATE [posts] SET underModeration = 1 WHERE pageId = '" +
-    escapeQuotations(req.param("pageid")) +
+    "UPDATE [posts] SET underModeration = 1 WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
     "';";
   executeQuery(res, query);
+});
+
+//POST API
+app.post("/backend/stopmoderating", function(req, res) {
+  var query =
+    "UPDATE [posts] SET underModeration = 0 WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
+  executeQuery(res, query);
+});
+
+//POST API
+app.post("/backend/schedulepost", function(req, res) {
+  var query =
+    "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = '" +
+    escapeQuotations(postid) +
+    "';\n" +
+    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageid = '" +
+    escapeQuotations(pageId) +
+    "';";
+  queryGet(response => postToFacebook(res, response), query);
+  res.end('{"success" : "Scheduled Successfully", "status" : 200}');
 });
 
 //POST API
@@ -293,7 +316,7 @@ app.post("/backend/postit", function(req, res) {
     escapeQuotations(req.param("postid")) +
     "';";
   queryGet(response => postToFacebook(res, response), query);
-  res.end('{"success" : "Updated Successfully", "status" : 200}');
+  res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
 
 var postToFacebook = function(res, response) {
@@ -389,12 +412,8 @@ app.post("/backend/updatepost", function(req, res) {
     "'";
 
   queryGet(response => console.log(response), query);
-  res.end(
-    '{"success" : "Updated Successfully", "status" : 200}'
-  );
+  res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
-
-
 
 //POST API
 app.post("/backend/createpost", function(req, res) {
