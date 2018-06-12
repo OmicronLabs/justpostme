@@ -30,7 +30,7 @@ export function fetchModerationSubmissions(pageid: string) {
 
     //TODO: what
 
-    return fetch(`${serverDomain}/backend/getmoderated?pageid=${pageid}`)
+    return fetch(`${serverDomain}/backend/getmoderating?pageid=${pageid}`)
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
