@@ -5,6 +5,8 @@ import SubmissionDisplay from "./SubmissionsDisplay";
 import Spinner from "../loadingSpinner/LoadingSpinner";
 import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
+import { Snackbar, VisibleSnackbar } from "../common/Snackbar";
+
 const SpinnerWrapper = PagesDisplayWrapper.extend`
   display: flex;
   justify-content: center;
@@ -47,14 +49,19 @@ class PendingSubmissions extends React.Component<Props> {
         <Spinner />
       </SpinnerWrapper>
     ) : (
-      <SubmissionDisplay
-        submissions={submissions}
-        token={accessToken}
-        pageId={pageId}
-        errorHead="No pending posts"
-        errorText="Looks like you have no pending submission yet. Make sure your users can see the submission link!"
-        isPending={true}
-      />
+      <div>
+        <VisibleSnackbar className="scheduled">
+          The post has been scheduled.
+        </VisibleSnackbar>
+        <SubmissionDisplay
+          submissions={submissions}
+          token={accessToken}
+          pageId={pageId}
+          errorHead="No pending posts"
+          errorText="Looks like you have no pending submission yet. Make sure your users can see the submission link!"
+          isPending={true}
+        />
+      </div>
     );
   }
 }
