@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { fetchCurrentSubmission } from "../../actions/currentSubmission";
 import { removeSubmission } from "../../actions/removeSubmission";
 import SubmissionControl from "../../components/pageControl/SubmissionControl";
+import { deletePendingSubmission } from "../../actions/pendingSubmissions";
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
@@ -18,7 +19,8 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   ...ownProps,
   fetchCurrentSubmission: hash => dispatch(fetchCurrentSubmission(hash)),
-  removeSubmission: id => dispatch(removeSubmission(id))
+  removeSubmission: id => dispatch(removeSubmission(id)),
+  deletePendingSubmission: id => dispatch(deletePendingSubmission(id))
 });
 
 export default withRouter(

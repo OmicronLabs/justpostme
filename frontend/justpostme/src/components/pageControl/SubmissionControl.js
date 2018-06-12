@@ -5,6 +5,7 @@ import { Box, BoxWrapper } from "../common/Box";
 import styled from "styled-components";
 import "font-awesome/css/font-awesome.min.css";
 import { removeSubmission } from "../../actions/removeSubmission";
+import { deletePendingSubmission } from "../../actions/pendingSubmissions";
 
 type Props = {
   loading: boolean,
@@ -12,6 +13,7 @@ type Props = {
   submission: any,
   fetchCurrentSubmission: Function,
   removeSubmission: Function,
+  deletePendingSubmission: Function,
   match: any,
   history: any,
   removeLoading: boolean,
@@ -231,7 +233,7 @@ class SubmissionControl extends React.Component<Props> {
 
     // Deleting the submission
     if (removeLoading && !newRemoveLoading && !newRemoveError) {
-      history.goBack();
+      //history.goBack();
     }
   }
 
@@ -241,7 +243,8 @@ class SubmissionControl extends React.Component<Props> {
       loading,
       error,
       removeSubmission,
-      history
+      history,
+      deletePendingSubmission
     } = this.props;
 
     return (
