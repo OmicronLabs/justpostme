@@ -16,27 +16,27 @@ type Props = {
   loading: boolean,
   error: boolean,
   userID: string,
-  fetchPendingSubmissions: Function,
+  fetchModerationSubmissions: Function,
   pageId: string,
   token: string,
   errorToFb: boolean,
   postingToFb: boolean
 };
 
-class PendingSubmissions extends React.Component<Props> {
+class ModerationSubmissions extends React.Component<Props> {
   componentDidMount() {
-    const { pageId, fetchPendingSubmissions } = this.props;
-    fetchPendingSubmissions(pageId);
+    const { pageId, fetchModerationSubmissions } = this.props;
+    fetchModerationSubmissions(pageId);
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { postingToFb, pageId, fetchPendingSubmissions } = this.props;
+    const { postingToFb, pageId, fetchModerationSubmissions } = this.props;
     const newPostingToFb = nextProps.postingToFb;
 
     const errorToFb = nextProps.errorToFb;
 
     if (postingToFb && !newPostingToFb && errorToFb) {
-      fetchPendingSubmissions(pageId);
+      fetchModerationSubmissions(pageId);
     }
   }
 
@@ -51,12 +51,12 @@ class PendingSubmissions extends React.Component<Props> {
         submissions={submissions}
         token={accessToken}
         pageId={pageId}
-        errorHead="No pending posts"
-        errorText="Looks like you have no pending submission yet. Make sure your users can see the submission link!"
+        errorHead="No posts awaiting moderation"
+        errorText="You have not asked your users to moderate any posts."
         isPending={true}
       />
     );
   }
 }
 
-export default PendingSubmissions;
+export default ModerationSubmissions;

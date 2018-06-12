@@ -18,6 +18,8 @@ import postSubmission from "./reducers/postSubmission";
 import removeManagedPage from "./reducers/removeManagedPage";
 import currentSubmission from "./reducers/currentSubmission";
 import pendingSubmissions from "./reducers/pendingSubmissions";
+import scheduledSubmissions from "./reducers/scheduledSubmissions";
+import moderationSubmissions from "./reducers/moderationSubmissions";
 
 const loggerMiddleware = createLogger();
 
@@ -38,7 +40,9 @@ const rootReducer = combineReducers({
   postSubmission,
   currentSubmission,
   removeManagedPage,
-  pendingSubmissions
+  pendingSubmissions,
+  scheduledSubmissions,
+  moderationSubmissions
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -64,6 +64,11 @@ const PostControls = LegendItem.extend`
   border-right: 2px solid white;
 `;
 
+const TimeStampScheduled = TimeStamp.extend`
+  width: 33%;
+  max-width: 33%;
+`;
+
 const PostWarning = LegendItem.extend`
   width: 10%;
   max-width: 10%;
@@ -72,17 +77,16 @@ const PostWarning = LegendItem.extend`
 type Props = {
   submissions: any,
   token: string,
-  pageId: string
+  pageId: string,
+  errorHead: string,
+  errorText: string,
+  isPending: boolean
 };
-
-const noSubmissionsHead = "No pending posts";
-const noSubmissionsText =
-  "Looks like you have no pending submission yet. Make sure your users can see the submission link!";
 
 const SubmissionDisplay = (props: Props) => {
   return props.submissions ? (
     <SubmissionsDisplayWrapper>
-      {props.submissions.length < 1 ? null : (
+      {props.submissions.length < 1 ? null : props.isPending ? (
         <SubmissionsLegend>
           <PostId>Index</PostId>
           <PostContent>Body</PostContent>
@@ -90,13 +94,20 @@ const SubmissionDisplay = (props: Props) => {
           <PostControls>Post Controls</PostControls>
           <PostWarning>Warnings</PostWarning>
         </SubmissionsLegend>
+      ) : (
+        <SubmissionsLegend>
+          <PostId>Index</PostId>
+          <PostContent>Body</PostContent>
+          <TimeStampScheduled>Scheduled for</TimeStampScheduled>
+          <PostWarning>Warnings</PostWarning>
+        </SubmissionsLegend>
       )}
 
       <SubmissionsWrapper>
         {props.submissions.length < 1 ? (
           <ErrorDisplay
-            head={noSubmissionsHead}
-            text={noSubmissionsText}
+            head={props.errorHead}
+            text={props.errorText}
             createCard={true}
           />
         ) : (

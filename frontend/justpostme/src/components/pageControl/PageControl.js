@@ -12,9 +12,11 @@ import {
 import "font-awesome/css/font-awesome.min.css";
 
 import PendingSubmissionsContainer from "../../containers/pageControl/PendingSubmissionsContainer";
+import ScheduledSubmissionsContainer from "../../containers/pageControl/ScheduledSubmissionsContainer";
 import PageSettings from "./PageSettings";
 import SubmissionControl from "../../containers/pageControl/SubmissionControlContainer";
 import { fetchCurrentPage } from "../../actions/currentPage";
+import ModerationSubmissionsContainer from "../../containers/pageControl/ModerationSubmissionsContainer";
 
 type RouteType = {
   to: string,
@@ -196,11 +198,11 @@ class PageControl extends React.Component<Props> {
             />
             <Route
               path={`${path}/scheduled`}
-              render={() => <p>Borys to Borys</p>}
+              render={() => <ScheduledSubmissionsContainer pageId={id} />}
             />
             <Route
               path={`${path}/moderation`}
-              render={() => <p>Borys to Borys</p>}
+              render={() => <ModerationSubmissionsContainer pageId={id} />}
             />
             <Route
               path={`${path}/insights`}
