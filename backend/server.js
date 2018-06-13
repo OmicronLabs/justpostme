@@ -226,11 +226,11 @@ app.get("/backend/page", function(req, res) {
 app.post("/backend/postcomment", function(req, res) {
   var query =
     "INSERT INTO [comments] (postHash, text, timeCommented, byAdmin) VALUES('" +
-    escapeQuotations(req.param("posthash")) +
+    escapeQuotations(req.body.posthash) +
     "', '" +
-    escapeQuotations(req.param("text")) +
+    escapeQuotations(req.body.text) +
     "', GETUTCDATE(), '" +
-    escapeQuotations(req.param("byadmin")) +
+    escapeQuotations(req.body.byadmin) +
     "');";
   executeQuery(res, query);
 });
