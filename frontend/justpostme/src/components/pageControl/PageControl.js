@@ -190,12 +190,7 @@ class PageControl extends React.Component<Props> {
           <Switch>
             <Route
               path={`${path}/pending`}
-              render={() => (
-                <PendingSubmissionsContainer
-                  style="display:contents; max-width:85%;"
-                  pageId={id}
-                />
-              )}
+              render={() => <PendingSubmissionsContainer pageId={id} />}
             />
             <Route
               path={`${path}/submission/:submissionid`}

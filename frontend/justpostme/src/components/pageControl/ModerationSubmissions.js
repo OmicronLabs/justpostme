@@ -53,7 +53,7 @@ class ModerationSubmissions extends React.Component<Props> {
         pageId={pageId}
         errorHead="No posts awaiting moderation"
         errorText="You have not asked your users to moderate any posts."
-        isPending={true}
+        isPending
       />
     );
   }

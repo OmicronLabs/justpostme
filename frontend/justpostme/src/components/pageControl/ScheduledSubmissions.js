@@ -54,7 +54,6 @@ class ScheduledSubmissions extends React.Component<Props> {
         pageId={pageId}
         errorHead="No scheduled posts"
         errorText="You have not scheduled any posts yet."
-        isPending={false}
       />
     );
   }

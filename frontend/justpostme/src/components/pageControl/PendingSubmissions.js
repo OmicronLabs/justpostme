@@ -77,7 +77,7 @@ class PendingSubmissions extends React.Component<Props> {
           pageId={pageId}
           errorHead="No pending posts"
           errorText="Looks like you have no pending submission yet. Make sure your users can see the submission link!"
-          isPending={true}
+          isPending
         />
       </Wrapper>
     );
