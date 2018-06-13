@@ -19,6 +19,7 @@ import removeSubmission from "./reducers/removeSubmission";
 import removeManagedPage from "./reducers/removeManagedPage";
 import currentSubmission from "./reducers/currentSubmission";
 import pendingSubmissions from "./reducers/pendingSubmissions";
+import scheduleSubmission from "./reducers/scheduledSubmissions";
 import scheduledSubmissions from "./reducers/scheduledSubmissions";
 import moderationSubmissions from "./reducers/moderationSubmissions";
 
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   currentSubmission,
   removeManagedPage,
   pendingSubmissions,
+  scheduleSubmission,
   scheduledSubmissions,
   moderationSubmissions
 });
