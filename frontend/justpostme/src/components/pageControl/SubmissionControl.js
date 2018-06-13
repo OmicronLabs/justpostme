@@ -442,14 +442,14 @@ class SubmissionControl extends React.Component<Props> {
             <ButtonRow>
               <Button
                 onClick={() => {
-                  postToFbInstant(match.params.id, submission.databaseId);
+                  postToFbInstant(submission.databaseId, submission.pageId);
                 }}
               >
                 <ButtonText>Publish now</ButtonText>
               </Button>
               <Button
                 onClick={() => {
-                  schedulePostToFb(match.params.id, submission.databaseId);
+                  schedulePostToFb(submission.databaseId, submission.pageId);
                 }}
               >
                 <ButtonText>Schedule</ButtonText>

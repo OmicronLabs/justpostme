@@ -35,7 +35,8 @@ export function fetchCurrentSubmission(submissionHash: string) {
           review: record.review,
           sentiment: record.sentiment,
           timePosted: record.timePosted,
-          databaseId: record.ID
+          databaseId: record.ID,
+          pageId: record.pageId
         }))[0];
         dispatch(fetchSubmissionSuccess(submission));
         return submission;
