@@ -5,8 +5,6 @@ import SubmissionDisplay from "./SubmissionsDisplay";
 import Spinner from "../loadingSpinner/LoadingSpinner";
 import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
-import { Snackbar, VisibleSnackbar } from "../common/Snackbar";
-
 const SpinnerWrapper = PagesDisplayWrapper.extend`
   display: flex;
   justify-content: center;
@@ -50,9 +48,6 @@ class PendingSubmissions extends React.Component<Props> {
       </SpinnerWrapper>
     ) : (
       <div>
-        <VisibleSnackbar className="scheduled">
-          The post has been scheduled.
-        </VisibleSnackbar>
         <SubmissionDisplay
           submissions={submissions}
           token={accessToken}
