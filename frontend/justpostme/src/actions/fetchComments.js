@@ -24,7 +24,7 @@ export const addComment = comment => ({
   payload: { comment }
 });
 
-export function fetchCommentsSubmissions(pageid: string) {
+export function fetchComments(pageid: string) {
   return dispatch => {
     dispatch(fetchCommentsBegin());
 

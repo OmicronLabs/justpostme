@@ -9,6 +9,7 @@ import { deletePendingSubmission } from "../../actions/pendingSubmissions";
 import { schedulePostToFb } from "../../actions/scheduleSubmission";
 import addToModeration from "../../reducers/addToModeration";
 import { postComment, postCommentError } from "../../actions/postComment";
+import fetchComments from "../../reducers/fetchComments";
 
 const Title = styled.p`
   font-size: 18px;
@@ -213,7 +214,10 @@ type Props = {
   editSubmission: Function,
   postComment: Function,
   postCommentLoading: boolean,
-  postCommentError: boolean
+  postCommentError: boolean,
+  commentsLoading: boolean,
+  commentsError: boolean,
+  fetchComments: Function
 };
 
 class SubmissionControl extends React.Component<Props> {
@@ -229,8 +233,9 @@ class SubmissionControl extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const { fetchCurrentSubmission, match } = this.props;
+    const { fetchCurrentSubmission, fetchComments, match } = this.props;
     fetchCurrentSubmission(match.params.submissionid);
+    fetchComments(match.params.submissionid);
   }
 
   componentWillReceiveProps(nextProps: Props) {
