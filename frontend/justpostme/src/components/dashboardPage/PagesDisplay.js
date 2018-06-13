@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { LargeThemedButton } from "../common/Buttons";
 import { GeneratedCard, AddPageCard } from "./DashboardPageCard";
 import type { CardProps } from "./DashboardPageCard";
-import { ErrorWrapper, PagesDisplayWrapper } from "./PagesDisplay.style";
+import { PagesDisplayWrapper } from "./PagesDisplay.style";
 
 import { ErrorHeader, ErrorText } from "../common/ErrorText";
 import { Link } from "react-router-dom";

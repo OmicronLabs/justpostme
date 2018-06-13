@@ -190,7 +190,12 @@ class PageControl extends React.Component<Props> {
           <Switch>
             <Route
               path={`${path}/pending`}
-              render={() => <PendingSubmissionsContainer pageId={id} />}
+              render={() => (
+                <PendingSubmissionsContainer
+                  style="display:contents; max-width:85%;"
+                  pageId={id}
+                />
+              )}
             />
             <Route
               path={`${path}/submission/:submissionid`}
@@ -198,11 +203,21 @@ class PageControl extends React.Component<Props> {
             />
             <Route
               path={`${path}/scheduled`}
-              render={() => <ScheduledSubmissionsContainer pageId={id} />}
+              render={() => (
+                <ScheduledSubmissionsContainer
+                  style="display:contents; max-width:85%;"
+                  pageId={id}
+                />
+              )}
             />
             <Route
               path={`${path}/moderation`}
-              render={() => <ModerationSubmissionsContainer pageId={id} />}
+              render={() => (
+                <ModerationSubmissionsContainer
+                  style="display:contents; max-width:85%;"
+                  pageId={id}
+                />
+              )}
             />
             <Route
               path={`${path}/insights`}
