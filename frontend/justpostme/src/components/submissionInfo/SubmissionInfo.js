@@ -142,7 +142,16 @@ type Props = {
   loading: boolean,
   error: boolean,
   submission: any,
-  fetchCurrentSubmission: Function
+  fetchCurrentSubmission: Function,
+  editSubmissionLoading: boolean,
+  editSubmissionError: boolean,
+  postCommentLoading: boolean,
+  postCommentError: boolean,
+  removeLoading: boolean,
+  removeError: boolean,
+  editSubmission: Function,
+  postComment: Function,
+  removeSubmission: Function
 };
 
 class SubmissionForm extends React.Component<Props> {
@@ -174,6 +183,8 @@ class SubmissionForm extends React.Component<Props> {
   }
 
   _renderButtons() {
+    const { editSubmission, match } = this.props;
+
     return !this.state.editing ? (
       <ButtonRow>
         <Button onClick={() => this.setState({ editing: true })}>
@@ -193,12 +204,16 @@ class SubmissionForm extends React.Component<Props> {
           <ButtonText>Save</ButtonText>
         </Button>
         <Button
-          onClick={() =>
+          onClick={() => {
+            editSubmission(
+              match.params.submissionid,
+              this.state.tempSubmissionText
+            );
             this.setState(state => ({
               editing: false,
               tempSubmissionText: state.submissionText
-            }))
-          }
+            }));
+          }}
         >
           <ButtonText>Cancel</ButtonText>
         </Button>
