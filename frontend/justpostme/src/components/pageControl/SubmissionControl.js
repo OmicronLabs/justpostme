@@ -9,6 +9,8 @@ import { deletePendingSubmission } from "../../actions/pendingSubmissions";
 import { schedulePostToFb } from "../../actions/scheduleSubmission";
 import addToModeration from "../../reducers/addToModeration";
 import { postComment, postCommentError } from "../../actions/postComment";
+import { snackbarNotify } from "../../actions/snackbar";
+import snackbar from "../../reducers/snackbar";
 
 const Title = styled.p`
   font-size: 18px;
@@ -213,7 +215,8 @@ type Props = {
   editSubmission: Function,
   postComment: Function,
   postCommentLoading: boolean,
-  postCommentError: boolean
+  postCommentError: boolean,
+  snackbarNotify: Function
 };
 
 class SubmissionControl extends React.Component<Props> {
@@ -242,7 +245,8 @@ class SubmissionControl extends React.Component<Props> {
       schedulingToFb,
       addToModerationLoading,
       editSubmissionLoading,
-      postCommentLoading
+      postCommentLoading,
+      snackbarNotify
     } = this.props;
 
     const newSubmission = nextProps.submission;
@@ -258,11 +262,13 @@ class SubmissionControl extends React.Component<Props> {
     // Deleting the submission
     if (removeLoading && !nextProps.removeLoading && !nextProps.removeError) {
       history.goBack();
+      snackbarNotify("The post has been removed");
     }
 
     // Posting submission to fb
     if (postingToFb && !nextProps.postingToFb && !nextProps.errorToFb) {
       history.goBack();
+      snackbarNotify("Posted to Facebook");
     }
 
     //scheduling the submission to fb
@@ -272,6 +278,7 @@ class SubmissionControl extends React.Component<Props> {
       !nextProps.errorSchedulingToFb
     ) {
       history.goBack();
+      snackbarNotify("The post has been scheduled");
     }
 
     //adding submission to moderation
@@ -280,7 +287,7 @@ class SubmissionControl extends React.Component<Props> {
       !nextProps.addToModerationLoading &&
       !nextProps.addToModerationError
     ) {
-      // show popup
+      snackbarNotify("Successfully added to moderation");
     }
 
     // save edited submission
@@ -289,7 +296,7 @@ class SubmissionControl extends React.Component<Props> {
       !nextProps.editSubmissionLoading &&
       !nextProps.editSubmissionError
     ) {
-      //show popup
+      snackbarNotify("Your changes have been saved");
     }
 
     // post comment
@@ -298,7 +305,7 @@ class SubmissionControl extends React.Component<Props> {
       !nextProps.postCommentLoading &&
       !nextProps.postCommentError
     ) {
-      //popup
+      snackbarNotify("Successfully posted your comment");
     }
   }
 

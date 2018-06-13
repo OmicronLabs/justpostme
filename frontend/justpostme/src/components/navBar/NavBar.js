@@ -23,8 +23,6 @@ const LogoWrapper = styled.div`
   margin-right: 12px;
 `;
 
-//TODO: link top left to /dashboard
-
 const HeaderLogoText = styled.h2`
   color: white;
 `;

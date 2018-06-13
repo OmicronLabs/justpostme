@@ -7,6 +7,7 @@ import "font-awesome/css/font-awesome.min.css";
 import { serverDomain } from "../../const/serverURL";
 import { postToFbInstant } from "../../actions/postSubmission";
 import { removeSubmission } from "../../actions/removeSubmission";
+import { snackbarNotify } from "../../actions/snackbar";
 
 const Wrapper = styled.div`
   height: 50px;
@@ -38,6 +39,7 @@ type Props = {
   schedulePostToFb: Function,
   displayId: string,
   match: any,
+  isPending: boolean,
   history: any
 };
 
@@ -191,6 +193,7 @@ const SubmissionCard = (props: Props) => {
     deletePendingSubmission,
     displayId,
     history,
+    isPending,
     removeSubmission,
     schedulePostToFb
   } = props;
@@ -208,26 +211,31 @@ const SubmissionCard = (props: Props) => {
         {submission.postText}
       </SubmissionBody>
       <Timestamp> {submission.timePosted} </Timestamp>
-      <SubmissionControls>
-        <PublishNowComponent
-          publishNow={() => {
-            postToFbInstant(submission.databaseId, pageId);
-            deletePendingSubmission(submission.databaseId);
-          }}
-        />
-        <ScheduleComponent
-          schedule={() => {
-            schedulePostToFb(submission.databaseId, pageId);
-            deletePendingSubmission(submission.databaseId);
-          }}
-        />
-        <DeleteComponent
-          delete={() => {
-            removeSubmission(submission.databaseId);
-            deletePendingSubmission(submission.databaseId);
-          }}
-        />
-      </SubmissionControls>
+      {props.isPending ? (
+        <SubmissionControls>
+          <PublishNowComponent
+            publishNow={() => {
+              snackbarNotify("The post has been published on Facebook");
+              postToFbInstant(submission.databaseId, pageId);
+              deletePendingSubmission(submission.databaseId);
+            }}
+          />
+          <ScheduleComponent
+            schedule={() => {
+              schedulePostToFb(submission.databaseId, pageId);
+              deletePendingSubmission(submission.databaseId);
+            }}
+          />
+
+          <DeleteComponent
+            delete={() => {
+              removeSubmission(submission.databaseId);
+              deletePendingSubmission(submission.databaseId);
+            }}
+          />
+        </SubmissionControls>
+      ) : null}
+
       <SubmissionWarnings>
         {displayWarning(submission) ? (
           <WarningComponent />

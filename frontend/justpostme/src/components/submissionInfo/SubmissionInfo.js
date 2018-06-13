@@ -21,6 +21,7 @@ import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
 import { fetchCurrentSubmission } from "../../actions/currentSubmission";
 import { SenderBox } from "../pageControl/SubmissionControl";
+import { snackbarNotify } from "../../actions/snackbar";
 
 const ContentWrapper = styled.div`
   width: 85%;
@@ -192,7 +193,7 @@ class SubmissionForm extends React.Component<Props> {
 
     //remove submission
     if (removeLoading && !nextProps.removeLoading && !nextProps.removeError) {
-      //popup
+      snackbarNotify("The post has been removed.");
     }
 
     //post comment
@@ -201,7 +202,7 @@ class SubmissionForm extends React.Component<Props> {
       !nextProps.editSubmissionLoading &&
       !nextProps.editSubmissionError
     ) {
-      // popup
+      snackbarNotify("Successfully posted");
     }
   }
 

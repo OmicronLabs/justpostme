@@ -60,6 +60,7 @@ export const Link = styled.a`
 const SettingsBox = Box.extend`
   padding: 30px;
   display: flex;
+  width: 600px;
   flex-direction: column;
   align-content: flex-start;
 `;
@@ -69,6 +70,9 @@ const SettingsBoxWrapper = BoxWrapper.extend`
 `;
 
 const SaveButton = LargeThemedButton.extend`
+  margin: 0px;
+  margin-top: 10px;
+  padding: 0px;
   border: none;
   &:hover {
     border: none;
@@ -121,11 +125,11 @@ class PageSettings extends React.Component<Props> {
                 <SettingName>Count from: </SettingName>
                 <InputBox type="text" name="name" />
               </SettingsRow>
-
-              <SaveButton onClick={() => alert("changes saved")}>
-                {" "}
-                <p> Save settings </p>{" "}
-              </SaveButton>
+              <SettingsRow>
+                <SaveButton onClick={() => alert("changes saved")}>
+                  Save settings
+                </SaveButton>
+              </SettingsRow>
             </SettingsBox>
           </SettingsBoxWrapper>
         </SubmissionsWrapper>
