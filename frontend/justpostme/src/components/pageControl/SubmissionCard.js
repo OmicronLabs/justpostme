@@ -35,6 +35,7 @@ type Props = {
   postToFbInstant: Function,
   deletePendingSubmission: Function,
   removeSubmission: Function,
+  schedulePostToFb: Function,
   displayId: string,
   match: any,
   history: any
@@ -190,7 +191,8 @@ const SubmissionCard = (props: Props) => {
     deletePendingSubmission,
     displayId,
     history,
-    removeSubmission
+    removeSubmission,
+    schedulePostToFb
   } = props;
 
   const isGreen = displayId % 2 === 1;
@@ -215,6 +217,7 @@ const SubmissionCard = (props: Props) => {
         />
         <ScheduleComponent
           schedule={() => {
+            schedulePostToFb(submission.databaseId, pageId);
             deletePendingSubmission(submission.databaseId);
           }}
         />

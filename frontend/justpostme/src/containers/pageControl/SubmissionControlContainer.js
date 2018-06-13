@@ -7,6 +7,7 @@ import { removeSubmission } from "../../actions/removeSubmission";
 import SubmissionControl from "../../components/pageControl/SubmissionControl";
 import { deletePendingSubmission } from "../../actions/pendingSubmissions";
 import { postToFbInstant } from "../../actions/postSubmission";
+import { schedulePostToFb } from "../../actions/scheduleSubmission";
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
@@ -16,7 +17,9 @@ const mapStateToProps = (state, ownProps) => ({
   removeLoading: state.removeSubmission.loading,
   removeError: state.removeSubmission.error,
   postingToFb: state.postSubmission.postingLoading,
-  errorToFb: state.postSubmission.postingError
+  errorToFb: state.postSubmission.postingError,
+  schedulingToFb: state.scheduleSubmission.loading,
+  errorSchedulingToFb: state.scheduleSubmission.error
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -24,7 +27,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchCurrentSubmission: hash => dispatch(fetchCurrentSubmission(hash)),
   removeSubmission: id => dispatch(removeSubmission(id)),
   deletePendingSubmission: id => dispatch(deletePendingSubmission(id)),
-  postToFbInstant: (postid, pageid) => dispatch(postToFbInstant(postid, pageid))
+  postToFbInstant: (postid, pageid) =>
+    dispatch(postToFbInstant(postid, pageid)),
+  schedulePostToFb: (postid, pageid) =>
+    dispatch(schedulePostToFb(postid, pageid))
 });
 
 export default withRouter(

@@ -6,6 +6,7 @@ import styled from "styled-components";
 import "font-awesome/css/font-awesome.min.css";
 import { removeSubmission } from "../../actions/removeSubmission";
 import { deletePendingSubmission } from "../../actions/pendingSubmissions";
+import { schedulePostToFb } from "../../actions/scheduleSubmission";
 
 type Props = {
   loading: boolean,
@@ -15,12 +16,15 @@ type Props = {
   postToFbInstant: Function,
   removeSubmission: Function,
   deletePendingSubmission: Function,
+  schedulePostToFb: Function,
   match: any,
   history: any,
   removeLoading: boolean,
   removeError: boolean,
   postingToFb: boolean,
-  errorToFb: boolean
+  errorToFb: boolean,
+  schedulingToFb: boolean,
+  errorSchedulingToFb: boolean
 };
 
 const Title = styled.p`
@@ -202,7 +206,7 @@ export const SenderBox = props => (
 );
 
 class SubmissionControl extends React.Component<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       submissionText: "",
@@ -219,7 +223,13 @@ class SubmissionControl extends React.Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { loading, removeLoading, history, postingToFb } = this.props;
+    const {
+      loading,
+      removeLoading,
+      history,
+      postingToFb,
+      schedulingToFb
+    } = this.props;
     const newLoading = nextProps.loading;
     const newSubmission = nextProps.submission;
 
@@ -246,6 +256,14 @@ class SubmissionControl extends React.Component<Props> {
     if (postingToFb && !newPostingToFb && !newErrorToFb) {
       history.goBack();
     }
+
+    const newSchedulingToFb = nextProps.schedulingToFb;
+    const newErrorSchedulingToFb = nextProps.errorSchedulingToFb;
+
+    //scheduling the submission to fb
+    if (schedulingToFb && !newSchedulingToFb && !newErrorSchedulingToFb) {
+      history.goBack();
+    }
   }
 
   _renderSubmissionControl() {
@@ -257,7 +275,8 @@ class SubmissionControl extends React.Component<Props> {
       history,
       deletePendingSubmission,
       match,
-      postToFbInstant
+      postToFbInstant,
+      schedulePostToFb
     } = this.props;
 
     return (
@@ -371,7 +390,11 @@ class SubmissionControl extends React.Component<Props> {
               >
                 <ButtonText>Publish now</ButtonText>
               </Button>
-              <Button onClick={() => {}}>
+              <Button
+                onClick={() => {
+                  schedulePostToFb(match.params.id, submission.databaseId);
+                }}
+              >
                 <ButtonText>Schedule</ButtonText>
               </Button>
               <Button
