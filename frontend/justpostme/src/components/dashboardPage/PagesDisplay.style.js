@@ -4,7 +4,9 @@ import styled from "styled-components";
 export const PagesDisplayWrapper = styled.div`
   margin-top: 30px;
   width: 1024px;
-  max-width: 85%;
+
+  //TODO:
+  /* max-width: 85%; */
   margin-bottom: 90px;
   display: flex;
   flex-wrap: wrap;
