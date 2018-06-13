@@ -10,14 +10,19 @@ import storage from "redux-persist/lib/storage";
 import user from "./reducers/user";
 import userMeta from "./reducers/userMeta";
 import submitForm from "./reducers/submitForm";
+import postComment from "./reducers/postComment";
 import currentPage from "./reducers/currentPage";
 import managedPages from "./reducers/managedPages";
 import unmanagedPages from "./reducers/unmanagedPages";
 import addManagedPage from "./reducers/addManagedPage";
+import editSubmission from "./reducers/editSubmission";
 import postSubmission from "./reducers/postSubmission";
+import addToModeration from "./reducers/addToModeration";
+import removeSubmission from "./reducers/removeSubmission";
 import removeManagedPage from "./reducers/removeManagedPage";
 import currentSubmission from "./reducers/currentSubmission";
 import pendingSubmissions from "./reducers/pendingSubmissions";
+import scheduleSubmission from "./reducers/scheduledSubmissions";
 import scheduledSubmissions from "./reducers/scheduledSubmissions";
 import moderationSubmissions from "./reducers/moderationSubmissions";
 
@@ -33,14 +38,19 @@ const rootReducer = combineReducers({
   user,
   userMeta,
   submitForm,
+  postComment,
   currentPage,
   managedPages,
   unmanagedPages,
   addManagedPage,
+  editSubmission,
   postSubmission,
+  addToModeration,
+  removeSubmission,
   currentSubmission,
   removeManagedPage,
   pendingSubmissions,
+  scheduleSubmission,
   scheduledSubmissions,
   moderationSubmissions
 });
