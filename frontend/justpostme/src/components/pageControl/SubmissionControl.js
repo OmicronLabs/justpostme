@@ -7,6 +7,7 @@ import "font-awesome/css/font-awesome.min.css";
 import { removeSubmission } from "../../actions/removeSubmission";
 import { deletePendingSubmission } from "../../actions/pendingSubmissions";
 import { schedulePostToFb } from "../../actions/scheduleSubmission";
+import addToModeration from "../../reducers/addToModeration";
 
 type Props = {
   loading: boolean,
@@ -24,7 +25,10 @@ type Props = {
   postingToFb: boolean,
   errorToFb: boolean,
   schedulingToFb: boolean,
-  errorSchedulingToFb: boolean
+  errorSchedulingToFb: boolean,
+  addToModerationLoading: boolean,
+  addToModerationError: boolean,
+  addModerationSubmission: Function
 };
 
 const Title = styled.p`
@@ -228,7 +232,8 @@ class SubmissionControl extends React.Component<Props> {
       removeLoading,
       history,
       postingToFb,
-      schedulingToFb
+      schedulingToFb,
+      addToModerationLoading
     } = this.props;
     const newLoading = nextProps.loading;
     const newSubmission = nextProps.submission;
@@ -264,6 +269,18 @@ class SubmissionControl extends React.Component<Props> {
     if (schedulingToFb && !newSchedulingToFb && !newErrorSchedulingToFb) {
       history.goBack();
     }
+
+    const newAddToModerationLoading = nextProps.addToModerationLoading;
+    const newAddToModerationError = nextProps.addToModerationError;
+
+    //adding submission to moderation
+    if (
+      addToModerationLoading &&
+      !newAddToModerationLoading &&
+      !newAddToModerationError
+    ) {
+      // show popup
+    }
   }
 
   _renderSubmissionControl() {
@@ -276,7 +293,8 @@ class SubmissionControl extends React.Component<Props> {
       deletePendingSubmission,
       match,
       postToFbInstant,
-      schedulePostToFb
+      schedulePostToFb,
+      addModerationSubmission
     } = this.props;
 
     return (
@@ -335,7 +353,13 @@ class SubmissionControl extends React.Component<Props> {
               {!this.state.moderation ? (
                 <Button
                   warning
-                  onClick={() => this.setState({ moderation: true })}
+                  onClick={() => {
+                    addModerationSubmission(
+                      match.params.id,
+                      submission.databaseId
+                    );
+                    this.setState({ moderation: true });
+                  }}
                 >
                   <ButtonText>Request modification</ButtonText>
                 </Button>
