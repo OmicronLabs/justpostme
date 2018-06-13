@@ -8,6 +8,7 @@ import { removeSubmission } from "../../actions/removeSubmission";
 import { deletePendingSubmission } from "../../actions/pendingSubmissions";
 import { schedulePostToFb } from "../../actions/scheduleSubmission";
 import addToModeration from "../../reducers/addToModeration";
+import { postComment, postCommentError } from "../../actions/postComment";
 
 const Title = styled.p`
   font-size: 18px;
@@ -209,7 +210,10 @@ type Props = {
   addModerationSubmission: Function,
   editSubmissionLoading: boolean,
   editSubmissionError: boolean,
-  editSubmission: Function
+  editSubmission: Function,
+  postComment: Function,
+  postCommentLoading: boolean,
+  postCommentError: boolean
 };
 
 class SubmissionControl extends React.Component<Props> {
@@ -237,65 +241,64 @@ class SubmissionControl extends React.Component<Props> {
       postingToFb,
       schedulingToFb,
       addToModerationLoading,
-      editSubmissionLoading
+      editSubmissionLoading,
+      postCommentLoading
     } = this.props;
-    const newLoading = nextProps.loading;
+
     const newSubmission = nextProps.submission;
 
     // Fetching submission
-    if (loading && !newLoading) {
+    if (loading && !nextProps.loading) {
       this.setState({
         submissionText: newSubmission.postText,
         tempSubmissionText: newSubmission.postText
       });
     }
 
-    const newRemoveLoading = nextProps.removeLoading;
-    const newRemoveError = nextProps.removeError;
-
     // Deleting the submission
-    if (removeLoading && !newRemoveLoading && !newRemoveError) {
+    if (removeLoading && !nextProps.removeLoading && !nextProps.removeError) {
       history.goBack();
     }
-
-    const newPostingToFb = nextProps.postingToFb;
-    const newErrorToFb = nextProps.errorToFb;
 
     // Posting submission to fb
-    if (postingToFb && !newPostingToFb && !newErrorToFb) {
+    if (postingToFb && !nextProps.postingToFb && !nextProps.errorToFb) {
       history.goBack();
     }
-
-    const newSchedulingToFb = nextProps.schedulingToFb;
-    const newErrorSchedulingToFb = nextProps.errorSchedulingToFb;
 
     //scheduling the submission to fb
-    if (schedulingToFb && !newSchedulingToFb && !newErrorSchedulingToFb) {
+    if (
+      schedulingToFb &&
+      !nextProps.schedulingToFb &&
+      !nextProps.errorSchedulingToFb
+    ) {
       history.goBack();
     }
-
-    const newAddToModerationLoading = nextProps.addToModerationLoading;
-    const newAddToModerationError = nextProps.addToModerationError;
 
     //adding submission to moderation
     if (
       addToModerationLoading &&
-      !newAddToModerationLoading &&
-      !newAddToModerationError
+      !nextProps.addToModerationLoading &&
+      !nextProps.addToModerationError
     ) {
       // show popup
     }
 
-    const newEditSubmissionLoading = nextProps.editSubmissionLoading;
-    const newEditSubmissionError = nextProps.editSubmissionError;
-
     // save edited submission
     if (
       editSubmissionLoading &&
-      !newEditSubmissionLoading &&
-      !newEditSubmissionError
+      !nextProps.editSubmissionLoading &&
+      !nextProps.editSubmissionError
     ) {
       //show popup
+    }
+
+    // post comment
+    if (
+      postCommentLoading &&
+      !nextProps.postCommentLoading &&
+      !nextProps.postCommentError
+    ) {
+      //popup
     }
   }
 
@@ -311,7 +314,8 @@ class SubmissionControl extends React.Component<Props> {
       postToFbInstant,
       schedulePostToFb,
       addModerationSubmission,
-      editSubmission
+      editSubmission,
+      postComment
     } = this.props;
 
     return (
@@ -420,7 +424,15 @@ class SubmissionControl extends React.Component<Props> {
                   }
                 />,
                 <ButtonRow>
-                  <Button onClick={() => {}}>
+                  <Button
+                    onClick={() => {
+                      postComment(
+                        match.params.submissionid,
+                        this.state.currentMessage,
+                        true
+                      );
+                    }}
+                  >
                     <ButtonText>Send</ButtonText>
                   </Button>
                 </ButtonRow>

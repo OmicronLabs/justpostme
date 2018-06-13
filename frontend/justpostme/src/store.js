@@ -10,6 +10,7 @@ import storage from "redux-persist/lib/storage";
 import user from "./reducers/user";
 import userMeta from "./reducers/userMeta";
 import submitForm from "./reducers/submitForm";
+import postComment from "./reducers/postComment";
 import currentPage from "./reducers/currentPage";
 import managedPages from "./reducers/managedPages";
 import unmanagedPages from "./reducers/unmanagedPages";
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   user,
   userMeta,
   submitForm,
+  postComment,
   currentPage,
   managedPages,
   unmanagedPages,

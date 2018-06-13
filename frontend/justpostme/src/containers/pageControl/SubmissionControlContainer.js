@@ -10,6 +10,7 @@ import { postToFbInstant } from "../../actions/postSubmission";
 import { schedulePostToFb } from "../../actions/scheduleSubmission";
 import { addModerationSubmission } from "../../actions/addToModeration";
 import { editSubmission } from "../../actions/editSubmission";
+import { postComment } from "../../actions/postComment";
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
@@ -25,7 +26,9 @@ const mapStateToProps = (state, ownProps) => ({
   addToModerationLoading: state.addToModeration.loading,
   addToModerationError: state.addToModeration.error,
   editSubmissionLoading: state.editSubmission.loading,
-  editSubmissionError: state.editSubmission.error
+  editSubmissionError: state.editSubmission.error,
+  postCommentLoading: state.postComment.loading,
+  postCommentError: state.postComment.error
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -38,7 +41,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   schedulePostToFb: (postid, pageid) =>
     dispatch(schedulePostToFb(postid, pageid)),
   addModerationSubmission: id => dispatch(addModerationSubmission(id)),
-  editSubmission: (postid, text) => dispatch(editSubmission(postid, text))
+  editSubmission: (postid, text) => dispatch(editSubmission(postid, text)),
+  postComment: (postHash, text, admin) =>
+    dispatch(postComment(postHash, text, admin))
 });
 
 export default withRouter(
