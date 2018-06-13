@@ -191,7 +191,7 @@ app.get("/backend/managedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
     escapeQuotations(req.param("id")) +
-    "' AND managed=1";
+    "' AND managed=1;";
   executeQuery(res, query);
 });
 
@@ -200,7 +200,7 @@ app.get("/backend/unmanagedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
     escapeQuotations(req.param("id")) +
-    "' AND managed=0";
+    "' AND managed=0;";
   executeQuery(res, query);
 });
 
@@ -209,7 +209,7 @@ app.get("/backend/postcomments", function(req, res) {
   var query =
     "SELECT * from [comments] WHERE postHash = '" +
     escapeQuotations(req.param("posthash")) +
-    "'";
+    "';";
   executeQuery(res, query);
 });
 
@@ -225,11 +225,13 @@ app.get("/backend/page", function(req, res) {
 //POST API
 app.post("/backend/postcomment", function(req, res) {
   var query =
-    "INSERT INTO [comments] (postHash, text, timeCommented) VALUES('" +
+    "INSERT INTO [comments] (postHash, text, timeCommented, byAdmin) VALUES('" +
     escapeQuotations(req.param("posthash")) +
     "', '" +
     escapeQuotations(req.param("text")) +
-    "', GETUTCDATE())";
+    "', GETUTCDATE(), '" +
+    escapeQuotations(req.param("byadmin")) +
+    "');";
   executeQuery(res, query);
 });
 
