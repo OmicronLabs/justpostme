@@ -198,21 +198,11 @@ class PageControl extends React.Component<Props> {
             />
             <Route
               path={`${path}/scheduled`}
-              render={() => (
-                <ScheduledSubmissionsContainer
-                  style="display:contents; max-width:85%;"
-                  pageId={id}
-                />
-              )}
+              render={() => <ScheduledSubmissionsContainer pageId={id} />}
             />
             <Route
               path={`${path}/moderation`}
-              render={() => (
-                <ModerationSubmissionsContainer
-                  style="display:contents; max-width:85%;"
-                  pageId={id}
-                />
-              )}
+              render={() => <ModerationSubmissionsContainer pageId={id} />}
             />
             <Route
               path={`${path}/insights`}
