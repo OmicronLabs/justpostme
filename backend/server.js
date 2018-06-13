@@ -191,7 +191,7 @@ app.get("/backend/managedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
     escapeQuotations(req.param("id")) +
-    "' AND managed=1";
+    "' AND managed=1;";
   executeQuery(res, query);
 });
 
@@ -200,7 +200,7 @@ app.get("/backend/unmanagedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
     escapeQuotations(req.param("id")) +
-    "' AND managed=0";
+    "' AND managed=0;";
   executeQuery(res, query);
 });
 
@@ -209,7 +209,7 @@ app.get("/backend/postcomments", function(req, res) {
   var query =
     "SELECT * from [comments] WHERE postHash = '" +
     escapeQuotations(req.param("posthash")) +
-    "'";
+    "';";
   executeQuery(res, query);
 });
 
@@ -225,11 +225,13 @@ app.get("/backend/page", function(req, res) {
 //POST API
 app.post("/backend/postcomment", function(req, res) {
   var query =
-    "INSERT INTO [comments] (postHash, text, timeCommented) VALUES('" +
+    "INSERT INTO [comments] (postHash, text, timeCommented, byAdmin) VALUES('" +
     escapeQuotations(req.param("posthash")) +
     "', '" +
     escapeQuotations(req.param("text")) +
-    "', GETUTCDATE())";
+    "', GETUTCDATE(), '" +
+    escapeQuotations(req.param("byadmin")) +
+    "');";
   executeQuery(res, query);
 });
 
@@ -299,14 +301,11 @@ app.post("/backend/stopmoderating", function(req, res) {
 //POST API
 app.post("/backend/schedulepost", function(req, res) {
   var query =
-    "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = '" +
-    escapeQuotations(postid) +
-    "';\n" +
-    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageid = '" +
-    escapeQuotations(pageId) +
+    "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
+    escapeQuotations(req.param("postid")) +
     "';";
   queryGet(response => postToFacebook(res, response), query);
-  res.end('{"success" : "Scheduled Successfully", "status" : 200}');
+  res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
 
 //POST API
