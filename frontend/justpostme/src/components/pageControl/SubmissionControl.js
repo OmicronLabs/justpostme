@@ -12,12 +12,15 @@ type Props = {
   error: boolean,
   submission: any,
   fetchCurrentSubmission: Function,
+  postToFbInstant: Function,
   removeSubmission: Function,
   deletePendingSubmission: Function,
   match: any,
   history: any,
   removeLoading: boolean,
-  removeError: boolean
+  removeError: boolean,
+  postingToFb: boolean,
+  errorToFb: boolean
 };
 
 const Title = styled.p`
@@ -216,7 +219,7 @@ class SubmissionControl extends React.Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { loading, removeLoading, history } = this.props;
+    const { loading, removeLoading, history, postingToFb } = this.props;
     const newLoading = nextProps.loading;
     const newSubmission = nextProps.submission;
 
@@ -233,7 +236,15 @@ class SubmissionControl extends React.Component<Props> {
 
     // Deleting the submission
     if (removeLoading && !newRemoveLoading && !newRemoveError) {
-      //history.goBack();
+      history.goBack();
+    }
+
+    const newPostingToFb = nextProps.postingToFb;
+    const newErrorToFb = nextProps.errorToFb;
+
+    // Posting submission to fb
+    if (postingToFb && !newPostingToFb && !newErrorToFb) {
+      history.goBack();
     }
   }
 
@@ -244,7 +255,9 @@ class SubmissionControl extends React.Component<Props> {
       error,
       removeSubmission,
       history,
-      deletePendingSubmission
+      deletePendingSubmission,
+      match,
+      postToFbInstant
     } = this.props;
 
     return (
@@ -351,7 +364,11 @@ class SubmissionControl extends React.Component<Props> {
             : null}
           <PageFooter>
             <ButtonRow>
-              <Button onClick={() => {}}>
+              <Button
+                onClick={() => {
+                  postToFbInstant(match.params.id, submission.databaseId);
+                }}
+              >
                 <ButtonText>Publish now</ButtonText>
               </Button>
               <Button onClick={() => {}}>
@@ -360,7 +377,7 @@ class SubmissionControl extends React.Component<Props> {
               <Button
                 alert
                 onClick={() => {
-                  removeSubmission(submission.databasId);
+                  removeSubmission(submission.databaseId);
                 }}
               >
                 <ButtonText>Delete</ButtonText>
