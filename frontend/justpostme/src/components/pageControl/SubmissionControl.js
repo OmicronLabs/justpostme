@@ -380,10 +380,7 @@ class SubmissionControl extends React.Component<Props> {
                 <Button
                   warning
                   onClick={() => {
-                    addModerationSubmission(
-                      match.params.id,
-                      submission.databaseId
-                    );
+                    addModerationSubmission(submission.databaseId);
                     this.setState({ moderation: true });
                   }}
                 >
@@ -431,6 +428,7 @@ class SubmissionControl extends React.Component<Props> {
                 <ButtonRow>
                   <Button
                     onClick={() => {
+                      alert(this.state.currentMessage);
                       postComment(
                         match.params.submissionid,
                         this.state.currentMessage,
