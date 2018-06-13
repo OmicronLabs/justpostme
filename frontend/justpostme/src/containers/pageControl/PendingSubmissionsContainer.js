@@ -9,7 +9,9 @@ const mapStateToProps = state => ({
   userID: state.userMeta.id,
   accessToken: state.userMeta.token,
   postingToFb: state.postSubmission.postingLoading,
-  errorToFb: state.postSubmission.postingError
+  errorToFb: state.postSubmission.postingError,
+  removeSubmissionLoading: state.removeSubmission.loading,
+  removeSubmissionError: state.removeSubmission.error
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

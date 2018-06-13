@@ -6,6 +6,7 @@ import "font-awesome/css/font-awesome.min.css";
 
 import { serverDomain } from "../../const/serverURL";
 import { postToFbInstant } from "../../actions/postSubmission";
+import { removeSubmission } from "../../actions/removeSubmission";
 
 const Wrapper = styled.div`
   height: 50px;
@@ -33,9 +34,12 @@ type Props = {
   pageId: string,
   postToFbInstant: Function,
   deletePendingSubmission: Function,
+  removeSubmission: Function,
+  schedulePostToFb: Function,
   displayId: string,
   match: any,
-  isPending: boolean
+  isPending: boolean,
+  history: any
 };
 
 const SubmissionId = styled.p`
@@ -188,7 +192,9 @@ const SubmissionCard = (props: Props) => {
     deletePendingSubmission,
     displayId,
     history,
-    isPending
+    isPending,
+    removeSubmission,
+    schedulePostToFb
   } = props;
 
   const isGreen = displayId % 2 === 1;
@@ -214,12 +220,14 @@ const SubmissionCard = (props: Props) => {
           />
           <ScheduleComponent
             schedule={() => {
+              schedulePostToFb(submission.databaseId, pageId);
               deletePendingSubmission(submission.databaseId);
             }}
           />
 
           <DeleteComponent
             delete={() => {
+              removeSubmission(submission.databaseId);
               deletePendingSubmission(submission.databaseId);
             }}
           />

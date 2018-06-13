@@ -4,14 +4,11 @@ import React from "react";
 import { Box, BoxWrapper } from "../common/Box";
 import styled from "styled-components";
 import "font-awesome/css/font-awesome.min.css";
-
-type Props = {
-  loading: boolean,
-  error: boolean,
-  submission: any,
-  fetchCurrentSubmission: Function,
-  match: any
-};
+import { removeSubmission } from "../../actions/removeSubmission";
+import { deletePendingSubmission } from "../../actions/pendingSubmissions";
+import { schedulePostToFb } from "../../actions/scheduleSubmission";
+import addToModeration from "../../reducers/addToModeration";
+import { postComment, postCommentError } from "../../actions/postComment";
 
 const Title = styled.p`
   font-size: 18px;
@@ -191,8 +188,36 @@ export const SenderBox = props => (
   </Sender>
 );
 
+type Props = {
+  loading: boolean,
+  error: boolean,
+  submission: any,
+  fetchCurrentSubmission: Function,
+  postToFbInstant: Function,
+  removeSubmission: Function,
+  deletePendingSubmission: Function,
+  schedulePostToFb: Function,
+  match: any,
+  history: any,
+  removeLoading: boolean,
+  removeError: boolean,
+  postingToFb: boolean,
+  errorToFb: boolean,
+  schedulingToFb: boolean,
+  errorSchedulingToFb: boolean,
+  addToModerationLoading: boolean,
+  addToModerationError: boolean,
+  addModerationSubmission: Function,
+  editSubmissionLoading: boolean,
+  editSubmissionError: boolean,
+  editSubmission: Function,
+  postComment: Function,
+  postCommentLoading: boolean,
+  postCommentError: boolean
+};
+
 class SubmissionControl extends React.Component<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       submissionText: "",
@@ -209,20 +234,89 @@ class SubmissionControl extends React.Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { loading } = this.props;
-    const newLoading = nextProps.loading;
+    const {
+      loading,
+      removeLoading,
+      history,
+      postingToFb,
+      schedulingToFb,
+      addToModerationLoading,
+      editSubmissionLoading,
+      postCommentLoading
+    } = this.props;
+
     const newSubmission = nextProps.submission;
 
-    if (loading && !newLoading) {
+    // Fetching submission
+    if (loading && !nextProps.loading) {
       this.setState({
         submissionText: newSubmission.postText,
         tempSubmissionText: newSubmission.postText
       });
     }
+
+    // Deleting the submission
+    if (removeLoading && !nextProps.removeLoading && !nextProps.removeError) {
+      history.goBack();
+    }
+
+    // Posting submission to fb
+    if (postingToFb && !nextProps.postingToFb && !nextProps.errorToFb) {
+      history.goBack();
+    }
+
+    //scheduling the submission to fb
+    if (
+      schedulingToFb &&
+      !nextProps.schedulingToFb &&
+      !nextProps.errorSchedulingToFb
+    ) {
+      history.goBack();
+    }
+
+    //adding submission to moderation
+    if (
+      addToModerationLoading &&
+      !nextProps.addToModerationLoading &&
+      !nextProps.addToModerationError
+    ) {
+      // show popup
+    }
+
+    // save edited submission
+    if (
+      editSubmissionLoading &&
+      !nextProps.editSubmissionLoading &&
+      !nextProps.editSubmissionError
+    ) {
+      //show popup
+    }
+
+    // post comment
+    if (
+      postCommentLoading &&
+      !nextProps.postCommentLoading &&
+      !nextProps.postCommentError
+    ) {
+      //popup
+    }
   }
 
   _renderSubmissionControl() {
-    const { submission, loading, error } = this.props;
+    const {
+      submission,
+      loading,
+      error,
+      removeSubmission,
+      history,
+      deletePendingSubmission,
+      match,
+      postToFbInstant,
+      schedulePostToFb,
+      addModerationSubmission,
+      editSubmission,
+      postComment
+    } = this.props;
 
     return (
       <Box
@@ -280,7 +374,13 @@ class SubmissionControl extends React.Component<Props> {
               {!this.state.moderation ? (
                 <Button
                   warning
-                  onClick={() => this.setState({ moderation: true })}
+                  onClick={() => {
+                    addModerationSubmission(
+                      match.params.id,
+                      submission.databaseId
+                    );
+                    this.setState({ moderation: true });
+                  }}
                 >
                   <ButtonText>Request modification</ButtonText>
                 </Button>
@@ -289,12 +389,16 @@ class SubmissionControl extends React.Component<Props> {
           ) : (
             <ButtonRow>
               <Button
-                onClick={() =>
+                onClick={() => {
+                  editSubmission(
+                    match.params.submissionid,
+                    this.state.tempSubmissionText
+                  );
                   this.setState(state => ({
                     editing: false,
                     submissionText: state.tempSubmissionText
-                  }))
-                }
+                  }));
+                }}
               >
                 <ButtonText>Save</ButtonText>
               </Button>
@@ -320,7 +424,15 @@ class SubmissionControl extends React.Component<Props> {
                   }
                 />,
                 <ButtonRow>
-                  <Button onClick={() => {}}>
+                  <Button
+                    onClick={() => {
+                      postComment(
+                        match.params.submissionid,
+                        this.state.currentMessage,
+                        true
+                      );
+                    }}
+                  >
                     <ButtonText>Send</ButtonText>
                   </Button>
                 </ButtonRow>
@@ -328,13 +440,26 @@ class SubmissionControl extends React.Component<Props> {
             : null}
           <PageFooter>
             <ButtonRow>
-              <Button onClick={() => {}}>
+              <Button
+                onClick={() => {
+                  postToFbInstant(match.params.id, submission.databaseId);
+                }}
+              >
                 <ButtonText>Publish now</ButtonText>
               </Button>
-              <Button onClick={() => {}}>
+              <Button
+                onClick={() => {
+                  schedulePostToFb(match.params.id, submission.databaseId);
+                }}
+              >
                 <ButtonText>Schedule</ButtonText>
               </Button>
-              <Button alert onClick={() => {}}>
+              <Button
+                alert
+                onClick={() => {
+                  removeSubmission(submission.databaseId);
+                }}
+              >
                 <ButtonText>Delete</ButtonText>
               </Button>
             </ButtonRow>

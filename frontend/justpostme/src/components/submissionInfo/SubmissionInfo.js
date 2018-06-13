@@ -142,7 +142,16 @@ type Props = {
   loading: boolean,
   error: boolean,
   submission: any,
-  fetchCurrentSubmission: Function
+  fetchCurrentSubmission: Function,
+  editSubmissionLoading: boolean,
+  editSubmissionError: boolean,
+  postCommentLoading: boolean,
+  postCommentError: boolean,
+  removeLoading: boolean,
+  removeError: boolean,
+  editSubmission: Function,
+  postComment: Function,
+  removeSubmission: Function
 };
 
 class SubmissionForm extends React.Component<Props> {
@@ -156,7 +165,12 @@ class SubmissionForm extends React.Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { loading } = this.props;
+    const {
+      loading,
+      editSubmissionLoading,
+      removeLoading,
+      postCommentLoading
+    } = this.props;
     const newLoading = nextProps.loading;
     const newSubmission = nextProps.submission;
 
@@ -166,6 +180,29 @@ class SubmissionForm extends React.Component<Props> {
         tempSubmissionText: newSubmission.postText
       });
     }
+
+    //edit submission
+    if (
+      editSubmissionLoading &&
+      !nextProps.editSubmissionLoading &&
+      nextProps.editSubmissionError
+    ) {
+      //popup
+    }
+
+    //remove submission
+    if (removeLoading && !nextProps.removeLoading && !nextProps.removeError) {
+      //popup
+    }
+
+    //post comment
+    if (
+      editSubmissionLoading &&
+      !nextProps.editSubmissionLoading &&
+      !nextProps.editSubmissionError
+    ) {
+      // popup
+    }
   }
 
   componentDidMount() {
@@ -174,21 +211,27 @@ class SubmissionForm extends React.Component<Props> {
   }
 
   _renderButtons() {
+    const { editSubmission, match, removeSubmission, submission } = this.props;
+
     return !this.state.editing ? (
-      <ButtonRow>
+      <ButtonRow style={{ justifyContent: "space-between" }}>
         <Button onClick={() => this.setState({ editing: true })}>
           <ButtonText>Edit</ButtonText>
+        </Button>
+        <Button warning onClick={() => removeSubmission(submission.databaseId)}>
+          <ButtonText>Remove</ButtonText>
         </Button>
       </ButtonRow>
     ) : (
       <ButtonRow>
         <Button
-          onClick={() =>
+          onClick={() => {
+            editSubmission(match.params.id, this.state.tempSubmissionText);
             this.setState(state => ({
               editing: false,
               submissionText: state.tempSubmissionText
-            }))
-          }
+            }));
+          }}
         >
           <ButtonText>Save</ButtonText>
         </Button>
@@ -260,8 +303,8 @@ class SubmissionForm extends React.Component<Props> {
           <p> {submission.pending ? "PENDING" : "ACCEPTED"} </p>
         </ButtonRow>
         <SubTitle>
-          Your submission (you can edit it while it is pending or under
-          moderation)
+          Your submission (you can edit or remove it while it is pending or
+          under moderation)
         </SubTitle>
         {submission.pending
           ? this._renderEditSubmission()
