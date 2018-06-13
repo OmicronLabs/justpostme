@@ -7,6 +7,7 @@ import "font-awesome/css/font-awesome.min.css";
 import { serverDomain } from "../../const/serverURL";
 import { postToFbInstant } from "../../actions/postSubmission";
 import { removeSubmission } from "../../actions/removeSubmission";
+import { snackbarNotify } from "../../actions/snackbar";
 
 const Wrapper = styled.div`
   height: 50px;
@@ -214,6 +215,7 @@ const SubmissionCard = (props: Props) => {
         <SubmissionControls>
           <PublishNowComponent
             publishNow={() => {
+              snackbarNotify("The post has been published on Facebook");
               postToFbInstant(submission.databaseId, pageId);
               deletePendingSubmission(submission.databaseId);
             }}

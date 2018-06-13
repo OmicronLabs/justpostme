@@ -21,6 +21,15 @@ type Props = {
   error: boolean
 };
 
+const ErrContainer = styled.div`
+  width: 100%;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+`;
+
 type EmptyProps = {
   head: string,
   text: string,
@@ -30,20 +39,20 @@ type EmptyProps = {
 export const ErrorDisplay = (props: EmptyProps) => {
   if (props.createCard) {
     return (
-      <ErrorWrapper>
+      <ErrContainer>
         <ErrorHeader className="emptyHeader">{props.head}</ErrorHeader>
         <ErrorText className="emptyText">{props.text}</ErrorText>
-      </ErrorWrapper>
+      </ErrContainer>
     );
   } else {
     return (
-      <ErrorWrapper>
+      <ErrContainer>
         <ErrorHeader className="emptyHeader">{props.head}</ErrorHeader>
         <ErrorText className="emptyText">{props.text}</ErrorText>
         <Link to="/pages/add">
           <LargeThemedButton>Add a managed page</LargeThemedButton>
         </Link>
-      </ErrorWrapper>
+      </ErrContainer>
     );
   }
 };

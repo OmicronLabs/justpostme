@@ -15,7 +15,7 @@ class Routes extends React.Component {
 
     return (
       <div>
-        <Snackbar showSnackbar>{snackbarMessage}</Snackbar>
+        <Snackbar showSnackbar={showSnackbar}>{snackbarMessage}</Snackbar>
         <Switch>
           <Route path="/login" component={WelcomePage} />
           <Route path="/about" component={AboutPage} />

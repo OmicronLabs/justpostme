@@ -28,8 +28,6 @@ export function fetchScheduledSubmissions(pageid: string) {
   return dispatch => {
     dispatch(fetchScheduledBegin());
 
-    //TODO: what
-
     return fetch(`${serverDomain}/backend/getscheduled?pageid=${pageid}`)
       .then(handleErrors)
       .then(res => res.json())

@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 export const Snackbar = styled.div`
-  visibility: ${props => (props.showSnacbar ? "visible" : "hidden")};
+  opacity: ${props => (props.showSnackbar ? "1" : "0")};
+  visibility: ${props => (props.showSnackbar ? "visible" : "hidden")};
   min-width: 250px;
   margin-left: -125px;
   background-color: gray;
@@ -11,9 +12,9 @@ export const Snackbar = styled.div`
   text-align: center;
   border-radius: 3px;
   padding: 16px;
-  position: fixed;
+  position: absolute;
   z-index: 1;
   left: 50%;
   bottom: 30px;
-  transition: 0.5s;
+  transition: 0.2s;
 `;
