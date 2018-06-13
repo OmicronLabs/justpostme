@@ -299,14 +299,11 @@ app.post("/backend/stopmoderating", function(req, res) {
 //POST API
 app.post("/backend/schedulepost", function(req, res) {
   var query =
-    "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = '" +
-    escapeQuotations(postid) +
-    "';\n" +
-    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageid = '" +
-    escapeQuotations(pageId) +
+    "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
+    escapeQuotations(req.param("postid")) +
     "';";
   queryGet(response => postToFacebook(res, response), query);
-  res.end('{"success" : "Scheduled Successfully", "status" : 200}');
+  res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
 
 //POST API
