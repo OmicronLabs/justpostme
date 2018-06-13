@@ -7,7 +7,7 @@ var https = require("https");
 var fs = require("fs");
 var request = require("request");
 var crypto = require("crypto");
-
+const execSync = require('child_process').execSync;
 require("dotenv").load();
 
 var privateKey = fs.readFileSync("privkey.pem", "utf8");
@@ -352,6 +352,12 @@ var incrementPosts = function(res, pageId) {
 
   queryGet(response => console.log(response), query);
 };
+
+function sendEmail(address, text) {
+  execSync('ssh mhutti1@mhutti1.eu "echo \'' + text + '\' | mail -s \'Post Update\' -r noreply@justpostme.tech ' + address + '"');
+}
+
+//sendEmail("ijh16@ic.ac.uk", "this is a testpost");
 
 function submitForReview(text, hash) {
   request.post({
