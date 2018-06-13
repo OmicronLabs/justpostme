@@ -9,28 +9,6 @@ import { deletePendingSubmission } from "../../actions/pendingSubmissions";
 import { schedulePostToFb } from "../../actions/scheduleSubmission";
 import addToModeration from "../../reducers/addToModeration";
 
-type Props = {
-  loading: boolean,
-  error: boolean,
-  submission: any,
-  fetchCurrentSubmission: Function,
-  postToFbInstant: Function,
-  removeSubmission: Function,
-  deletePendingSubmission: Function,
-  schedulePostToFb: Function,
-  match: any,
-  history: any,
-  removeLoading: boolean,
-  removeError: boolean,
-  postingToFb: boolean,
-  errorToFb: boolean,
-  schedulingToFb: boolean,
-  errorSchedulingToFb: boolean,
-  addToModerationLoading: boolean,
-  addToModerationError: boolean,
-  addModerationSubmission: Function
-};
-
 const Title = styled.p`
   font-size: 18px;
   font-weight: 800;
@@ -209,6 +187,31 @@ export const SenderBox = props => (
   </Sender>
 );
 
+type Props = {
+  loading: boolean,
+  error: boolean,
+  submission: any,
+  fetchCurrentSubmission: Function,
+  postToFbInstant: Function,
+  removeSubmission: Function,
+  deletePendingSubmission: Function,
+  schedulePostToFb: Function,
+  match: any,
+  history: any,
+  removeLoading: boolean,
+  removeError: boolean,
+  postingToFb: boolean,
+  errorToFb: boolean,
+  schedulingToFb: boolean,
+  errorSchedulingToFb: boolean,
+  addToModerationLoading: boolean,
+  addToModerationError: boolean,
+  addModerationSubmission: Function,
+  editSubmissionLoading: boolean,
+  editSubmissionError: boolean,
+  editSubmission: Function
+};
+
 class SubmissionControl extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
@@ -233,7 +236,8 @@ class SubmissionControl extends React.Component<Props> {
       history,
       postingToFb,
       schedulingToFb,
-      addToModerationLoading
+      addToModerationLoading,
+      editSubmissionLoading
     } = this.props;
     const newLoading = nextProps.loading;
     const newSubmission = nextProps.submission;
@@ -281,6 +285,18 @@ class SubmissionControl extends React.Component<Props> {
     ) {
       // show popup
     }
+
+    const newEditSubmissionLoading = nextProps.editSubmissionLoading;
+    const newEditSubmissionError = nextProps.editSubmissionError;
+
+    // save edited submission
+    if (
+      editSubmissionLoading &&
+      !newEditSubmissionLoading &&
+      !newEditSubmissionError
+    ) {
+      //show popup
+    }
   }
 
   _renderSubmissionControl() {
@@ -294,7 +310,8 @@ class SubmissionControl extends React.Component<Props> {
       match,
       postToFbInstant,
       schedulePostToFb,
-      addModerationSubmission
+      addModerationSubmission,
+      editSubmission
     } = this.props;
 
     return (
@@ -368,12 +385,16 @@ class SubmissionControl extends React.Component<Props> {
           ) : (
             <ButtonRow>
               <Button
-                onClick={() =>
+                onClick={() => {
+                  editSubmission(
+                    match.params.submissionid,
+                    this.state.tempSubmissionText
+                  );
                   this.setState(state => ({
                     editing: false,
                     submissionText: state.tempSubmissionText
-                  }))
-                }
+                  }));
+                }}
               >
                 <ButtonText>Save</ButtonText>
               </Button>

@@ -14,6 +14,7 @@ import currentPage from "./reducers/currentPage";
 import managedPages from "./reducers/managedPages";
 import unmanagedPages from "./reducers/unmanagedPages";
 import addManagedPage from "./reducers/addManagedPage";
+import editSubmission from "./reducers/editSubmission";
 import postSubmission from "./reducers/postSubmission";
 import addToModeration from "./reducers/addToModeration";
 import removeSubmission from "./reducers/removeSubmission";
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   managedPages,
   unmanagedPages,
   addManagedPage,
+  editSubmission,
   postSubmission,
   addToModeration,
   removeSubmission,
