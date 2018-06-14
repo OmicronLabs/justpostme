@@ -174,7 +174,7 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
 //GET API
 app.get("/backend/getstats", function(req, res) {
   var query =
-    "SELECT COUNT(DISTINCT Pg.pageID), MAX(Ps.ID) FROM dbo.pages Pg LEFT OUTER JOIN dbo.posts Ps ON Ps.pageId = Pg.pageId;";
+    "SELECT COUNT(DISTINCT Pg.pageID) AS numberOfPages, MAX(Ps.ID) AS numberOfPosts FROM dbo.pages Pg LEFT OUTER JOIN dbo.posts Ps ON Ps.pageId = Pg.pageId;";
   executeQuery(res, query);
 });
 
@@ -305,7 +305,9 @@ app.post("/backend/setmoderating", function(req, res) {
 //POST API
 app.post("/backend/setemail", function(req, res) {
   var query =
-    "UPDATE [posts] SET email = '" + escapeQuotations(req.param("email")) + "' WHERE ID = '" +
+    "UPDATE [posts] SET email = '" +
+    escapeQuotations(req.param("email")) +
+    "' WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
   executeQuery(res, query);
@@ -325,9 +327,16 @@ app.post("/backend/schedulepost", function(req, res) {
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
-  var email = "SELECT email from [posts] WHERE ID = '" + escapeQuotations(req.param("postid")) + "';";
+  var email =
+    "SELECT email from [posts] WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
   console.log("Sending email: " + email);
-  queryGet(response => sendEmail(response.recordset[0].email, "Your post has been scheduled"), email);
+  queryGet(
+    response =>
+      sendEmail(response.recordset[0].email, "Your post has been scheduled"),
+    email
+  );
   queryGet(response => scheduleToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
@@ -338,9 +347,16 @@ app.post("/backend/postit", function(req, res) {
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
-  var email = "SELECT email from [posts] WHERE ID = '" + escapeQuotations(req.param("postid")) + "';";
+  var email =
+    "SELECT email from [posts] WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
   console.log("Sending email: " + email);
-  queryGet(response => sendEmail(response.recordset[0].email, "Your post has been scheduled"), email);
+  queryGet(
+    response =>
+      sendEmail(response.recordset[0].email, "Your post has been scheduled"),
+    email
+  );
   queryGet(response => postToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
