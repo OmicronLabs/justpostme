@@ -191,7 +191,7 @@ app.get("/backend/managedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
     escapeQuotations(req.param("id")) +
-    "' AND managed=1";
+    "' AND managed=1;";
   executeQuery(res, query);
 });
 
@@ -200,7 +200,7 @@ app.get("/backend/unmanagedpages", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE userid = '" +
     escapeQuotations(req.param("id")) +
-    "' AND managed=0";
+    "' AND managed=0;";
   executeQuery(res, query);
 });
 
@@ -209,10 +209,9 @@ app.get("/backend/postcomments", function(req, res) {
   var query =
     "SELECT * from [comments] WHERE postHash = '" +
     escapeQuotations(req.param("posthash")) +
-    "'";
+    "';";
   executeQuery(res, query);
 });
-
 
 //GET API
 app.get("/backend/page", function(req, res) {
@@ -226,9 +225,13 @@ app.get("/backend/page", function(req, res) {
 //POST API
 app.post("/backend/postcomment", function(req, res) {
   var query =
-    "INSERT INTO [comments] (postHash, text, timeCommented) VALUES('" +
+    "INSERT INTO [comments] (postHash, text, timeCommented, byAdmin) VALUES('" +
     escapeQuotations(req.param("posthash")) +
-    "', '" + escapeQuotations(req.param("text")) + "', GETUTCDATE())";
+    "', '" +
+    escapeQuotations(req.param("text")) +
+    "', GETUTCDATE(), '" +
+    escapeQuotations(req.param("byadmin")) +
+    "');";
   executeQuery(res, query);
 });
 
@@ -280,10 +283,29 @@ app.get("/backend/getmoderating", function(req, res) {
 //POST API
 app.post("/backend/setmoderating", function(req, res) {
   var query =
-    "UPDATE [posts] SET underModeration = 1 WHERE pageId = '" +
-    escapeQuotations(req.param("pageid")) +
+    "UPDATE [posts] SET underModeration = 1 WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
     "';";
   executeQuery(res, query);
+});
+
+//POST API
+app.post("/backend/stopmoderating", function(req, res) {
+  var query =
+    "UPDATE [posts] SET underModeration = 0 WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
+  executeQuery(res, query);
+});
+
+//POST API
+app.post("/backend/schedulepost", function(req, res) {
+  var query =
+    "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
+  queryGet(response => postToFacebook(res, response), query);
+  res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
 
 //POST API
@@ -293,7 +315,7 @@ app.post("/backend/postit", function(req, res) {
     escapeQuotations(req.param("postid")) +
     "';";
   queryGet(response => postToFacebook(res, response), query);
-  res.end('{"success" : "Updated Successfully", "status" : 200}');
+  res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
 
 var postToFacebook = function(res, response) {
@@ -389,12 +411,8 @@ app.post("/backend/updatepost", function(req, res) {
     "'";
 
   queryGet(response => console.log(response), query);
-  res.end(
-    '{"success" : "Updated Successfully", "status" : 200}'
-  );
+  res.end('{"success" : "Updated Successfully", "status" : 200}');
 });
-
-
 
 //POST API
 app.post("/backend/createpost", function(req, res) {
