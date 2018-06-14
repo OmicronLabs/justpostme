@@ -221,6 +221,15 @@ app.get("/backend/getcomments", function(req, res) {
 });
 
 //GET API
+app.get("/backend/getsettings", function(req, res) {
+  var query =
+    "SELECT preText, postText, queueTime, countFrom from [pages] WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "';";
+  executeQuery(res, query);
+});
+
+//GET API
 app.get("/backend/page", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE pageId = '" +
@@ -285,6 +294,24 @@ app.get("/backend/getpending", function(req, res) {
 });
 
 //GET API
+app.get("/backend/getnumberscheduled", function(req, res) {
+  var query =
+    "SELECT COUNT(ID) from dbo.posts WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "' AND timeposted > DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE());";
+  executeQuery(res, query);
+});
+
+//GET API
+app.get("/backend/getscheduled", function(req, res) {
+  var query =
+    "SELECT * from dbo.posts WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "' AND timeposted > DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE());";
+  executeQuery(res, query);
+});
+
+//GET API
 app.get("/backend/getmoderating", function(req, res) {
   var query =
     "SELECT * from [posts] WHERE pageId = '" +
@@ -340,13 +367,17 @@ app.post("/backend/schedulepost", function(req, res) {
     escapeQuotations(req.param("postid")) +
     "';";
   var email =
-    "SELECT email from [posts] WHERE ID = '" +
+    "SELECT * from [posts] WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
   console.log("Sending email: " + email);
   queryGet(
     response =>
-      sendEmail(response.recordset[0].email, "Your post has been scheduled"),
+      sendEmail(
+        response.recordset[0].email,
+        "Your post has been scheduled, you can track it at https://justpostme.tech/submission/" +
+          response.recordset[0].posthash
+      ),
     email
   );
   queryGet(response => scheduleToFacebook(res, response), query);
@@ -360,13 +391,17 @@ app.post("/backend/postit", function(req, res) {
     escapeQuotations(req.param("postid")) +
     "';";
   var email =
-    "SELECT email from [posts] WHERE ID = '" +
+    "SELECT * from [posts] WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
   console.log("Sending email: " + email);
   queryGet(
     response =>
-      sendEmail(response.recordset[0].email, "Your post has been scheduled"),
+      sendEmail(
+        response.recordset[0].email,
+        "Your post has been scheduled, you can track it at https://justpostme.tech/submission/" +
+          response.recordset[0].posthash
+      ),
     email
   );
   queryGet(response => postToFacebook(res, response), query);
@@ -552,6 +587,21 @@ function submitForReview(text, hash) {
   });
 }
 
+function highlight(response, terms) {
+  var text = response.recordset[0].postText;
+  for (var i = 0; i < terms.length; i++) {
+    if (terms[i].Text != undefined) {
+      text = text.slice(0, terms[i].Index + i * 7) + "|i|" + terms[i].Text + "|/i|" + text.slice(terms[i].Index + terms[i].Text.length + i * 7); 
+    } else { 
+      text = text.slice(0, terms[i].Index + i * 7) + "|p|" + terms[i].Term + "|/p|" + text.slice(terms[i].Index + terms[i].Term.length + i * 7);
+    }
+  }
+  var update = "UPDATE [posts] SET postText = '" + text + "' WHERE jobID = '" +
+      response.recordset[0].jobID + "';";
+  console.log(text);
+  queryGet(response => console.log(response), update);
+}
+
 app.post("/backend/newreview", function(req, res) {
   console.log(req.body);
   var sentiment = req.body.Metadata["sentiment.score"];
@@ -560,6 +610,19 @@ app.post("/backend/newreview", function(req, res) {
   var pii = +(req.body.Metadata["text.haspii"] == "True");
   var review = +(req.body.Metadata["text.reviewrecommended"] == "True");
   var jobid = req.body.JobId;
+  if (req.body.Metadata["text.matchterms"] == undefined) {
+    req.body.Metadata["text.matchterms"] = '[]';
+  }
+  if (req.body.Metadata["text.detectedphonenumber"] == undefined) {
+    req.body.Metadata["text.detectedphonenumber"] = '[]';
+  }
+  if (req.body.Metadata["text.detectedemail"] == undefined) {
+    req.body.Metadata["text.detectedemail"] = '[]';
+  }
+  var termTerm = JSON.parse(req.body.Metadata["text.matchterms"]).concat(JSON.parse(req.body.Metadata["text.detectedphonenumber"])).concat(JSON.parse(req.body.Metadata["text.detectedemail"]));
+  var getquery = "SELECT * from [posts] WHERE jobID = '" + jobid + "';";
+  queryGet(response => highlight(response, termTerm), getquery);
+
   var query =
     "UPDATE [posts] SET sentiment = " +
     sentiment +
@@ -641,37 +704,63 @@ app.post("/backend/removefrommanaged", function(req, res) {
   executeQuery(res, query);
 });
 
-app.post("/backend/changeform", function(req, res) {
-  console.log(req.body.form + req.body.content + req.body.pageid);
+app.post("/backend/settings", function(req, res) {
+  console.log(
+    "form: " +
+      req.body.form +
+      ", submission: " +
+      req.body.submission +
+      ", pageid: " +
+      req.body.pageid +
+      ", queue: " +
+      req.body.queueTime +
+      ", count from: " +
+      req.body.countFrom
+  );
 
-  var query;
+  var query = "";
 
-  if (!req.body.submission) {
-    console.log("AHAHAHAHAHAHAHA");
+  if (req.body.submission) {
+    console.log("Submission text change to: " + req.body.submission);
     query =
-      "UPDATE [pages] SET formText = '" +
-      escapeQuotations(req.body.form) +
-      "' WHERE pageId = '" +
-      escapeQuotations(req.body.pageid) +
-      "';";
-  } else if (!req.body.form) {
-    console.log("AHAHAHAHAHAHAHA2");
-    query =
-      "UPDATE [pages] SET submissionText = '" +
+      query +
+      "UPDATE [pages] SET postText = '" +
       escapeQuotations(req.body.submission) +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
-      "';";
-  } else {
-    query =
-      "UPDATE [pages] SET formText = '" +
-      escapeQuotations(req.body.form) +
-      "', submissionText = '" +
-      escapeQuotations(req.body.submission) +
-      "' WHERE pageId = '" +
-      escapeQuotations(req.body.pageid) +
-      "';";
+      "';\n";
   }
+  if (req.body.form) {
+    console.log("Form text change to: " + req.body.form);
+    query =
+      query +
+      "UPDATE [pages] SET preText = '" +
+      escapeQuotations(req.body.form) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';\n";
+  }
+  if (req.body.queueTime) {
+    console.log("Queue time change to: " + req.body.queueTime);
+    query =
+      query +
+      "UPDATE [pages] SET queueTime = '" +
+      escapeQuotations(req.body.queueTime) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';\n";
+  }
+  if (req.body.countFrom) {
+    console.log("Count from change to: " + req.body.countFrom);
+    query =
+      query +
+      "UPDATE [pages] SET countFrom = '" +
+      escapeQuotations(req.body.countFrom) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';\n";
+  }
+  console.log("Changing settings, query: " + query);
   executeQuery(res, query);
 });
 
