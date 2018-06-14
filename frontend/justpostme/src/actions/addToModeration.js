@@ -19,9 +19,9 @@ export const addModerationSubmissionError = (error: string) => ({
   type: ADD_MODERATION_ERROR
 });
 
-export function addModerationSubmission(postid: string) {
+export function addModerationSubmission(postid: string, pageid: string) {
   return (dispatch: Function) => {
-    const url = `${serverDomain}/backend/setmoderating?postid=${postid}`;
+    const url = `${serverDomain}/backend/setmoderating?postid=${postid}&pageid=${pageid}`;
     dispatch(addModerationSubmissionBegin());
     return fetch(url, {
       method: "POST",

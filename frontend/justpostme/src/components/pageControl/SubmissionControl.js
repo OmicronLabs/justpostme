@@ -6,6 +6,7 @@ import styled from "styled-components";
 import "font-awesome/css/font-awesome.min.css";
 import { RoundButton } from "../common/Buttons";
 import Comments from "../common/Comments";
+import SubmissionDisplay from "./SubmissionsDisplay";
 
 const CommentsContainer = styled.div`
   display: flex;
@@ -71,6 +72,7 @@ const InputField = styled.textarea`
 const DisplaySubmission = styled.div`
   box-shadow: inset 0 0 10px whitesmoke;
   border: 1px solid lightgray;
+  display: flex;
   border-radius: 6px;
   min-height: 80px;
   width: 100%;
@@ -204,7 +206,7 @@ const Message = styled.textarea`
 
 const SubmissionText = styled.p`
   font-size: 16px;
-  margin: 7px;
+  margin: 2px 2px;
   padding: 0;
   white-space: pre-wrap;
 `;
@@ -254,7 +256,8 @@ type Props = {
   commentsLoading: boolean,
   commentsError: boolean,
   fetchComments: Function,
-  comments: any
+  comments: any,
+  addComment: Function
 };
 
 class SubmissionControl extends React.Component<Props> {
@@ -363,8 +366,10 @@ class SubmissionControl extends React.Component<Props> {
       editSubmission,
       postComment,
       comments,
-      commentsLoading
+      commentsLoading,
+      addComment
     } = this.props;
+
     return (
       <Box
         style={{
@@ -391,8 +396,10 @@ class SubmissionControl extends React.Component<Props> {
                 <div>
                   <p>Post has been flagged for following reasons</p>
                   <ul>
-                    {submission.profanity ? <li>Profanity</li> : null}
-                    {submission.pii ? <li>Personal information</li> : null}
+                    {submission.profanity ? <li>Profanity (red)</li> : null}
+                    {submission.pii ? (
+                      <li>Personal information (orange)</li>
+                    ) : null}
                   </ul>
                 </div>
               ) : null}
@@ -401,7 +408,28 @@ class SubmissionControl extends React.Component<Props> {
           <SubTitle>Submission:</SubTitle>
           {!this.state.editing ? (
             <DisplaySubmission>
-              <SubmissionText>{this.state.submissionText}</SubmissionText>
+              {submission.rawText.map(elem => {
+                if (elem.profanity) {
+                  return (
+                    <SubmissionText
+                      style={{ color: "red", fontWeight: "bold" }}
+                    >
+                      {elem.word}
+                    </SubmissionText>
+                  );
+                } else if (elem.information) {
+                  return (
+                    <SubmissionText
+                      style={{ color: "orange", fontWeight: "bold" }}
+                    >
+                      {elem.word}
+                    </SubmissionText>
+                  );
+                } else {
+                  return <SubmissionText>{elem}</SubmissionText>;
+                }
+              })}
+              {/* <SubmissionText>{this.state.submissionText}</SubmissionText> */}
             </DisplaySubmission>
           ) : (
             <InputField
@@ -421,7 +449,10 @@ class SubmissionControl extends React.Component<Props> {
                 <Button
                   warning
                   onClick={() => {
-                    addModerationSubmission(submission.databaseId);
+                    addModerationSubmission(
+                      submission.databaseId,
+                      submission.pageId
+                    );
                     this.setState({ moderation: true });
                   }}
                 >
@@ -467,13 +498,18 @@ class SubmissionControl extends React.Component<Props> {
                     loading={commentsLoading}
                   />
                   <SenderBox
-                    postComment={() =>
+                    postComment={() => {
+                      addComment({
+                        text: this.state.currentMessage,
+                        byAdmin: true
+                      });
                       postComment(
                         match.params.submissionid,
                         this.state.currentMessage,
                         "true"
-                      )
-                    }
+                      );
+                      this.setState({ currentMessage: "" });
+                    }}
                     currentMessage={this.state.currentMessage}
                     onChange={event =>
                       this.setState({ currentMessage: event.target.value })

@@ -9,6 +9,7 @@ import { postComment } from "../../actions/postComment";
 import { removeSubmission } from "../../actions/removeSubmission";
 import { fetchComments } from "../../actions/fetchComments";
 import { snackbarNotify } from "../../actions/snackbar";
+import { addComment } from "../../actions/fetchComments";
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
@@ -34,7 +35,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(postComment(postHash, text, admin)),
   removeSubmission: id => dispatch(removeSubmission(id)),
   fetchComments: postHash => dispatch(fetchComments(postHash)),
-  snackbarNotify: message => dispatch(snackbarNotify(message))
+  snackbarNotify: message => dispatch(snackbarNotify(message)),
+  addComment: comment => dispatch(addComment(comment))
 });
 
 export default withRouter(

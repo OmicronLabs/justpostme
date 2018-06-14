@@ -30,7 +30,8 @@ export function fetchCurrentSubmission(submissionHash: string) {
         const submission = records.map(record => ({
           pending: record.pending,
           pii: record.pii,
-          postText: record.postText,
+          rawText: processText(record.postText),
+          postText: cleanupText(record.postText),
           profanity: record.profanity,
           review: record.review,
           sentiment: record.sentiment,
@@ -45,6 +46,26 @@ export function fetchCurrentSubmission(submissionHash: string) {
       .catch(error => dispatch(fetchSubmissionError(error)));
   };
 }
+
+export const processText = (text: string) => {
+  return text.split(" ").map(word => {
+    if (word.startsWith("|p|") && word.endsWith("|/p|")) {
+      return { word: cleanupText(word), profanity: true };
+    } else if (word.startsWith("|i|") && word.endsWith("|/i|")) {
+      return { word: cleanupText(word), information: true };
+    } else {
+      return word;
+    }
+  });
+};
+
+export const cleanupText = (text: string) => {
+  return text
+    .replace(/\|p\|/g, ``)
+    .replace(/\|\/p\|/g, ``)
+    .replace(/\|i\|/g, ``)
+    .replace(/\|\/i\|/g, ``);
+};
 
 function handleErrors(response) {
   if (!response.ok) {

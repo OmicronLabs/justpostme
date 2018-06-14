@@ -1,4 +1,5 @@
 import { serverDomain } from "../const/serverURL";
+import { cleanupText, processText } from "./currentSubmission";
 
 export const FETCH_SCHEDULED_BEGIN = "FETCH_SCHEDULED_BEGIN";
 export const FETCH_SCHEDULED_SUCCESS = "FETCH_SCHEDULED_SUCCESS";
@@ -34,7 +35,8 @@ export function fetchScheduledSubmissions(pageid: string) {
       .then(json => {
         const records = json.recordset;
         const submissions = records.map(record => ({
-          postText: record.postText,
+          rawText: processText(record.postText),
+          postText: cleanupText(record.postText),
           databaseId: record.ID,
           pending: record.pending,
           pii: record.pii,
