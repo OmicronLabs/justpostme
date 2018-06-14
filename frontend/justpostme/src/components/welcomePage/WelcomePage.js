@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { Link, withRouter } from "react-router-dom";
-
+import CountUp from "react-countup";
 import { LargeThemedButton, TopMenuButton } from "../common/Buttons";
 import { Box, BoxWrapper } from "../common/Box";
 import { SimpleFooter, GitHubFooter } from "../common/Footer";
@@ -31,7 +31,11 @@ import {
   LogoWhite,
   BackgroundShape,
   WelcomePageBox,
-  About
+  About,
+  MetaCountupBox,
+  PageMetaBox,
+  PageMetaWrapper,
+  PageMetaText
 } from "./WelcomePage.style";
 
 const aboutText =
@@ -88,6 +92,43 @@ class Welcome extends React.Component<Props> {
     }
   }
 
+  _renderPageMeta() {
+    return (
+      <PageMetaWrapper>
+        <PageMetaBox>
+          <PageMetaText>So far we processed</PageMetaText>
+          <MetaCountupBox>
+            <CountUp
+              style={{ color: "rgb(76, 175, 80)", fontWeight: "bold" }}
+              start={0}
+              end={1347}
+              duration={3.5}
+              useEasing={true}
+              useGrouping={true}
+              separator=" "
+            />
+          </MetaCountupBox>
+          <PageMetaText> submissions </PageMetaText>
+        </PageMetaBox>
+        <PageMetaBox>
+          <PageMetaText>Already </PageMetaText>
+          <MetaCountupBox>
+            <CountUp
+              style={{ color: "rgb(76, 175, 80)", fontWeight: "bold" }}
+              start={0}
+              end={43}
+              duration={3.5}
+              useEasing={true}
+              useGrouping={true}
+              separator=" "
+            />
+          </MetaCountupBox>
+          <PageMetaText> Facebook pages are using our site </PageMetaText>
+        </PageMetaBox>
+      </PageMetaWrapper>
+    );
+  }
+
   render() {
     const { addUser, logIn, posting, error } = this.props;
 
@@ -108,35 +149,33 @@ class Welcome extends React.Component<Props> {
         <BackgroundShape src={background} className="" />
         <FrontDoorBackgroundBottom />
         <BoxWrapper>
-          <WelcomePageBox>
-            <About>
-              {!posting && !error ? (
-                aboutText
-              ) : posting && !error ? (
-                loadingText
-              ) : (
-                <ErrorComponent />
-              )}
-            </About>
+          <WelcomePageBox style={{ display: "flex", minHeight: "300px" }}>
             {!posting && !error ? (
               posting ? (
                 <Spinner />
               ) : (
-                <FacebookLogin
-                  appId="2207425962822702"
-                  // autoLoad={true}
-                  size={"small"}
-                  fields="first_name,email,picture"
-                  scope="manage_pages, email, publish_pages"
-                  render={renderProps => (
-                    <LargeThemedButton onClick={renderProps.onClick}>
-                      Get started with Facebook
-                    </LargeThemedButton>
-                  )}
-                  callback={response =>
-                    responseFacebook(response, addUser, logIn)
-                  }
-                />
+                [
+                  <About style={{ marginBottom: "0" }}>{aboutText}</About>,
+                  this._renderPageMeta(),
+                  <FacebookLogin
+                    appId="2207425962822702"
+                    // autoLoad={true}
+                    size={"small"}
+                    fields="first_name,email,picture"
+                    scope="manage_pages, email, publish_pages"
+                    render={renderProps => (
+                      <LargeThemedButton
+                        style={{ margin: "40px 0px" }}
+                        onClick={renderProps.onClick}
+                      >
+                        Get started with Facebook
+                      </LargeThemedButton>
+                    )}
+                    callback={response =>
+                      responseFacebook(response, addUser, logIn)
+                    }
+                  />
+                ]
               )
             ) : null}
           </WelcomePageBox>

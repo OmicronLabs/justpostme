@@ -55,9 +55,11 @@ export const FrontDoorBackgroundBottom = styled.div`
 `;
 
 export const About = styled.p`
-  font-size: large;
+  font-size: 20px;
   padding: 2em;
   text-align: center;
+  color: gray;
+  font-weight: bold;
 `;
 
 export const BackgroundShape = styled.img`
@@ -78,3 +80,28 @@ export const WelcomePageBox = Box.extend`
   align-items: center;
   flex-direction: column;
 `;
+
+export const PageMetaBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+`;
+
+export const MetaCountupBox = styled.div`
+  box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
+  border-radius: 6px;
+  background: white;
+  display: flex;
+  padding: 5px;
+`;
+
+export const PageMetaText = styled.p`
+  margin: 0 10px;
+  font-size: 18px;
+  font-weight: 500;
+  color: gray;
+`;
+
+export const PageMetaWrapper = styled.div``;

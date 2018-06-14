@@ -8,7 +8,7 @@ import { removeSubmission } from "../../actions/removeSubmission";
 import { deletePendingSubmission } from "../../actions/pendingSubmissions";
 import { schedulePostToFb } from "../../actions/scheduleSubmission";
 import addToModeration from "../../reducers/addToModeration";
-import { postComment, postCommentError } from "../../actions/postComment";
+import { postComment } from "../../actions/postComment";
 import fetchComments from "../../reducers/fetchComments";
 
 const Title = styled.p`
@@ -337,7 +337,7 @@ class SubmissionControl extends React.Component<Props> {
           paddingBottom: "10px"
         }}
       >
-        <ContentWrapper>
+        <ContentWrapper style={{ transition: "height 0.5s ease" }}>
           <PageInfoWrapper>
             <Title>Submission control panel</Title>
           </PageInfoWrapper>
@@ -428,11 +428,10 @@ class SubmissionControl extends React.Component<Props> {
                 <ButtonRow>
                   <Button
                     onClick={() => {
-                      alert(this.state.currentMessage);
                       postComment(
                         match.params.submissionid,
                         this.state.currentMessage,
-                        true
+                        "true"
                       );
                     }}
                   >

@@ -24,11 +24,11 @@ export const addComment = comment => ({
   payload: { comment }
 });
 
-export function fetchComments(pageid: string) {
+export function fetchComments(posthash: string) {
   return dispatch => {
     dispatch(fetchCommentsBegin());
 
-    return fetch(`${serverDomain}/backend/getpending?pageid=${pageid}`)
+    return fetch(`${serverDomain}/backend/postcomments?posthash=${posthash}`)
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
