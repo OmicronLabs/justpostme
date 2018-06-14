@@ -88,6 +88,11 @@ const Timestamp = styled.div`
   align-items: center;
 `;
 
+const TimestampScheduled = Timestamp.extend`
+  width: 33%;
+  max-width: 33%;
+`;
+
 const SubmissionWarnings = styled.div`
   width: 10%;
   max-width: 10%;
@@ -200,7 +205,7 @@ const SubmissionCard = (props: Props) => {
 
   const isGreen = displayId % 2 === 1;
 
-  return (
+  return isPending ? (
     <Wrapper isGreen={isGreen}>
       <SubmissionId>{displayId}</SubmissionId>
       <SubmissionBody
@@ -211,30 +216,48 @@ const SubmissionCard = (props: Props) => {
         {submission.postText}
       </SubmissionBody>
       <Timestamp> {submission.timePosted} </Timestamp>
-      {props.isPending ? (
-        <SubmissionControls>
-          <PublishNowComponent
-            publishNow={() => {
-              snackbarNotify("The post has been published on Facebook");
-              postToFbInstant(submission.databaseId, pageId);
-              deletePendingSubmission(submission.databaseId);
-            }}
-          />
-          <ScheduleComponent
-            schedule={() => {
-              schedulePostToFb(submission.databaseId, pageId);
-              deletePendingSubmission(submission.databaseId);
-            }}
-          />
+      <SubmissionControls>
+        <PublishNowComponent
+          publishNow={() => {
+            snackbarNotify("The post has been published on Facebook");
+            postToFbInstant(submission.databaseId, pageId);
+            deletePendingSubmission(submission.databaseId);
+          }}
+        />
+        <ScheduleComponent
+          schedule={() => {
+            schedulePostToFb(submission.databaseId, pageId);
+            deletePendingSubmission(submission.databaseId);
+          }}
+        />
 
-          <DeleteComponent
-            delete={() => {
-              removeSubmission(submission.databaseId);
-              deletePendingSubmission(submission.databaseId);
-            }}
-          />
-        </SubmissionControls>
-      ) : null}
+        <DeleteComponent
+          delete={() => {
+            removeSubmission(submission.databaseId);
+            deletePendingSubmission(submission.databaseId);
+          }}
+        />
+      </SubmissionControls>
+
+      <SubmissionWarnings>
+        {displayWarning(submission) ? (
+          <WarningComponent />
+        ) : (
+          <NoWarningComponent />
+        )}
+      </SubmissionWarnings>
+    </Wrapper>
+  ) : (
+    <Wrapper isGreen={isGreen}>
+      <SubmissionId>{displayId}</SubmissionId>
+      <SubmissionBody
+        onClick={() => {
+          history.push(`/page/${pageId}/submission/${submission.postHash}`);
+        }}
+      >
+        {submission.postText}
+      </SubmissionBody>
+      <TimestampScheduled> {submission.timePosted} </TimestampScheduled>
 
       <SubmissionWarnings>
         {displayWarning(submission) ? (
