@@ -13,9 +13,11 @@ export const SubmissionsDisplayWrapper = styled.div`
   align-content: center;
   justify-content: flex-start;
   display: flex;
+  overflow: scroll;
 `;
 
 export const SubmissionsWrapper = styled.div`
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -147,46 +149,40 @@ class SubmissionDisplay extends React.Component<Props> {
     } = this.props;
 
     return submissions ? (
-      <div>
-        <SubmissionsDisplayWrapper>
-          {submissions.length < 1 ? null : isPending ? (
-            <SubmissionsLegend>
-              <PostId>Index</PostId>
-              <PostContent>Body</PostContent>
-              <TimeStamp>Submitted</TimeStamp>
-              <PostControls>Post Controls</PostControls>
-              <PostWarning>Warnings</PostWarning>
-            </SubmissionsLegend>
-          ) : (
-            <SubmissionsLegend>
-              <PostId>Index</PostId>
-              <PostContent>Body</PostContent>
-              <TimeStampScheduled>Scheduled for</TimeStampScheduled>
-              <PostWarning>Warnings</PostWarning>
-            </SubmissionsLegend>
-          )}
+      <SubmissionsDisplayWrapper>
+        {submissions.length < 1 ? null : isPending ? (
+          <SubmissionsLegend>
+            <PostId>Index</PostId>
+            <PostContent>Body</PostContent>
+            <TimeStamp>Submitted</TimeStamp>
+            <PostControls>Post Controls</PostControls>
+            <PostWarning>Warnings</PostWarning>
+          </SubmissionsLegend>
+        ) : (
+          <SubmissionsLegend>
+            <PostId>Index</PostId>
+            <PostContent>Body</PostContent>
+            <TimeStampScheduled>Scheduled for</TimeStampScheduled>
+            <PostWarning>Warnings</PostWarning>
+          </SubmissionsLegend>
+        )}
 
-          <SubmissionsWrapper>
-            {submissions.length < 1 ? (
-              <ErrorDisplay
-                head={errorHead}
-                text={errorText}
-                createCard={true}
+        <SubmissionsWrapper>
+          {submissions.length < 1 ? (
+            <ErrorDisplay head={errorHead} text={errorText} createCard={true} />
+          ) : (
+            submissions.map((post, index) => (
+              <SubmissionCardContainer
+                pageId={pageId}
+                submission={post}
+                token={token}
+                displayId={index + 1}
+                isPending={isPending}
               />
-            ) : (
-              submissions.map((post, index) => (
-                <SubmissionCardContainer
-                  pageId={pageId}
-                  submission={post}
-                  token={token}
-                  displayId={index + 1}
-                  isPending={isPending}
-                />
-              ))
-            )}
-          </SubmissionsWrapper>
-        </SubmissionsDisplayWrapper>
-      </div>
+            ))
+          )}
+        </SubmissionsWrapper>
+      </SubmissionsDisplayWrapper>
     ) : null;
   }
 }

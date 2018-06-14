@@ -271,7 +271,7 @@ class SubmissionForm extends React.Component<Props> {
               position: "relative",
               display: "flex",
               justifyContent: "flex-start",
-              minHeight: "950px"
+              minHeight: "450px"
             }}
           >
             {currentPageLoading
