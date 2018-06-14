@@ -296,8 +296,15 @@ app.get("/backend/getmoderating", function(req, res) {
 //POST API
 app.post("/backend/setmoderating", function(req, res) {
   var query =
-    "UPDATE [posts] SET underModeration = 1 WHERE ID = '" +
+    "UPDATE [posts] SET underModeration = 1, pending = 0 WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
+    "';\n" +
+    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    escapeQuotations(pageId) +
+    "' and underModeration = 1), pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    escapeQuotations(pageId) +
+    "' and pending = 1) WHERE pageid = '" +
+    escapeQuotations(pageId) +
     "';";
   executeQuery(res, query);
 });
@@ -307,8 +314,8 @@ app.post("/backend/setemail", function(req, res) {
   var query =
     "UPDATE [posts] SET email = '" +
     escapeQuotations(req.param("email")) +
-    "' WHERE ID = '" +
-    escapeQuotations(req.param("postid")) +
+    "' WHERE posthash = '" +
+    escapeQuotations(req.param("posthash")) +
     "';";
   executeQuery(res, query);
 });
@@ -318,6 +325,11 @@ app.post("/backend/stopmoderating", function(req, res) {
   var query =
     "UPDATE [posts] SET underModeration = 0 WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
+    "';\n" +
+    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    escapeQuotations(pageId) +
+    "' and underModeration = 1) WHERE pageid = '" +
+    escapeQuotations(pageId) +
     "';";
   executeQuery(res, query);
 });
@@ -414,14 +426,16 @@ var scheduleToFacebookQuery2 = function(
   if (nowTime > nextQueueTime) {
     //Post now
     var query =
-      "UPDATE [posts] SET pending = 0, timePosted = " +
+      "UPDATE [posts] SET pending = 0, underModeration = 0, timePosted = " +
       nowTime +
       " WHERE ID = '" +
       escapeQuotations(postId) +
       "';\n" +
       "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
       escapeQuotations(pageId) +
-      "' and pending = 1) WHERE pageid = '" +
+      "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+      escapeQuotations(pageId) +
+      "' and underModeration = 1) WHERE pageid = '" +
       escapeQuotations(pageId) +
       "';";
     queryGet(response => console.log(response), query);
@@ -438,14 +452,16 @@ var scheduleToFacebookQuery2 = function(
     console.log("Scheduling for time: " + nextQueueTime);
 
     var query =
-      "UPDATE [posts] SET pending = 0, timePosted = " +
+      "UPDATE [posts] SET pending = 0, underModeration = 0, timePosted = " +
       nextQueueTime +
       " WHERE ID = '" +
       escapeQuotations(postId) +
       "';\n" +
       "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
       escapeQuotations(pageId) +
-      "' and pending = 1) WHERE pageid = '" +
+      "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+      escapeQuotations(pageId) +
+      "' and underModeration = 1) WHERE pageid = '" +
       escapeQuotations(pageId) +
       "';";
     queryGet(response => console.log(response), query);
@@ -471,10 +487,14 @@ var postToFacebook = function(res, response) {
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
   var query =
-    "UPDATE [posts] SET pending = 0, timePosted = DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE()) WHERE ID = '" +
+    "UPDATE [posts] SET pending = 0, underModeration = 0, timePosted = DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE()) WHERE ID = '" +
     escapeQuotations(postId) +
     "';\n" +
-    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageid = '" +
+    "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    escapeQuotations(pageId) +
+    "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    escapeQuotations(pageId) +
+    "' and underModeration = 1) WHERE pageid = '" +
     escapeQuotations(pageId) +
     "';";
   queryGet(response => console.log(response), query);
