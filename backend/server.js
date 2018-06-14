@@ -221,6 +221,15 @@ app.get("/backend/getcomments", function(req, res) {
 });
 
 //GET API
+app.get("/backend/getsettings", function(req, res) {
+  var query =
+    "SELECT preText, postText, queueTime, countFrom from [pages] WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "';";
+  executeQuery(res, query);
+});
+
+//GET API
 app.get("/backend/page", function(req, res) {
   var query =
     "SELECT * from [pages] WHERE pageId = '" +
@@ -349,13 +358,17 @@ app.post("/backend/schedulepost", function(req, res) {
     escapeQuotations(req.param("postid")) +
     "';";
   var email =
-    "SELECT email from [posts] WHERE ID = '" +
+    "SELECT * from [posts] WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
   console.log("Sending email: " + email);
   queryGet(
     response =>
-      sendEmail(response.recordset[0].email, "Your post has been scheduled"),
+      sendEmail(
+        response.recordset[0].email,
+        "Your post has been scheduled, you can track it at https://justpostme.tech/submission/" +
+          response.recordset[0].posthash
+      ),
     email
   );
   queryGet(response => scheduleToFacebook(res, response), query);
@@ -369,13 +382,17 @@ app.post("/backend/postit", function(req, res) {
     escapeQuotations(req.param("postid")) +
     "';";
   var email =
-    "SELECT email from [posts] WHERE ID = '" +
+    "SELECT * from [posts] WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
   console.log("Sending email: " + email);
   queryGet(
     response =>
-      sendEmail(response.recordset[0].email, "Your post has been scheduled"),
+      sendEmail(
+        response.recordset[0].email,
+        "Your post has been scheduled, you can track it at https://justpostme.tech/submission/" +
+          response.recordset[0].posthash
+      ),
     email
   );
   queryGet(response => postToFacebook(res, response), query);
@@ -529,6 +546,7 @@ var incrementPosts = function(res, pageId) {
 };
 
 function sendEmail(address, text) {
+  console.log("Sending an email to " + address + " with text: " + text);
   // execSync(
   //   "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
   //     text +
@@ -670,7 +688,7 @@ app.post("/backend/settings", function(req, res) {
     console.log("Submission text change to: " + req.body.submission);
     query =
       query +
-      "UPDATE [pages] SET submissionText = '" +
+      "UPDATE [pages] SET postText = '" +
       escapeQuotations(req.body.submission) +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
@@ -680,7 +698,7 @@ app.post("/backend/settings", function(req, res) {
     console.log("Form text change to: " + req.body.form);
     query =
       query +
-      "UPDATE [pages] SET formText = '" +
+      "UPDATE [pages] SET preText = '" +
       escapeQuotations(req.body.form) +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
