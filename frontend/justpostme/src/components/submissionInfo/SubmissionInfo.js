@@ -29,6 +29,16 @@ const ContentWrapper = styled.div`
   width: 85%;
 `;
 
+const CommentsContainer = styled.div`
+  display: flex;
+  box-shadow: inset 0 0 10px whitesmoke;
+  border: 1px solid lightgray;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-bottom: 0px;
+  border-radius: 6px;
+`;
+
 const PageInfoWrapper = styled.div`
   width: 100%;
   border-bottom: 2px solid lightgray;
@@ -191,7 +201,8 @@ class SubmissionForm extends React.Component<Props> {
     this.state = {
       submissionText: "",
       editing: false,
-      tempSubmissionText: ""
+      tempSubmissionText: "",
+      currentMessage: ""
     };
   }
 
@@ -361,27 +372,27 @@ class SubmissionForm extends React.Component<Props> {
           : this._renderSubmission()}
         {submission.moderation
           ? [
-              <SubTitle>Chat with admin</SubTitle>,
-              <Comments comments={comments} loading={commentsLoading} />,
-              <SenderBox
-                currentMessage={this.state.currentMessage}
-                onChange={event =>
-                  this.setState({ currentMessage: event.target.value })
-                }
-              />,
-              <ButtonRow>
-                <Button
-                  onClick={() => {
+              <SubTitle>Moderation messages</SubTitle>,
+              <CommentsContainer>
+                <Comments
+                  comments={comments}
+                  admin={false}
+                  loading={commentsLoading}
+                />
+                <SenderBox
+                  postComment={() =>
                     postComment(
                       match.params.id,
                       this.state.currentMessage,
                       "false"
-                    );
-                  }}
-                >
-                  <ButtonText>Send</ButtonText>
-                </Button>
-              </ButtonRow>
+                    )
+                  }
+                  currentMessage={this.state.currentMessage}
+                  onChange={event =>
+                    this.setState({ currentMessage: event.target.value })
+                  }
+                />
+              </CommentsContainer>
             ]
           : null}
       </ContentWrapper>
