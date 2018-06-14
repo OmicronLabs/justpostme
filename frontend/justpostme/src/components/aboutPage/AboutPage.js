@@ -21,7 +21,9 @@ import {
   HeaderTopRight,
   LogoWhite,
   BackgroundShape,
-  About
+  About,
+  MetaCountupBox,
+  PageMetaBox
 } from "../welcomePage/WelcomePage.style";
 
 const AboutBox = Box.extend`

@@ -9,8 +9,7 @@ const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
   currentPageLoading: state.currentPage.loading,
   currentPage: state.currentPage.page,
-  currentSubmission: state.currentSubmission.submission,
-  pendingSubmissions: state.pendingSubmissions.submissions.length
+  currentSubmission: state.currentSubmission.submission
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

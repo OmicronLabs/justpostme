@@ -14,6 +14,7 @@ import submitForm from "./reducers/submitForm";
 import postComment from "./reducers/postComment";
 import currentPage from "./reducers/currentPage";
 import managedPages from "./reducers/managedPages";
+import fetchComments from "./reducers/fetchComments";
 import getUsageStats from "./reducers/getUsageStats";
 import unmanagedPages from "./reducers/unmanagedPages";
 import addManagedPage from "./reducers/addManagedPage";
@@ -44,6 +45,7 @@ const rootReducer = combineReducers({
   postComment,
   currentPage,
   managedPages,
+  fetchComments,
   getUsageStats,
   unmanagedPages,
   addManagedPage,

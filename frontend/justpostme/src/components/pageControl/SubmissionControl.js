@@ -4,14 +4,8 @@ import React from "react";
 import { Box, BoxWrapper } from "../common/Box";
 import styled from "styled-components";
 import "font-awesome/css/font-awesome.min.css";
-import { removeSubmission } from "../../actions/removeSubmission";
-import { deletePendingSubmission } from "../../actions/pendingSubmissions";
-import { schedulePostToFb } from "../../actions/scheduleSubmission";
-import addToModeration from "../../reducers/addToModeration";
-import { postComment, postCommentError } from "../../actions/postComment";
-import { snackbarNotify } from "../../actions/snackbar";
-import snackbar from "../../reducers/snackbar";
 import { RoundButton } from "../common/Buttons";
+import Comments from "../common/Comments";
 
 const Title = styled.p`
   font-size: 18px;
@@ -239,7 +233,10 @@ type Props = {
   postComment: Function,
   postCommentLoading: boolean,
   postCommentError: boolean,
-  snackbarNotify: Function
+  commentsLoading: boolean,
+  commentsError: boolean,
+  fetchComments: Function,
+  comments: any
 };
 
 class SubmissionControl extends React.Component<Props> {
@@ -255,8 +252,9 @@ class SubmissionControl extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const { fetchCurrentSubmission, match } = this.props;
+    const { fetchCurrentSubmission, fetchComments, match } = this.props;
     fetchCurrentSubmission(match.params.submissionid);
+    fetchComments(match.params.submissionid);
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -345,9 +343,10 @@ class SubmissionControl extends React.Component<Props> {
       schedulePostToFb,
       addModerationSubmission,
       editSubmission,
-      postComment
+      postComment,
+      comments,
+      commentsLoading
     } = this.props;
-
     return (
       <Box
         style={{
@@ -362,7 +361,7 @@ class SubmissionControl extends React.Component<Props> {
           paddingBottom: "10px"
         }}
       >
-        <ContentWrapper>
+        <ContentWrapper style={{ transition: "height 0.5s ease" }}>
           <PageInfoWrapper>
             <Title>Submission Control</Title>
           </PageInfoWrapper>
@@ -401,14 +400,11 @@ class SubmissionControl extends React.Component<Props> {
               <Button onClick={() => this.setState({ editing: true })}>
                 <ButtonText>Edit</ButtonText>
               </Button>
-              {!this.state.moderation ? (
+              {!submission.moderation && !this.state.moderation ? (
                 <Button
                   warning
                   onClick={() => {
-                    addModerationSubmission(
-                      match.params.id,
-                      submission.databaseId
-                    );
+                    addModerationSubmission(submission.databaseId);
                     this.setState({ moderation: true });
                   }}
                 >
@@ -444,8 +440,13 @@ class SubmissionControl extends React.Component<Props> {
               </Button>
             </ButtonRow>
           )}
-          {this.state.moderation
+          {submission.moderation || this.state.moderation
             ? [
+                <Comments
+                  comments={comments}
+                  admin
+                  loading={commentsLoading}
+                />,
                 <SubTitle>Send (optional) message to the submitter: </SubTitle>,
                 <SenderBox
                   currentMessage={this.state.currentMessage}
@@ -459,7 +460,7 @@ class SubmissionControl extends React.Component<Props> {
                       postComment(
                         match.params.submissionid,
                         this.state.currentMessage,
-                        true
+                        "true"
                       );
                     }}
                   >
@@ -472,14 +473,14 @@ class SubmissionControl extends React.Component<Props> {
             <ButtonRow>
               <Button
                 onClick={() => {
-                  postToFbInstant(match.params.id, submission.databaseId);
+                  postToFbInstant(submission.databaseId, submission.pageId);
                 }}
               >
                 <ButtonText>Publish now</ButtonText>
               </Button>
               <Button
                 onClick={() => {
-                  schedulePostToFb(match.params.id, submission.databaseId);
+                  schedulePostToFb(submission.databaseId, submission.pageId);
                 }}
               >
                 <ButtonText>Schedule</ButtonText>
