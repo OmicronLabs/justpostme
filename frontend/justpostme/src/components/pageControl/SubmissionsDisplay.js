@@ -7,17 +7,15 @@ import { removeSubmission } from "../../actions/removeSubmission";
 
 export const SubmissionsDisplayWrapper = styled.div`
   width: 1024px;
-  max-width: 100%;
+  max-width: 85%;
   margin-bottom: 70px;
   flex-direction: column;
   align-content: center;
   justify-content: flex-start;
   display: flex;
-  overflow: scroll;
 `;
 
 export const SubmissionsWrapper = styled.div`
-  display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
