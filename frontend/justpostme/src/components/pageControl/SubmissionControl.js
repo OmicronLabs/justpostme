@@ -53,10 +53,15 @@ const SubTitle = styled.p`
 const InputField = styled.textarea`
   width: 100%;
   padding: 5px;
+  outline: none;
   box-shadow: inset 0 0 10px whitesmoke;
   font-size: 16px;
   border: 1px solid lightgray;
   border-radius: 6px;
+  background: whitesmoke;
+  &:focus {
+    background: white;
+  }
 `;
 
 const DisplaySubmission = styled.div`
@@ -80,6 +85,8 @@ const ButtonText = styled.div`
 `;
 
 const Button = RoundButton.extend`
+  margin: 5px;
+  margin-top: 1em;
   border-radius: 6px;
   padding: 0px;
   color: ${props =>
@@ -145,17 +152,8 @@ const SubmissionWarning = () => (
   </ButtonRow>
 );
 
-const MessageBox = styled.div`
-  height: 80px;
-  box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
-  border-radius: 20px;
-  width: 80%;
-  padding: 0 10px;
-  margin-left: 20px;
-`;
-
 const Sender = styled.div`
-  height: 100px;
+  height: 80px;
   display: flex;
   justify-content: left;
   flex-direction: row;
@@ -164,39 +162,34 @@ const Sender = styled.div`
 `;
 
 const Avatar = styled.img`
-  height: 80px;
-  width: 80px;
+  height: 60px;
+  width: 60px;
 `;
 
 const AvatarContainer = styled.div`
-  height: 80px;
-  width: 80px;
-  border-radius: 50%;
+  height: 60px;
+  width: 60px;
+  border-radius: 6px;
   border: 1px solid rgb(76, 175, 80);
   overflow: hidden;
-`;
-
-const Msg = styled.textarea`
-  width: 80%;
-  box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
-  border-radius: 20px;
-  padding: 20px;
-  border: none;
-  outline: none;
-  margin-left: 10px;
-  &:focus {
-    box-shadow: 0px 0px 4px 3px rgb(76, 175, 80);
-  }
+  min-height: 60px;
+  min-width: 60px;
 `;
 
 const Message = styled.textarea`
+  height: 50px;
   margin-left: 20px;
-  width: 80%;
+  outline: none;
+  width: 100%;
   padding: 5px;
   box-shadow: inset 0 0 10px whitesmoke;
   font-size: 16px;
   border: 1px solid lightgray;
   border-radius: 6px;
+  background: whitesmoke;
+  &:focus {
+    background: white;
+  }
 `;
 
 const SubmissionText = styled.p`
@@ -213,7 +206,7 @@ export const SenderBox = props => (
     </AvatarContainer>
     <Message
       rows="4"
-      placeholder="Type your message the sumitter here ..."
+      placeholder="Your message to the submitter"
       value={props.currentMessage}
       onChange={props.onChange}
     />
