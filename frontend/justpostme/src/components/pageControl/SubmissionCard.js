@@ -177,17 +177,7 @@ function convert(unixtimestamp) {
   var minutes = "0" + date.getMinutes();
   var seconds = "0" + date.getSeconds();
   var convdataTime =
-    month +
-    "-" +
-    day +
-    "-" +
-    year +
-    " " +
-    hours +
-    ":" +
-    minutes.substr(-2) +
-    ":" +
-    seconds.substr(-2);
+    day + "-" + month + "-" + year + " " + hours + ":" + minutes.substr(-2);
   return convdataTime;
 }
 
