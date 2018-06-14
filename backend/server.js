@@ -474,7 +474,9 @@ var postToFacebook = function(res, response) {
     "UPDATE [posts] SET pending = 0, timePosted = DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE()) WHERE ID = '" +
     escapeQuotations(postId) +
     "';\n" +
-    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageid = '" +
+    "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    escapeQuotations(pageId) +
+    "' and pending = 1) WHERE pageid = '" +
     escapeQuotations(pageId) +
     "';";
   queryGet(response => console.log(response), query);
