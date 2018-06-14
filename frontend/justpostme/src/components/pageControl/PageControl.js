@@ -13,7 +13,7 @@ import "font-awesome/css/font-awesome.min.css";
 
 import PendingSubmissionsContainer from "../../containers/pageControl/PendingSubmissionsContainer";
 import ScheduledSubmissionsContainer from "../../containers/pageControl/ScheduledSubmissionsContainer";
-import PageSettings from "./PageSettings";
+import PageSettings from "../../containers/pageControl/PageSettingsContainer";
 import SubmissionControl from "../../containers/pageControl/SubmissionControlContainer";
 import { fetchCurrentPage } from "../../actions/currentPage";
 import ModerationSubmissionsContainer from "../../containers/pageControl/ModerationSubmissionsContainer";
