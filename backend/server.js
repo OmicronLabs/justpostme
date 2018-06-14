@@ -309,6 +309,8 @@ app.post("/backend/schedulepost", function(req, res) {
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
+  var email = "SELECT email from [posts] WHERE ID = '" + escapeQuotations(req.param("postid")) + "';";
+  queryGet(response => sendEmail(response, "Your post has been scheduled"), email);
   queryGet(response => scheduleToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
