@@ -7,7 +7,7 @@ var https = require("https");
 var fs = require("fs");
 var request = require("request");
 var crypto = require("crypto");
-const execSync = require('child_process').execSync;
+const execSync = require("child_process").execSync;
 require("dotenv").load();
 
 var privateKey = fs.readFileSync("privkey.pem", "utf8");
@@ -205,7 +205,7 @@ app.get("/backend/unmanagedpages", function(req, res) {
 });
 
 //GET API
-app.get("/backend/postcomments", function(req, res) {
+app.get("/backend/getcomments", function(req, res) {
   var query =
     "SELECT * from [comments] WHERE postHash = '" +
     escapeQuotations(req.param("posthash")) +
@@ -224,14 +224,20 @@ app.get("/backend/page", function(req, res) {
 
 //POST API
 app.post("/backend/postcomment", function(req, res) {
+  var byadmin = "0";
+
+  if (req.body.byadmin === "true") {
+    byadmin = "1";
+  }
+
   var query =
     "INSERT INTO [comments] (postHash, text, timeCommented, byAdmin) VALUES('" +
     escapeQuotations(req.body.posthash) +
     "', '" +
     escapeQuotations(req.body.text) +
-    "', GETUTCDATE(), '" +
-    escapeQuotations(req.body.byadmin) +
-    "');";
+    "', GETUTCDATE(), " +
+    byadmin +
+    ");";
   executeQuery(res, query);
 });
 
@@ -298,13 +304,12 @@ app.post("/backend/stopmoderating", function(req, res) {
   executeQuery(res, query);
 });
 
-//POST API
 app.post("/backend/schedulepost", function(req, res) {
   var query =
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
-  queryGet(response => postToFacebook(res, response), query);
+  queryGet(response => scheduleToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
 
@@ -317,6 +322,50 @@ app.post("/backend/postit", function(req, res) {
   queryGet(response => postToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
+
+var scheduleToFacebook = function(res, response) {
+  var pageId = response.recordset[0].pageId[0];
+  var postText = response.recordset[0].postText;
+  var postid = response.recordset[0].ID[1] + "";
+  var pageAccessToken = response.recordset[0].pageAccessToken;
+  var postTime = "GETUTCDATE()";
+
+  var query =
+    "SELECT MAX(timePosted) AS maxTime FROM dbo.posts WHERE pageId = '" +
+    pageId +
+    "';";
+  queryGet(
+    response =>
+      scheduleToFacebookQuery2(response.recordset[0].maxTime, postid, pageId),
+    query
+  );
+};
+
+var scheduleToFacebookQuery2 = function(maxTime, postid, pageId) {
+  console.log("MaxTime is: " + maxTime);
+  // var query2 =
+  //   "UPDATE [posts] SET pending = 0, timePosted = " +
+  //   postTime +
+  //   " WHERE ID = '" +
+  //   escapeQuotations(postid) +
+  //   "';\n" +
+  //   "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+  //   escapeQuotations(pageId) +
+  //   "' and pending = 1) WHERE pageid = '" +
+  //   escapeQuotations(pageId) +
+  //   "';";
+  // queryGet(response => console.log(response), query2);
+
+  // request.post(
+  //   `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
+  //   function(error, response, body) {
+  //     body = JSON.parse(body);
+  //     if (!error && response.statusCode == 200) {
+  //       //console.log(body.data);
+  //     }
+  //   }
+  // );
+};
 
 var postToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
@@ -354,7 +403,13 @@ var incrementPosts = function(res, pageId) {
 };
 
 function sendEmail(address, text) {
-  execSync('ssh mhutti1@mhutti1.eu "echo \'' + text + '\' | mail -s \'Post Update\' -r noreply@justpostme.tech ' + address + '"');
+  execSync(
+    "ssh mhutti1@mhutti1.eu \"echo '" +
+      text +
+      "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
+      address +
+      '"'
+  );
 }
 
 //sendEmail("ijh16@ic.ac.uk", "this is a testpost");
