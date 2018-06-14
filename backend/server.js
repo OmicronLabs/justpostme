@@ -589,6 +589,21 @@ function submitForReview(text, hash) {
   });
 }
 
+function highlight(response, terms) {
+  var text = response.recordset[0].postText;
+  for (var i = 0; i < terms.length; i++) {
+    if (terms[i].Text != undefined) {
+      text = text.slice(0, terms[i].Index + i * 7) + "|i|" + terms[i].Text + "|/i|" + text.slice(terms[i].Index + terms[i].Text.length + i * 7); 
+    } else { 
+      text = text.slice(0, terms[i].Index + i * 7) + "|p|" + terms[i].Term + "|/p|" + text.slice(terms[i].Index + terms[i].Term.length + i * 7);
+    }
+  }
+  var update = "UPDATE [posts] SET postText = '" + text + "' WHERE jobID = '" +
+      response.recordset[0].jobID + "';";
+  console.log(text);
+  queryGet(response => console.log(response), update);
+}
+
 app.post("/backend/newreview", function(req, res) {
   console.log(req.body);
   var sentiment = req.body.Metadata["sentiment.score"];
@@ -596,7 +611,20 @@ app.post("/backend/newreview", function(req, res) {
   var language = req.body.Metadata["text.language"];
   var pii = +(req.body.Metadata["text.haspii"] == "True");
   var review = +(req.body.Metadata["text.reviewrecommended"] == "True");
-  var jobid = req.body.JobId;
+  var jobid = req.body.JobId
+  if (req.body.Metadata["text.matchterms"] == undefined) {
+    req.body.Metadata["text.matchterms"] = '[]';
+  }
+  if (req.body.Metadata["text.detectedphonenumber"] == undefined) {
+    req.body.Metadata["text.detectedphonenumber"] = '[]';
+  }
+  if (req.body.Metadata["text.detectedemail"] == undefined) {
+    req.body.Metadata["text.detectedemail"] = '[]';
+  }
+  var termTerm = JSON.parse(req.body.Metadata["text.matchterms"]).concat(JSON.parse(req.body.Metadata["text.detectedphonenumber"])).concat(JSON.parse(req.body.Metadata["text.detectedemail"]));
+  var getquery = "SELECT * from [posts] WHERE jobID = '" + jobid + "';";
+  queryGet(response => highlight(response, termTerm), getquery);
+
   var query =
     "UPDATE [posts] SET sentiment = " +
     sentiment +
