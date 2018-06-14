@@ -4,8 +4,8 @@ import React from "react";
 import { Box, BoxWrapper } from "../common/Box";
 import styled from "styled-components";
 import "font-awesome/css/font-awesome.min.css";
+import { RoundButton } from "../common/Buttons";
 import Comments from "../common/Comments";
-
 
 const Title = styled.p`
   font-size: 18px;
