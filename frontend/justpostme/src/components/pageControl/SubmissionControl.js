@@ -11,6 +11,7 @@ import addToModeration from "../../reducers/addToModeration";
 import { postComment, postCommentError } from "../../actions/postComment";
 import { snackbarNotify } from "../../actions/snackbar";
 import snackbar from "../../reducers/snackbar";
+import { RoundButton } from "../common/Buttons";
 
 const Title = styled.p`
   font-size: 18px;
@@ -20,7 +21,7 @@ const Title = styled.p`
 
 const PageInfoWrapper = styled.div`
   width: 100%;
-  border-bottom: 2px solid rgb(76, 175, 80);
+  border-bottom: 2px solid lightgrey;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -30,7 +31,7 @@ const PageInfoWrapper = styled.div`
 
 const PageFooter = styled.div`
   width: 100%;
-  border-top: 2px solid rgb(76, 175, 80);
+  border-top: 2px solid lightgrey;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -51,10 +52,17 @@ const SubTitle = styled.p`
 
 const InputField = styled.textarea`
   width: 100%;
+  padding: 5px;
+  box-shadow: inset 0 0 10px whitesmoke;
+  font-size: 16px;
+  border: 1px solid lightgray;
+  border-radius: 6px;
 `;
 
 const DisplaySubmission = styled.div`
-  border: 1px solid grey;
+  box-shadow: inset 0 0 10px whitesmoke;
+  border: 1px solid lightgray;
+  border-radius: 6px;
   min-height: 150px;
   width: 100%;
   overflow: scroll;
@@ -71,17 +79,28 @@ const ButtonText = styled.div`
   margin: 5px 10px;
 `;
 
-const Button = styled.div`
-  background: ${props =>
-    props.alert ? "red" : props.warning ? "orange" : "rgb(76, 175, 80)"};
-  color: white;
-  select: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin: 10px 10px 10px 0;
+const Button = RoundButton.extend`
+  border-radius: 6px;
+  padding: 0px;
+  color: ${props =>
+    props.alert ? "red" : props.warning ? "orange" : "rgb(76,175, 80)"};
+  border: ${props =>
+    props.alert
+      ? "1px solid red"
+      : props.warning
+        ? "1px solid orange"
+        : "1px solid rgb(76,175, 80)"};
   &:hover {
-    background: ${props =>
+    box-shadow: inset 0 0 10px whitesmoke;
+    border: 0px;
+    color: ${props =>
       props.alert ? "darkred" : props.warning ? "darkorange" : "green"};
+    border: ${props =>
+      props.alert
+        ? "1px solid darkred"
+        : props.warning
+          ? "1px solid darkorange"
+          : "1px solid green"};
   }
 `;
 
@@ -136,12 +155,12 @@ const MessageBox = styled.div`
 `;
 
 const Sender = styled.div`
-  height: 80px;
+  height: 100px;
   display: flex;
   justify-content: left;
   flex-direction: row;
   align-items: center;
-  margin: 20px 0 40px;
+  margin: 20px 0 0px;
 `;
 
 const Avatar = styled.img`
@@ -157,7 +176,7 @@ const AvatarContainer = styled.div`
   overflow: hidden;
 `;
 
-const Message = styled.textarea`
+const Msg = styled.textarea`
   width: 80%;
   box-shadow: 0px 0px 4px 3px rgba(126, 149, 168, 0.5);
   border-radius: 20px;
@@ -170,7 +189,18 @@ const Message = styled.textarea`
   }
 `;
 
+const Message = styled.textarea`
+  margin-left: 20px;
+  width: 80%;
+  padding: 5px;
+  box-shadow: inset 0 0 10px whitesmoke;
+  font-size: 16px;
+  border: 1px solid lightgray;
+  border-radius: 6px;
+`;
+
 const SubmissionText = styled.p`
+  font-size: 16px;
   margin: 7px;
   padding: 0;
   white-space: pre-wrap;
@@ -341,7 +371,7 @@ class SubmissionControl extends React.Component<Props> {
       >
         <ContentWrapper>
           <PageInfoWrapper>
-            <Title>Submission control panel</Title>
+            <Title>Submission Control</Title>
           </PageInfoWrapper>
           {!submission.review ? (
             <SubmissionOk />
