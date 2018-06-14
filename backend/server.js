@@ -296,6 +296,15 @@ app.post("/backend/setmoderating", function(req, res) {
 });
 
 //POST API
+app.post("/backend/setemail", function(req, res) {
+  var query =
+    "UPDATE [posts] SET email = '" + escapeQuotations(req.param("email")) + "' WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
+  executeQuery(res, query);
+});
+
+//POST API
 app.post("/backend/stopmoderating", function(req, res) {
   var query =
     "UPDATE [posts] SET underModeration = 0 WHERE ID = '" +
