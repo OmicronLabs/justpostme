@@ -285,6 +285,15 @@ app.get("/backend/getpending", function(req, res) {
 });
 
 //GET API
+app.get("/backend/getnumberscheduled", function(req, res) {
+  var query =
+    "SELECT COUNT(ID) from dbo.posts WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "' AND timeposted > DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE());";
+  executeQuery(res, query);
+});
+
+//GET API
 app.get("/backend/getmoderating", function(req, res) {
   var query =
     "SELECT * from [posts] WHERE pageId = '" +
@@ -520,13 +529,13 @@ var incrementPosts = function(res, pageId) {
 };
 
 function sendEmail(address, text) {
-  execSync(
-    "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
-      text +
-      "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
-      address +
-      '"'
-  );
+   execSync(
+     "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
+       text +
+       "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
+       address +
+       '"'
+   );
 }
 
 //sendEmail("ijh16@ic.ac.uk", "this is a testpost");
@@ -641,37 +650,63 @@ app.post("/backend/removefrommanaged", function(req, res) {
   executeQuery(res, query);
 });
 
-app.post("/backend/changeform", function(req, res) {
-  console.log(req.body.form + req.body.content + req.body.pageid);
+app.post("/backend/settings", function(req, res) {
+  console.log(
+    "form: " +
+      req.body.form +
+      ", submission: " +
+      req.body.submission +
+      ", pageid: " +
+      req.body.pageid +
+      ", queue: " +
+      req.body.queueTime +
+      ", count from: " +
+      req.body.countFrom
+  );
 
-  var query;
+  var query = "";
 
-  if (!req.body.submission) {
-    console.log("AHAHAHAHAHAHAHA");
+  if (req.body.submission) {
+    console.log("Submission text change to: " + req.body.submission);
     query =
-      "UPDATE [pages] SET formText = '" +
-      escapeQuotations(req.body.form) +
-      "' WHERE pageId = '" +
-      escapeQuotations(req.body.pageid) +
-      "';";
-  } else if (!req.body.form) {
-    console.log("AHAHAHAHAHAHAHA2");
-    query =
+      query +
       "UPDATE [pages] SET submissionText = '" +
       escapeQuotations(req.body.submission) +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
-      "';";
-  } else {
+      "';\n";
+  }
+  if (req.body.form) {
+    console.log("Form text change to: " + req.body.form);
     query =
+      query +
       "UPDATE [pages] SET formText = '" +
       escapeQuotations(req.body.form) +
-      "', submissionText = '" +
-      escapeQuotations(req.body.submission) +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
-      "';";
+      "';\n";
   }
+  if (req.body.queueTime) {
+    console.log("Queue time change to: " + req.body.queueTime);
+    query =
+      query +
+      "UPDATE [pages] SET queueTime = '" +
+      escapeQuotations(req.body.queueTime) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';\n";
+  }
+  if (req.body.countFrom) {
+    console.log("Count from change to: " + req.body.countFrom);
+    query =
+      query +
+      "UPDATE [pages] SET countFrom = '" +
+      escapeQuotations(req.body.countFrom) +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';\n";
+  }
+  console.log("Changing settings, query: " + query);
   executeQuery(res, query);
 });
 
