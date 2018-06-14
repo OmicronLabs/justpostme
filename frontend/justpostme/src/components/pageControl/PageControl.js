@@ -94,7 +94,6 @@ type Props = {
   unmanagedPages: Array<any>,
   pageName: string,
   pageImageURL: string,
-  pendingPosts: number,
   scheduledPosts: number,
   currentPageLoading: boolean,
   currentPage: any,
@@ -126,17 +125,12 @@ class PageControl extends React.Component<Props> {
     const displaySubmission =
       this.props.location.pathname.indexOf("submission") !== -1;
 
-    const {
-      managedPages,
-      currentPage,
-      history,
-      pendingSubmissions
-    } = this.props;
+    const { managedPages, currentPage, history } = this.props;
 
     const tabBarNavRoutes = [
       {
         to: `${path}/pending`,
-        name: `Pending (${currentPage ? pendingSubmissions : 0}) `,
+        name: `Pending (${currentPage ? currentPage.pendingPosts : 0}) `,
         number: managedPages ? managedPages : 0
       },
       {
