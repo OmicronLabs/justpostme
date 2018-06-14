@@ -12,10 +12,6 @@ const SpinnerWrapper = PagesDisplayWrapper.extend`
   align-items: center;
 `;
 
-const Wrapper = styled.div`
-  max-width: 85%;
-`;
-
 type Props = {
   submissions: Array<any>,
   loading: boolean,
@@ -70,16 +66,14 @@ class PendingSubmissions extends React.Component<Props> {
         <Spinner />
       </SpinnerWrapper>
     ) : (
-      <Wrapper>
-        <SubmissionDisplay
-          submissions={submissions}
-          token={accessToken}
-          pageId={pageId}
-          errorHead="No pending posts"
-          errorText="Looks like you have no pending submission yet. Make sure your users can see the submission link!"
-          isPending
-        />
-      </Wrapper>
+      <SubmissionDisplay
+        submissions={submissions}
+        token={accessToken}
+        pageId={pageId}
+        errorHead="No pending posts"
+        errorText="Looks like you have no pending submission yet. Make sure your users can see the submission link!"
+        isPending
+      />
     );
   }
 }
