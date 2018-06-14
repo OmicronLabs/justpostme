@@ -311,7 +311,7 @@ app.post("/backend/schedulepost", function(req, res) {
     "';";
   var email = "SELECT email from [posts] WHERE ID = '" + escapeQuotations(req.param("postid")) + "';";
   console.log("Sending email: " + email);
-  queryGet(response => sendEmail(response, "Your post has been scheduled"), email);
+  queryGet(response => sendEmail(response.recordset[0].email, "Your post has been scheduled"), email);
   queryGet(response => scheduleToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
@@ -324,7 +324,7 @@ app.post("/backend/postit", function(req, res) {
     "';";
   var email = "SELECT email from [posts] WHERE ID = '" + escapeQuotations(req.param("postid")) + "';";
   console.log("Sending email: " + email);
-  queryGet(response => sendEmail(response, "Your post has been scheduled"), email);
+  queryGet(response => sendEmail(response.recordset[0].email, "Your post has been scheduled"), email);
   queryGet(response => postToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
@@ -410,7 +410,7 @@ var incrementPosts = function(res, pageId) {
 
 function sendEmail(address, text) {
   execSync(
-    "ssh mhutti1@mhutti1.eu \"echo '" +
+    "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
       text +
       "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
       address +
