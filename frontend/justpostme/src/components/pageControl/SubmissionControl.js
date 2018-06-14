@@ -441,12 +441,12 @@ class SubmissionControl extends React.Component<Props> {
           )}
           {submission.moderation || this.state.moderation
             ? [
+                <SubTitle>Chat with the submitter</SubTitle>,
                 <Comments
                   comments={comments}
                   admin
                   loading={commentsLoading}
                 />,
-                <SubTitle>Send (optional) message to the submitter: </SubTitle>,
                 <SenderBox
                   currentMessage={this.state.currentMessage}
                   onChange={event =>

@@ -219,7 +219,7 @@ class SubmissionForm extends React.Component<Props> {
       !nextProps.editSubmissionLoading &&
       nextProps.editSubmissionError
     ) {
-      //popup
+      snackbarNotify("Your changes have been saved");
     }
 
     //remove submission
@@ -328,7 +328,13 @@ class SubmissionForm extends React.Component<Props> {
   }
 
   _renderInfo() {
-    const { submission, comments, commentsLoading } = this.props;
+    const {
+      submission,
+      comments,
+      commentsLoading,
+      postComment,
+      match
+    } = this.props;
 
     return submission.profanity !== null ? (
       <ContentWrapper>
@@ -347,8 +353,8 @@ class SubmissionForm extends React.Component<Props> {
           </p>
         </ButtonRow>
         <SubTitle>
-          Your submission (you can edit or remove it while it is pending or
-          under moderation)
+          Your submission (you can edit or remove it while i's pending or under
+          moderation)
         </SubTitle>
         {submission.pending
           ? this._renderEditSubmission()
@@ -356,13 +362,26 @@ class SubmissionForm extends React.Component<Props> {
         {submission.moderation
           ? [
               <SubTitle>Chat with admin</SubTitle>,
-              <Comments comments={comments} admin loading={commentsLoading} />,
+              <Comments comments={comments} loading={commentsLoading} />,
               <SenderBox
                 currentMessage={this.state.currentMessage}
                 onChange={event =>
                   this.setState({ currentMessage: event.target.value })
                 }
-              />
+              />,
+              <ButtonRow>
+                <Button
+                  onClick={() => {
+                    postComment(
+                      match.params.id,
+                      this.state.currentMessage,
+                      "false"
+                    );
+                  }}
+                >
+                  <ButtonText>Send</ButtonText>
+                </Button>
+              </ButtonRow>
             ]
           : null}
       </ContentWrapper>
@@ -401,9 +420,7 @@ class SubmissionForm extends React.Component<Props> {
         </FrontDoorBackgroundTop>
         <BackgroundShape src={background} className="" />
         <FrontDoorBackgroundBottom />
-        <BoxWrapper
-          style={{ overflow: "scroll", justifyContent: "flex-start" }}
-        >
+        <BoxWrapper style={{ overflow: "scroll" }}>
           <WelcomePageBox
             style={{
               width: "940px",
@@ -411,9 +428,8 @@ class SubmissionForm extends React.Component<Props> {
               margin: "100px 0",
               padding: "0",
               display: "flex",
-              height: "100%",
-              minHeight: "350px",
-              paddingBottom: "20px"
+              height: "auto",
+              minHeight: "350px"
             }}
           >
             {loading
