@@ -28,8 +28,6 @@ export function fetchModerationSubmissions(pageid: string) {
   return dispatch => {
     dispatch(fetchModerationBegin());
 
-    //TODO: what
-
     return fetch(`${serverDomain}/backend/getmoderating?pageid=${pageid}`)
       .then(handleErrors)
       .then(res => res.json())

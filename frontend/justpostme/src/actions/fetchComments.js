@@ -33,7 +33,12 @@ export function fetchComments(posthash: string) {
       .then(res => res.json())
       .then(json => {
         const records = json.recordset;
-        const comments = records.map(record => ({}));
+        debugger;
+        const comments = records.map(record => ({
+          text: record.text,
+          byAdmin: record.byAdmin,
+          timeCommented: record.timeCommented
+        }));
         dispatch(fetchCommentsSuccess(comments));
         return comments;
       })

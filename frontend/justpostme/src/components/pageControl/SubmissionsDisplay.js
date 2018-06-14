@@ -7,7 +7,7 @@ import { removeSubmission } from "../../actions/removeSubmission";
 
 export const SubmissionsDisplayWrapper = styled.div`
   width: 1024px;
-  max-width: 85%;
+  max-width: 100%;
   margin-bottom: 70px;
   flex-direction: column;
   align-content: center;
@@ -82,49 +82,113 @@ type Props = {
   errorHead: string,
   errorText: string,
   isPending: boolean,
-  removeSubmission: Function
+  removeSubmission: Function,
+  removeLoading: boolean,
+  removeError: boolean,
+  postingToFb: boolean,
+  errorToFb: boolean,
+  schedulingToFb: boolean,
+  errorSchedulingToFb: boolean,
+  snackbarNotify: Function
 };
 
-const SubmissionDisplay = (props: Props) => {
-  return props.submissions ? (
-    <SubmissionsDisplayWrapper>
-      {props.submissions.length < 1 ? null : props.isPending ? (
-        <SubmissionsLegend>
-          <PostId>Index</PostId>
-          <PostContent>Body</PostContent>
-          <TimeStamp>Submitted</TimeStamp>
-          <PostControls>Post Controls</PostControls>
-          <PostWarning>Warnings</PostWarning>
-        </SubmissionsLegend>
-      ) : (
-        <SubmissionsLegend>
-          <PostId>Index</PostId>
-          <PostContent>Body</PostContent>
-          <TimeStampScheduled>Scheduled for</TimeStampScheduled>
-          <PostWarning>Warnings</PostWarning>
-        </SubmissionsLegend>
-      )}
+class SubmissionDisplay extends React.Component<Props> {
+  componentWillReceiveProps(nextProps: Props) {
+    const {
+      submissions,
+      token,
+      pageId,
+      errorHead,
+      errorText,
+      isPending,
+      removeSubmission,
+      removeLoading,
+      removeError,
+      postingToFb,
+      errorToFb,
+      schedulingToFb,
+      errorSchedulingToFb,
+      snackbarNotify
+    } = this.props;
 
-      <SubmissionsWrapper>
-        {props.submissions.length < 1 ? (
-          <ErrorDisplay
-            head={props.errorHead}
-            text={props.errorText}
-            createCard={true}
-          />
-        ) : (
-          props.submissions.map((post, index) => (
-            <SubmissionCardContainer
-              pageId={props.pageId}
-              submission={post}
-              token={props.token}
-              displayId={index + 1}
-            />
-          ))
-        )}
-      </SubmissionsWrapper>
-    </SubmissionsDisplayWrapper>
-  ) : null;
-};
+    if (
+      schedulingToFb &&
+      !nextProps.schedulingToFb &&
+      !nextProps.errorSchedulingToFb
+    ) {
+      snackbarNotify("The post has been scheduled");
+    }
+
+    if (postingToFb && !nextProps.errorToFb && !nextProps.postingToFb) {
+      snackbarNotify("Posted to Facebook");
+    }
+
+    if (removeLoading && !nextProps.removeLoading && !nextProps.removeError) {
+      snackbarNotify("The post has been removed");
+    }
+  }
+
+  render() {
+    const {
+      submissions,
+      token,
+      pageId,
+      errorHead,
+      errorText,
+      isPending,
+      removeSubmission,
+      removeLoading,
+      removeError,
+      postingToFb,
+      errorToFb,
+      schedulingToFb,
+      errorSchedulingToFb,
+      snackbarNotify
+    } = this.props;
+
+    return submissions ? (
+      <div>
+        <SubmissionsDisplayWrapper>
+          {submissions.length < 1 ? null : isPending ? (
+            <SubmissionsLegend>
+              <PostId>Index</PostId>
+              <PostContent>Body</PostContent>
+              <TimeStamp>Submitted</TimeStamp>
+              <PostControls>Post Controls</PostControls>
+              <PostWarning>Warnings</PostWarning>
+            </SubmissionsLegend>
+          ) : (
+            <SubmissionsLegend>
+              <PostId>Index</PostId>
+              <PostContent>Body</PostContent>
+              <TimeStampScheduled>Scheduled for</TimeStampScheduled>
+              <PostWarning>Warnings</PostWarning>
+            </SubmissionsLegend>
+          )}
+
+          <SubmissionsWrapper>
+            {submissions.length < 1 ? (
+              <ErrorDisplay
+                head={errorHead}
+                text={errorText}
+                createCard={true}
+              />
+            ) : (
+              submissions.map((post, index) => (
+                <SubmissionCardContainer
+                  pageId={pageId}
+                  submission={post}
+                  token={token}
+                  displayId={index + 1}
+                  isPending={isPending}
+                />
+              ))
+            )}
+          </SubmissionsWrapper>
+        </SubmissionsDisplayWrapper>
+      </div>
+    ) : null;
+  }
+}
 
 export default SubmissionDisplay;

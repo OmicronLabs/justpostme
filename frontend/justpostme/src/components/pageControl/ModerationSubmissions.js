@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import SubmissionDisplay from "./SubmissionsDisplay";
+import SubmissionDisplay from "../../containers/pageControl/SubmissionsDisplayContainer";
 import Spinner from "../loadingSpinner/LoadingSpinner";
 import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
@@ -53,7 +53,7 @@ class ModerationSubmissions extends React.Component<Props> {
         pageId={pageId}
         errorHead="No posts awaiting moderation"
         errorText="You have not asked your users to moderate any posts."
-        isPending={true}
+        isPending
       />
     );
   }

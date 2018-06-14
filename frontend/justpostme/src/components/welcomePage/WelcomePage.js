@@ -37,6 +37,7 @@ import {
   PageMetaWrapper,
   PageMetaText
 } from "./WelcomePage.style";
+import { Snackbar } from "../common/Snackbar";
 
 const aboutText =
   "Welcome to justpost.me, a simple way to manage user-submitted content for your anonymous Facebook pages.";

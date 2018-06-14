@@ -8,6 +8,7 @@ import { createLogger } from "redux-logger";
 import storage from "redux-persist/lib/storage";
 
 import user from "./reducers/user";
+import snackbar from "./reducers/snackbar";
 import userMeta from "./reducers/userMeta";
 import submitForm from "./reducers/submitForm";
 import postComment from "./reducers/postComment";
@@ -38,6 +39,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user,
   userMeta,
+  snackbar,
   submitForm,
   postComment,
   currentPage,

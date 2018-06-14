@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import SubmissionDisplay from "./SubmissionsDisplay";
+import SubmissionDisplay from "../../containers/pageControl/SubmissionsDisplayContainer";
 import Spinner from "../loadingSpinner/LoadingSpinner";
 import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 import { removeSubmission } from "../../actions/removeSubmission";
@@ -10,6 +10,10 @@ const SpinnerWrapper = PagesDisplayWrapper.extend`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Wrapper = styled.div`
+  max-width: 85%;
 `;
 
 type Props = {
@@ -66,14 +70,16 @@ class PendingSubmissions extends React.Component<Props> {
         <Spinner />
       </SpinnerWrapper>
     ) : (
-      <SubmissionDisplay
-        submissions={submissions}
-        token={accessToken}
-        pageId={pageId}
-        errorHead="No pending posts"
-        errorText="Looks like you have no pending submission yet. Make sure your users can see the submission link!"
-        isPending={true}
-      />
+      <Wrapper>
+        <SubmissionDisplay
+          submissions={submissions}
+          token={accessToken}
+          pageId={pageId}
+          errorHead="No pending posts"
+          errorText="Looks like you have no pending submission yet. Make sure your users can see the submission link!"
+          isPending
+        />
+      </Wrapper>
     );
   }
 }
