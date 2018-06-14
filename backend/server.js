@@ -303,6 +303,15 @@ app.get("/backend/getnumberscheduled", function(req, res) {
 });
 
 //GET API
+app.get("/backend/getscheduled", function(req, res) {
+  var query =
+    "SELECT * from dbo.posts WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "' AND timeposted > DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE());";
+  executeQuery(res, query);
+});
+
+//GET API
 app.get("/backend/getmoderating", function(req, res) {
   var query =
     "SELECT * from [posts] WHERE pageId = '" +
@@ -317,12 +326,12 @@ app.post("/backend/setmoderating", function(req, res) {
     "UPDATE [posts] SET underModeration = 1, pending = 0 WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';\n" +
-    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
-    escapeQuotations(pageId) +
-    "' and underModeration = 1), pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
-    escapeQuotations(pageId) +
-    "' and pending = 1) WHERE pageid = '" +
-    escapeQuotations(pageId) +
+    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    escapeQuotations(req.param("postid")) +
+    "' and underModeration = 1), pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    escapeQuotations(req.param("postid")) +
+    "' and pending = 1) WHERE pageId = '" +
+    escapeQuotations(req.param("postid")) +
     "';";
   executeQuery(res, query);
 });
@@ -344,9 +353,9 @@ app.post("/backend/stopmoderating", function(req, res) {
     "UPDATE [posts] SET underModeration = 0 WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';\n" +
-    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
     escapeQuotations(pageId) +
-    "' and underModeration = 1) WHERE pageid = '" +
+    "' and underModeration = 1) WHERE pageId = '" +
     escapeQuotations(pageId) +
     "';";
   executeQuery(res, query);
@@ -457,11 +466,11 @@ var scheduleToFacebookQuery2 = function(
       " WHERE ID = '" +
       escapeQuotations(postId) +
       "';\n" +
-      "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+      "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
       escapeQuotations(pageId) +
-      "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+      "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
       escapeQuotations(pageId) +
-      "' and underModeration = 1) WHERE pageid = '" +
+      "' and underModeration = 1) WHERE pageId = '" +
       escapeQuotations(pageId) +
       "';";
     queryGet(response => console.log(response), query);
@@ -483,11 +492,11 @@ var scheduleToFacebookQuery2 = function(
       " WHERE ID = '" +
       escapeQuotations(postId) +
       "';\n" +
-      "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+      "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
       escapeQuotations(pageId) +
-      "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+      "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
       escapeQuotations(pageId) +
-      "' and underModeration = 1) WHERE pageid = '" +
+      "' and underModeration = 1) WHERE pageId = '" +
       escapeQuotations(pageId) +
       "';";
     queryGet(response => console.log(response), query);
@@ -516,11 +525,11 @@ var postToFacebook = function(res, response) {
     "UPDATE [posts] SET pending = 0, underModeration = 0, timePosted = DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE()) WHERE ID = '" +
     escapeQuotations(postId) +
     "';\n" +
-    "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
     escapeQuotations(pageId) +
-    "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
     escapeQuotations(pageId) +
-    "' and underModeration = 1) WHERE pageid = '" +
+    "' and underModeration = 1) WHERE pageId = '" +
     escapeQuotations(pageId) +
     "';";
   queryGet(response => console.log(response), query);
@@ -546,24 +555,13 @@ var incrementPosts = function(res, pageId) {
 };
 
 function sendEmail(address, text) {
-<<<<<<< HEAD
-  console.log("Sending an email to " + address + " with text: " + text);
-  // execSync(
-  //   "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
-  //     text +
-  //     "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
-  //     address +
-  //     '"'
-  // );
-=======
-   execSync(
-     "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
-       text +
-       "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
-       address +
-       '"'
-   );
->>>>>>> c59bef356379783a02ec6c4bf2b25eeb75ed0473
+  execSync(
+    "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
+      text +
+      "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
+      address +
+      '"'
+  );
 }
 
 //sendEmail("ijh16@ic.ac.uk", "this is a testpost");
@@ -589,6 +587,35 @@ function submitForReview(text, hash) {
   });
 }
 
+function highlight(response, terms) {
+  var text = response.recordset[0].postText;
+  for (var i = 0; i < terms.length; i++) {
+    if (terms[i].Text != undefined) {
+      text =
+        text.slice(0, terms[i].Index + i * 7) +
+        "|i|" +
+        terms[i].Text +
+        "|/i|" +
+        text.slice(terms[i].Index + terms[i].Text.length + i * 7);
+    } else {
+      text =
+        text.slice(0, terms[i].Index + i * 7) +
+        "|p|" +
+        terms[i].Term +
+        "|/p|" +
+        text.slice(terms[i].Index + terms[i].Term.length + i * 7);
+    }
+  }
+  var update =
+    "UPDATE [posts] SET postText = '" +
+    text +
+    "' WHERE jobID = '" +
+    response.recordset[0].jobID +
+    "';";
+  console.log(text);
+  queryGet(response => console.log(response), update);
+}
+
 app.post("/backend/newreview", function(req, res) {
   console.log(req.body);
   var sentiment = req.body.Metadata["sentiment.score"];
@@ -597,6 +624,21 @@ app.post("/backend/newreview", function(req, res) {
   var pii = +(req.body.Metadata["text.haspii"] == "True");
   var review = +(req.body.Metadata["text.reviewrecommended"] == "True");
   var jobid = req.body.JobId;
+  if (req.body.Metadata["text.matchterms"] == undefined) {
+    req.body.Metadata["text.matchterms"] = "[]";
+  }
+  if (req.body.Metadata["text.detectedphonenumber"] == undefined) {
+    req.body.Metadata["text.detectedphonenumber"] = "[]";
+  }
+  if (req.body.Metadata["text.detectedemail"] == undefined) {
+    req.body.Metadata["text.detectedemail"] = "[]";
+  }
+  var termTerm = JSON.parse(req.body.Metadata["text.matchterms"])
+    .concat(JSON.parse(req.body.Metadata["text.detectedphonenumber"]))
+    .concat(JSON.parse(req.body.Metadata["text.detectedemail"]));
+  var getquery = "SELECT * from [posts] WHERE jobID = '" + jobid + "';";
+  queryGet(response => highlight(response, termTerm), getquery);
+
   var query =
     "UPDATE [posts] SET sentiment = " +
     sentiment +

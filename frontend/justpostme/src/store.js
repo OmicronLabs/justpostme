@@ -12,8 +12,10 @@ import addEmail from "./reducers/addEmail";
 import snackbar from "./reducers/snackbar";
 import userMeta from "./reducers/userMeta";
 import submitForm from "./reducers/submitForm";
+import getSettings from "./reducers/getSettings";
 import postComment from "./reducers/postComment";
 import currentPage from "./reducers/currentPage";
+import saveSettings from "./reducers/saveSettings";
 import managedPages from "./reducers/managedPages";
 import fetchComments from "./reducers/fetchComments";
 import getUsageStats from "./reducers/getUsageStats";
@@ -45,7 +47,9 @@ const rootReducer = combineReducers({
   snackbar,
   submitForm,
   postComment,
+  getSettings,
   currentPage,
+  saveSettings,
   managedPages,
   fetchComments,
   getUsageStats,
