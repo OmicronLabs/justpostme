@@ -499,7 +499,7 @@ app.post("/backend/createpost", function(req, res) {
 //POST API
 app.post("/backend/removepost", function(req, res) {
   var query =
-    "UPDATE [posts] SET pending = 0 WHERE ID = '" +
+    "DELETE FROM [posts] WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
   console.log(query);
