@@ -701,7 +701,7 @@ app.post("/backend/settings", function(req, res) {
     query =
       query +
       "UPDATE [pages] SET countFrom = '" +
-      escapeQuotations(req.body.countFromt) +
+      escapeQuotations(req.body.countFrom) +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
       "';\n";
