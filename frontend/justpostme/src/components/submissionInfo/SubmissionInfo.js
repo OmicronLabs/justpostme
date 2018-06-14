@@ -23,12 +23,23 @@ import {
 } from "../common/Buttons";
 import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
+import Comments from "../common/Comments";
 import { fetchCurrentSubmission } from "../../actions/currentSubmission";
 import { SenderBox } from "../pageControl/SubmissionControl";
 import { snackbarNotify } from "../../actions/snackbar";
 
 const ContentWrapper = styled.div`
   width: 85%;
+`;
+
+const CommentsContainer = styled.div`
+  display: flex;
+  box-shadow: inset 0 0 10px whitesmoke;
+  border: 1px solid lightgray;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-bottom: 0px;
+  border-radius: 6px;
 `;
 
 const PageInfoWrapper = styled.div`
@@ -303,7 +314,7 @@ class SubmissionForm extends React.Component<Props> {
   }
 
   _renderInfo() {
-    const { submission } = this.props;
+    const { submission, postComment, comments, commentsLoading } = this.props;
 
     return submission.profanity !== null ? (
       <ContentWrapper>
@@ -340,12 +351,26 @@ class SubmissionForm extends React.Component<Props> {
         {submission.moderation
           ? [
               <SubTitle>Moderation messages</SubTitle>,
-              <SenderBox
-                currentMessage={this.state.currentMessage}
-                onChange={event =>
-                  this.setState({ currentMessage: event.target.value })
-                }
-              />
+              <CommentsContainer>
+                <Comments
+                  comments={comments}
+                  admin={false}
+                  loading={commentsLoading}
+                />
+                <SenderBox
+                  postComment={() =>
+                    postComment(
+                      match.params.submissionid,
+                      this.state.currentMessage,
+                      "true"
+                    )
+                  }
+                  currentMessage={this.state.currentMessage}
+                  onChange={event =>
+                    this.setState({ currentMessage: event.target.value })
+                  }
+                />
+              </CommentsContainer>
             ]
           : null}
       </ContentWrapper>

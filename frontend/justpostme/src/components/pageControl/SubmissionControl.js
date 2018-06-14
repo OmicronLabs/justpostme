@@ -7,6 +7,16 @@ import "font-awesome/css/font-awesome.min.css";
 import { RoundButton } from "../common/Buttons";
 import Comments from "../common/Comments";
 
+const CommentsContainer = styled.div`
+  display: flex;
+  box-shadow: inset 0 0 10px whitesmoke;
+  border: 1px solid lightgray;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-bottom: 0px;
+  border-radius: 6px;
+`;
+
 const Title = styled.p`
   font-size: 18px;
   font-weight: 800;
@@ -62,7 +72,7 @@ const DisplaySubmission = styled.div`
   box-shadow: inset 0 0 10px whitesmoke;
   border: 1px solid lightgray;
   border-radius: 6px;
-  min-height: 150px;
+  min-height: 80px;
   width: 100%;
   overflow: scroll;
 `;
@@ -93,7 +103,6 @@ const Button = RoundButton.extend`
         : "1px solid rgb(76,175, 80)"};
   &:hover {
     box-shadow: inset 0 0 10px whitesmoke;
-    border: 0px;
     color: ${props =>
       props.alert ? "darkred" : props.warning ? "darkorange" : "green"};
     border: ${props =>
@@ -103,6 +112,11 @@ const Button = RoundButton.extend`
           ? "1px solid darkorange"
           : "1px solid green"};
   }
+`;
+
+const SendButton = Button.extend`
+  padding: 1px;
+  margin: 0px;
 `;
 
 const InfoText = styled.p`
@@ -147,12 +161,14 @@ const SubmissionWarning = () => (
 );
 
 const Sender = styled.div`
-  height: 80px;
+  height: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
   display: flex;
   justify-content: left;
   flex-direction: row;
   align-items: center;
-  margin: 20px 0 0px;
+  margin: 10px 0 10px;
 `;
 
 const Avatar = styled.img`
@@ -171,8 +187,8 @@ const AvatarContainer = styled.div`
 `;
 
 const Message = styled.textarea`
-  height: 50px;
-  margin-left: 20px;
+  height: 20px;
+  margin-left: 10px;
   outline: none;
   width: 100%;
   padding: 5px;
@@ -195,9 +211,11 @@ const SubmissionText = styled.p`
 
 export const SenderBox = props => (
   <Sender>
-    <AvatarContainer>
-      <Avatar src="http://marketline.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" />
-    </AvatarContainer>
+    <ButtonRow>
+      <SendButton onClick={() => props.postComment()}>
+        <ButtonText>Send</ButtonText>
+      </SendButton>
+    </ButtonRow>
     <Message
       rows="4"
       placeholder="Your message to the submitter"
@@ -381,7 +399,7 @@ class SubmissionControl extends React.Component<Props> {
               ) : null}
             </div>
           )}
-          <SubTitle> Submission: </SubTitle>
+          <SubTitle>Submission:</SubTitle>
           {!this.state.editing ? (
             <DisplaySubmission>
               <SubmissionText>{this.state.submissionText}</SubmissionText>
@@ -442,31 +460,27 @@ class SubmissionControl extends React.Component<Props> {
           )}
           {submission.moderation || this.state.moderation
             ? [
-                <Comments
-                  comments={comments}
-                  admin
-                  loading={commentsLoading}
-                />,
                 <SubTitle>Send (optional) message to the submitter: </SubTitle>,
-                <SenderBox
-                  currentMessage={this.state.currentMessage}
-                  onChange={event =>
-                    this.setState({ currentMessage: event.target.value })
-                  }
-                />,
-                <ButtonRow>
-                  <Button
-                    onClick={() => {
+                <CommentsContainer>
+                  <Comments
+                    comments={comments}
+                    admin
+                    loading={commentsLoading}
+                  />
+                  <SenderBox
+                    postComment={() =>
                       postComment(
                         match.params.submissionid,
                         this.state.currentMessage,
                         "true"
-                      );
-                    }}
-                  >
-                    <ButtonText>Send</ButtonText>
-                  </Button>
-                </ButtonRow>
+                      )
+                    }
+                    currentMessage={this.state.currentMessage}
+                    onChange={event =>
+                      this.setState({ currentMessage: event.target.value })
+                    }
+                  />
+                </CommentsContainer>
               ]
             : null}
           <PageFooter>
