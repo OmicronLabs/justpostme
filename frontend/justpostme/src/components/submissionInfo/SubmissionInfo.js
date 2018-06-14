@@ -353,7 +353,7 @@ class SubmissionForm extends React.Component<Props> {
           </p>
         </ButtonRow>
         <SubTitle>
-          Your submission (you can edit or remove it while i's pending or under
+          Your submission (you can edit or remove it while it's pending or under
           moderation)
         </SubTitle>
         {submission.pending
