@@ -546,6 +546,7 @@ var incrementPosts = function(res, pageId) {
 };
 
 function sendEmail(address, text) {
+<<<<<<< HEAD
   console.log("Sending an email to " + address + " with text: " + text);
   // execSync(
   //   "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
@@ -554,6 +555,15 @@ function sendEmail(address, text) {
   //     address +
   //     '"'
   // );
+=======
+   execSync(
+     "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
+       text +
+       "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
+       address +
+       '"'
+   );
+>>>>>>> c59bef356379783a02ec6c4bf2b25eeb75ed0473
 }
 
 //sendEmail("ijh16@ic.ac.uk", "this is a testpost");
