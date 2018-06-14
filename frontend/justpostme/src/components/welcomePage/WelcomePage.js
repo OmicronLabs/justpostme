@@ -108,7 +108,7 @@ class Welcome extends React.Component<Props> {
               separator=" "
             />
           </MetaCountupBox>
-          <PageMetaText> submissions </PageMetaText>
+          <PageMetaText> submissions. </PageMetaText>
         </PageMetaBox>
         <PageMetaBox>
           <PageMetaText>Already </PageMetaText>
@@ -123,7 +123,7 @@ class Welcome extends React.Component<Props> {
               separator=" "
             />
           </MetaCountupBox>
-          <PageMetaText> Facebook pages are using our site </PageMetaText>
+          <PageMetaText> Facebook pages are using our site. </PageMetaText>
         </PageMetaBox>
       </PageMetaWrapper>
     );
