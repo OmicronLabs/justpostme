@@ -224,14 +224,20 @@ app.get("/backend/page", function(req, res) {
 
 //POST API
 app.post("/backend/postcomment", function(req, res) {
+  var byadmin = "0";
+
+  if (req.body.byadmin === "true") {
+    byadmin = "1";
+  }
+
   var query =
     "INSERT INTO [comments] (postHash, text, timeCommented, byAdmin) VALUES('" +
     escapeQuotations(req.body.posthash) +
     "', '" +
     escapeQuotations(req.body.text) +
-    "', GETUTCDATE(), '" +
-    escapeQuotations(req.body.byadmin) +
-    "');";
+    "', GETUTCDATE(), " +
+    byadmin +
+    ");";
   executeQuery(res, query);
 });
 
