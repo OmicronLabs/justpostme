@@ -357,8 +357,7 @@ class SubmissionControl extends React.Component<Props> {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "flex-start",
-          overflow: "scroll",
-          paddingBottom: "10px"
+          overflow: "auto"
         }}
       >
         <ContentWrapper style={{ transition: "height 0.5s ease" }}>

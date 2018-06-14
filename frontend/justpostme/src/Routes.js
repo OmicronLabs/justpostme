@@ -14,7 +14,7 @@ class Routes extends React.Component {
     const { loggedIn, showSnackbar, snackbarMessage } = this.props;
 
     return (
-      <div>
+      <div style={{ overflow: "hidden" }}>
         <Snackbar showSnackbar={showSnackbar}>{snackbarMessage}</Snackbar>
         <Switch>
           <Route
