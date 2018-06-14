@@ -420,16 +420,23 @@ class SubmissionForm extends React.Component<Props> {
         </FrontDoorBackgroundTop>
         <BackgroundShape src={background} className="" />
         <FrontDoorBackgroundBottom />
-        <BoxWrapper style={{ overflow: "scroll" }}>
+        <BoxWrapper
+          style={{
+            overflow: "scroll",
+            height: "100vh"
+          }}
+        >
           <WelcomePageBox
             style={{
               width: "940px",
               maxWidth: "75%",
               margin: "100px 0",
               padding: "0",
-              display: "flex",
               height: "auto",
-              minHeight: "350px"
+              position: "relative",
+              display: "flex",
+              justifyContent: "flex-start",
+              minHeight: "650px"
             }}
           >
             {loading
