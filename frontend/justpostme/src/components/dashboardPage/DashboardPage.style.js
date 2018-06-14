@@ -9,8 +9,3 @@ export const DashboardWrapper = styled.div`
   flex-direction: column;
   overflow: hidden;
 `;
-
-export const DashboardSidebarWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-`;

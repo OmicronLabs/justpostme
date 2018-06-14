@@ -357,8 +357,7 @@ class SubmissionControl extends React.Component<Props> {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "flex-start",
-          overflow: "scroll",
-          paddingBottom: "10px"
+          overflow: "auto"
         }}
       >
         <ContentWrapper style={{ transition: "height 0.5s ease" }}>
@@ -442,12 +441,12 @@ class SubmissionControl extends React.Component<Props> {
           )}
           {submission.moderation || this.state.moderation
             ? [
+                <SubTitle>Chat with the submitter</SubTitle>,
                 <Comments
                   comments={comments}
                   admin
                   loading={commentsLoading}
                 />,
-                <SubTitle>Send (optional) message to the submitter: </SubTitle>,
                 <SenderBox
                   currentMessage={this.state.currentMessage}
                   onChange={event =>

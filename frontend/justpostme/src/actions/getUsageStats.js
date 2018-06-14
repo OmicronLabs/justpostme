@@ -25,19 +25,13 @@ export function getUsageStats() {
   return (dispatch: Function) => {
     const url = `${serverDomain}/backend/getstats`;
     dispatch(getStatsBegin());
-    return fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+    return fetch(url)
       .then(handleErrors)
+      .then(res => res.json())
       .then(json => {
-        //this jsom will have to values
-        debugger;
-        const totalSubmissions = 0;
-        const totalPages = 0;
+        const record = json.recordset[0];
+        const totalSubmissions = record.numberOfPosts;
+        const totalPages = record.numberOfPages;
         dispatch(getStatsSuccess(totalSubmissions, totalPages));
         return true;
       })
