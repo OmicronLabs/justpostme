@@ -15,7 +15,11 @@ import {
   About
 } from "../welcomePage/WelcomePage.style";
 import { Box, BoxWrapper } from "../common/Box";
-import { LargeThemedButton, TopMenuButton } from "../common/Buttons";
+import {
+  LargeThemedButton,
+  TopMenuButton,
+  RoundButton
+} from "../common/Buttons";
 import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
 
@@ -41,6 +45,16 @@ const Form = styled.div`
 
 const InputField = styled.textarea`
   width: 100%;
+  padding: 5px;
+  outline: none;
+  box-shadow: inset 0 0 10px whitesmoke;
+  font-size: 16px;
+  border: 1px solid lightgray;
+  border-radius: 6px;
+  background: whitesmoke;
+  &:focus {
+    background: white;
+  }
 `;
 
 const PageImage = styled.img`
@@ -55,7 +69,7 @@ const PageImage = styled.img`
 
 const PageInfoWrapper = styled.div`
   width: 100%;
-  border-bottom: 2px solid rgb(76, 175, 80);
+  border-bottom: 2px solid lightgray;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -100,6 +114,23 @@ const ErrorText = styled.a`
   font-size: 26px;
   color: grey;
   margin-left: 5px;
+`;
+
+const SubmitButton = RoundButton.extend`
+  font-size: 20px;
+
+  margin: 5px;
+  padding: 8px;
+  margin-top: 1em;
+  border-radius: 6px;
+  color: rgb(76, 175, 80);
+  border: 2px solid rgb(76, 175, 80);
+  &:hover {
+    box-shadow: inset 0 0 10px whitesmoke;
+    border: 0px;
+    color: green;
+    border: 2px solid green;
+  }
 `;
 
 const Link = styled.a`
@@ -148,23 +179,22 @@ class SubmissionForm extends React.Component<Props> {
         <SubTitle> Your submissions content </SubTitle>
         <InputField
           rows="8"
+          placeholder="Type your submission here..."
           value={this.state.submissionText}
           onChange={event =>
             this.setState({ submissionText: event.target.value })
           }
         />
-        <SubTitle>
-          What year are you and what do you study (e.g 3rd year Computing)
-        </SubTitle>
-        <InputField />
+        <SubTitle>What year are you and what do you study</SubTitle>
+        <InputField placeholder="e.g 3rd year Computing" />
         <ButtonWrapper>
-          <LargeThemedButton
+          <SubmitButton
             onClick={() =>
               submitForm(match.params.id, this.state.submissionText)
             }
           >
-            Submit form
-          </LargeThemedButton>
+            Submit Form
+          </SubmitButton>
         </ButtonWrapper>
       </Form>
     );
