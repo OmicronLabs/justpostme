@@ -172,6 +172,13 @@ var insertRelevantPages = function(res, response, userid, pagesToInsert) {
 };
 
 //GET API
+app.get("/backend/getstats", function(req, res) {
+  var query =
+    "SELECT COUNT(DISTINCT Pg.pageID), MAX(Ps.ID) FROM dbo.pages Pg LEFT OUTER JOIN dbo.posts Ps ON Ps.pageId = Pg.pageId;";
+  executeQuery(res, query);
+});
+
+//GET API
 app.get("/backend/user", function(req, res) {
   var query = "select * from [users]";
   executeQuery(res, query);
@@ -326,36 +333,71 @@ app.post("/backend/postit", function(req, res) {
 var scheduleToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
   var postText = response.recordset[0].postText;
-  var postid = response.recordset[0].ID[1] + "";
+  var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
-  var postTime = "GETUTCDATE()";
 
   var query =
-    "SELECT MAX(timePosted) AS maxTime FROM dbo.posts WHERE pageId = '" +
+    "SELECT TOP 1 * FROM [pages] Pg JOIN [posts] PS on Ps.pageId = Pg.pageId WHERE Ps.pageId = '" +
     pageId +
-    "';";
+    "' ORDER BY timePosted DESC;";
   queryGet(
     response =>
-      scheduleToFacebookQuery2(response.recordset[0].maxTime, postid, pageId),
+      scheduleToFacebookQuery2(
+        response.recordset[0].timePosted,
+        response.recordset[0].queueTime,
+        postId,
+        pageId,
+        pageAccessToken,
+        postText
+      ),
     query
   );
 };
 
-var scheduleToFacebookQuery2 = function(maxTime, postid, pageId) {
-  console.log("MaxTime is: " + maxTime);
-  // var query2 =
+var scheduleToFacebookQuery2 = function(
+  maxTime,
+  queueTime,
+  postId,
+  pageId,
+  pageAccessToken,
+  postText
+) {
+  console.log(
+    "Max time: " +
+      maxTime +
+      ", queue time: " +
+      queueTime +
+      ", postId: " +
+      postId +
+      ", pageId: " +
+      pageId +
+      ", postText: " +
+      postText
+  );
+  var postTime = "DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE())";
+
+  var maxTimeD = new Date(maxTime);
+  console.log(maxTimeD);
+  var maxTimeT = new Date(maxTimeD.getTime());
+  console.log(maxTimeT);
+  maxTimeD.setMinutes(maxTimeD.getMinutes() + queueTime);
+  console.log(maxTimeD);
+  var nowD = new Date();
+  console.log(nowD);
+  //if (nowD > maxTimeD) {
+  // //Post now
+  // var query =
   //   "UPDATE [posts] SET pending = 0, timePosted = " +
   //   postTime +
   //   " WHERE ID = '" +
-  //   escapeQuotations(postid) +
+  //   escapeQuotations(postId) +
   //   "';\n" +
   //   "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
   //   escapeQuotations(pageId) +
   //   "' and pending = 1) WHERE pageid = '" +
   //   escapeQuotations(pageId) +
   //   "';";
-  // queryGet(response => console.log(response), query2);
-
+  // queryGet(response => console.log(response), query);
   // request.post(
   //   `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
   //   function(error, response, body) {
@@ -365,25 +407,28 @@ var scheduleToFacebookQuery2 = function(maxTime, postid, pageId) {
   //     }
   //   }
   // );
-};
+  // } else {
+  //schedule for maxTime + 5
 
-var postToFacebook = function(res, response) {
-  var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText;
-  var postid = response.recordset[0].ID[1] + "";
-  var pageAccessToken = response.recordset[0].pageAccessToken;
+  console.log("post time: " + maxTimeD);
 
   var query =
-    "UPDATE [posts] SET pending = 0, timePosted = GETUTCDATE() WHERE ID = '" +
-    escapeQuotations(postid) +
+    "UPDATE [posts] SET pending = 0, timePosted = " +
+    postTime +
+    " WHERE ID = '" +
+    escapeQuotations(postId) +
     "';\n" +
-    "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageid = '" +
+    "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageid = '" +
+    escapeQuotations(pageId) +
+    "' and pending = 1) WHERE pageid = '" +
     escapeQuotations(pageId) +
     "';";
   queryGet(response => console.log(response), query);
-
+  console.log(
+    `https://graph.facebook.com/${pageId}/feed?published=false&access_token=${pageAccessToken}&message=${postText}&scheduled_publish_time=now +${queueTime} minute`
+  );
   request.post(
-    `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
+    `https://graph.facebook.com/${pageId}/feed?published=false&access_token=${pageAccessToken}&message=${postText}&scheduled_publish_time=now +${queueTime} minute`,
     function(error, response, body) {
       body = JSON.parse(body);
       if (!error && response.statusCode == 200) {
@@ -391,6 +436,33 @@ var postToFacebook = function(res, response) {
       }
     }
   );
+  // }
+
+  var postToFacebook = function(res, response) {
+    var pageId = response.recordset[0].pageId[0];
+    var postText = response.recordset[0].postText;
+    var postId = response.recordset[0].ID[1] + "";
+    var pageAccessToken = response.recordset[0].pageAccessToken;
+
+    var query =
+      "UPDATE [posts] SET pending = 0, timePosted = DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE()) WHERE ID = '" +
+      escapeQuotations(postId) +
+      "';\n" +
+      "UPDATE [pages] SET pendingPosts = pendingPosts - 1 WHERE pageid = '" +
+      escapeQuotations(pageId) +
+      "';";
+    queryGet(response => console.log(response), query);
+
+    request.post(
+      `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
+      function(error, response, body) {
+        body = JSON.parse(body);
+        if (!error && response.statusCode == 200) {
+          //console.log(body.data);
+        }
+      }
+    );
+  };
 };
 
 var incrementPosts = function(res, pageId) {
