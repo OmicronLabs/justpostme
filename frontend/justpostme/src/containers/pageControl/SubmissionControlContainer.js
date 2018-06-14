@@ -11,6 +11,7 @@ import { schedulePostToFb } from "../../actions/scheduleSubmission";
 import { addModerationSubmission } from "../../actions/addToModeration";
 import { editSubmission } from "../../actions/editSubmission";
 import { postComment } from "../../actions/postComment";
+import { fetchComments } from "../../actions/fetchComments";
 import { snackbarNotify } from "../../actions/snackbar";
 
 const mapStateToProps = (state, ownProps) => ({
@@ -29,7 +30,10 @@ const mapStateToProps = (state, ownProps) => ({
   editSubmissionLoading: state.editSubmission.loading,
   editSubmissionError: state.editSubmission.error,
   postCommentLoading: state.postComment.loading,
-  postCommentError: state.postComment.error
+  postCommentError: state.postComment.error,
+  commentsLoading: state.fetchComments.loading,
+  commentsError: state.fetchComments.error,
+  comments: state.fetchComments.comments
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -45,6 +49,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   editSubmission: (postid, text) => dispatch(editSubmission(postid, text)),
   postComment: (postHash, text, admin) =>
     dispatch(postComment(postHash, text, admin)),
+  fetchComments: postHash => dispatch(fetchComments(postHash)),
   snackbarNotify: message => dispatch(snackbarNotify(message))
 });
 

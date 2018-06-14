@@ -303,6 +303,15 @@ app.post("/backend/setmoderating", function(req, res) {
 });
 
 //POST API
+app.post("/backend/setemail", function(req, res) {
+  var query =
+    "UPDATE [posts] SET email = '" + escapeQuotations(req.param("email")) + "' WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';";
+  executeQuery(res, query);
+});
+
+//POST API
 app.post("/backend/stopmoderating", function(req, res) {
   var query =
     "UPDATE [posts] SET underModeration = 0 WHERE ID = '" +
@@ -316,6 +325,9 @@ app.post("/backend/schedulepost", function(req, res) {
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
+  var email = "SELECT email from [posts] WHERE ID = '" + escapeQuotations(req.param("postid")) + "';";
+  console.log("Sending email: " + email);
+  queryGet(response => sendEmail(response.recordset[0].email, "Your post has been scheduled"), email);
   queryGet(response => scheduleToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
@@ -326,6 +338,9 @@ app.post("/backend/postit", function(req, res) {
     "SELECT * from [pages] Pg JOIN [posts] Ps ON Pg.pageId = Ps.pageId WHERE Ps.ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
+  var email = "SELECT email from [posts] WHERE ID = '" + escapeQuotations(req.param("postid")) + "';";
+  console.log("Sending email: " + email);
+  queryGet(response => sendEmail(response.recordset[0].email, "Your post has been scheduled"), email);
   queryGet(response => postToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
 });
@@ -470,7 +485,7 @@ var incrementPosts = function(res, pageId) {
 
 function sendEmail(address, text) {
   execSync(
-    "ssh mhutti1@mhutti1.eu \"echo '" +
+    "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
       text +
       "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
       address +
@@ -565,7 +580,7 @@ app.post("/backend/createpost", function(req, res) {
 //POST API
 app.post("/backend/removepost", function(req, res) {
   var query =
-    "UPDATE [posts] SET pending = 0 WHERE ID = '" +
+    "DELETE FROM [posts] WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
   console.log(query);
