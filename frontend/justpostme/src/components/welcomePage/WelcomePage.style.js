@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Box, BoxWrapper } from "../common/Box";
 
 export const LogoWhite = styled.img`
+  user-select: none;
   transform: scale(0.6, 0.6);
   max-width: 100%;
 `;
@@ -27,6 +28,7 @@ export const HeaderTopLeft = styled.div`
   top: 0;
   left: 0;
   z-index: 3;
+  user-select: none;
   height: 100px;
   width: 100px;
   position: absolute;

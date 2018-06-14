@@ -10,6 +10,7 @@ import logoWhite from "../../media/logo-white.png";
 const LogoWhite = styled.img`
   height: 50px;
   width: 50px;
+  user-select: none;
   position: relative;
   max-height: 100%;
 `;

@@ -6,25 +6,68 @@ import styled from "styled-components";
 import Spinner from "../loadingSpinner/LoadingSpinner";
 
 const SpinnerWrapper = styled.div`
-  /* height: 100%; */
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
+const CommentSection = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+`;
+
+const CommentWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  min-height: 44px;
+`;
+
+const TheirCommentWrapper = CommentWrapper.extend`
+  justify-content: flex-start;
+`;
+
+const MyCommentWrapper = CommentWrapper.extend`
+  justify-content: flex-end;
+`;
+
+const CommentAuthor = styled.p`
+  color: lightgray;
+  margin: 0px;
+  font-size: 16px;
+`;
+
+const CommentBody = styled.p`
+  margin: 0px;
+  display: flex;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+`;
+
+const TheirCommentBody = CommentBody.extend`
+  background: lightgray;
+`;
+
+const MyCommentBody = CommentBody.extend`
+  color: white;
+  background: lightgreen;
+`;
+
 const CommentsWrapper = styled.div`
   display: flex;
+  margin: 20px;
+  padding-top: 40px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  max-height: 200px;
+  overflow: scroll;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
 `;
-
-const AdminComment = styled.div`
-  flex-direction: row;
-  display: flex;
-`;
-
-const UserComment = styled.div``;
 
 type CommentComponentProps = {
   comment: CommentProps,
@@ -33,24 +76,23 @@ type CommentComponentProps = {
 
 const MyComment = (props: { comment: CommentProps, author: string }) => {
   return (
-    <div>
-      <p> {props.author} </p>
-      <p> {props.comment.text} </p>
-    </div>
+    <MyCommentWrapper>
+      <MyCommentBody> {props.comment.text} </MyCommentBody>
+    </MyCommentWrapper>
   );
 };
 
 const TheirComment = (props: { comment: CommentProps, author: string }) => {
   return (
-    <div>
-      <p> {props.author}</p>
-      <p> {props.comment.text} </p>
-    </div>
+    <TheirCommentWrapper>
+      <TheirCommentBody> {props.comment.text} </TheirCommentBody>
+    </TheirCommentWrapper>
   );
 };
 
 const Comment = (props: CommentComponentProps) => {
   const { comment, admin } = props;
+
   if (admin) {
     if (comment.byAdmin) {
       return <MyComment comment={comment} author={"You"} />;
