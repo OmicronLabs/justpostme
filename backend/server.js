@@ -303,6 +303,15 @@ app.get("/backend/getnumberscheduled", function(req, res) {
 });
 
 //GET API
+app.get("/backend/getscheduled", function(req, res) {
+  var query =
+    "SELECT * from dbo.posts WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "' AND timeposted > DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE());";
+  executeQuery(res, query);
+});
+
+//GET API
 app.get("/backend/getmoderating", function(req, res) {
   var query =
     "SELECT * from [posts] WHERE pageId = '" +
@@ -546,24 +555,13 @@ var incrementPosts = function(res, pageId) {
 };
 
 function sendEmail(address, text) {
-<<<<<<< HEAD
-  console.log("Sending an email to " + address + " with text: " + text);
-  // execSync(
-  //   "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
-  //     text +
-  //     "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
-  //     address +
-  //     '"'
-  // );
-=======
-   execSync(
-     "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
-       text +
-       "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
-       address +
-       '"'
-   );
->>>>>>> c59bef356379783a02ec6c4bf2b25eeb75ed0473
+  execSync(
+    "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
+      text +
+      "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
+      address +
+      '"'
+  );
 }
 
 //sendEmail("ijh16@ic.ac.uk", "this is a testpost");
