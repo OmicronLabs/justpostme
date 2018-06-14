@@ -1,7 +1,7 @@
 //@flow
 import React from "react";
 import styled from "styled-components";
-import { submitForm } from "../../actions/submitForm";
+import Comments from "../common/Comments";
 import {
   FrontDoorRelative,
   FrontDoorBackgroundBottom,
@@ -23,10 +23,7 @@ import {
 } from "../common/Buttons";
 import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
-import Comments from "../common/Comments";
-import { fetchCurrentSubmission } from "../../actions/currentSubmission";
 import { SenderBox } from "../pageControl/SubmissionControl";
-import { snackbarNotify } from "../../actions/snackbar";
 
 const ContentWrapper = styled.div`
   width: 85%;
@@ -190,7 +187,12 @@ type Props = {
   removeError: boolean,
   editSubmission: Function,
   postComment: Function,
-  removeSubmission: Function
+  removeSubmission: Function,
+  commentsLoading: boolean,
+  commentsError: boolean,
+  fetchComments: Function,
+  comments: any,
+  snackbarNotify: Function
 };
 
 class SubmissionForm extends React.Component<Props> {
@@ -199,7 +201,8 @@ class SubmissionForm extends React.Component<Props> {
     this.state = {
       submissionText: "",
       editing: false,
-      tempSubmissionText: ""
+      tempSubmissionText: "",
+      currentMessage: ""
     };
   }
 
@@ -208,7 +211,8 @@ class SubmissionForm extends React.Component<Props> {
       loading,
       editSubmissionLoading,
       removeLoading,
-      postCommentLoading
+      postCommentLoading,
+      snackbarNotify
     } = this.props;
     const newLoading = nextProps.loading;
     const newSubmission = nextProps.submission;
@@ -226,7 +230,7 @@ class SubmissionForm extends React.Component<Props> {
       !nextProps.editSubmissionLoading &&
       nextProps.editSubmissionError
     ) {
-      //popup
+      snackbarNotify("Your changes have been saved");
     }
 
     //remove submission
@@ -240,13 +244,14 @@ class SubmissionForm extends React.Component<Props> {
       !nextProps.editSubmissionLoading &&
       !nextProps.editSubmissionError
     ) {
-      snackbarNotify("Successfully posted");
+      snackbarNotify("Successfully posted a comment");
     }
   }
 
   componentDidMount() {
-    const { fetchCurrentSubmission, match } = this.props;
+    const { fetchCurrentSubmission, match, fetchComments } = this.props;
     fetchCurrentSubmission(match.params.id);
+    fetchComments(match.params.id);
   }
 
   _renderButtons() {
@@ -313,37 +318,54 @@ class SubmissionForm extends React.Component<Props> {
     );
   }
 
+  _renderContentModerationInfo() {
+    const { submission } = this.props;
+    return !submission.review ? (
+      <SubmissionOk />
+    ) : (
+      <div>
+        <SubmissionWarning />
+        {submission.pii || submission.profanity ? (
+          <div>
+            <p>Post has been flagged for following reasons</p>
+            <ul>
+              {submission.profanity ? <li>Profanity</li> : null}
+              {submission.pii ? <li>Personal information</li> : null}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+
   _renderInfo() {
-    const { submission, postComment, comments, commentsLoading } = this.props;
+    const {
+      submission,
+      comments,
+      commentsLoading,
+      postComment,
+      match
+    } = this.props;
 
     return submission.profanity !== null ? (
       <ContentWrapper>
         <PageInfoWrapper>
           <Title>Submission Tracking</Title>
         </PageInfoWrapper>
-        {!submission.review ? (
-          <SubmissionOk />
-        ) : (
-          <div>
-            <SubmissionWarning />
-            {submission.pii || submission.profanity ? (
-              <div>
-                <p>Post has been flagged for following reasons</p>
-                <ul>
-                  {submission.profanity ? <li>Profanity</li> : null}
-                  {submission.pii ? <li>Personal information</li> : null}
-                </ul>
-              </div>
-            ) : null}
-          </div>
-        )}
+        {submission.moderation ? this._renderContentModerationInfo() : null}
         <ButtonRow>
           <p> Submission status: </p>
-          <p> {submission.pending ? "PENDING" : "ACCEPTED"} </p>
+          <p>
+            {submission.moderation
+              ? "MODERATION "
+              : submission.pending
+                ? "PENDING"
+                : "ACCEPTED"}
+          </p>
         </ButtonRow>
         <SubTitle>
-          Your submission (you can edit or remove it while it is pending or
-          under moderation)
+          Your submission (you can edit or remove it while i's pending or under
+          moderation)
         </SubTitle>
         {submission.pending
           ? this._renderEditSubmission()
@@ -360,9 +382,9 @@ class SubmissionForm extends React.Component<Props> {
                 <SenderBox
                   postComment={() =>
                     postComment(
-                      match.params.submissionid,
+                      match.params.id,
                       this.state.currentMessage,
-                      "true"
+                      "false"
                     )
                   }
                   currentMessage={this.state.currentMessage}
@@ -410,7 +432,10 @@ class SubmissionForm extends React.Component<Props> {
         <BackgroundShape src={background} className="" />
         <FrontDoorBackgroundBottom />
         <BoxWrapper
-          style={{ overflow: "scroll", justifyContent: "flex-start" }}
+          style={{
+            overflow: "scroll",
+            height: "100vh"
+          }}
         >
           <WelcomePageBox
             style={{
@@ -418,10 +443,11 @@ class SubmissionForm extends React.Component<Props> {
               maxWidth: "75%",
               margin: "100px 0",
               padding: "0",
+              height: "auto",
+              position: "relative",
               display: "flex",
-              height: "100%",
-              minHeight: "350px",
-              paddingBottom: "20px"
+              justifyContent: "flex-start",
+              minHeight: "650px"
             }}
           >
             {loading

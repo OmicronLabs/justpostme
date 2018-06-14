@@ -2,10 +2,7 @@
 
 import React from "react";
 import styled from "styled-components";
-import {
-  DashboardSidebarWrapper,
-  DashboardWrapper
-} from "./DashboardPage.style";
+import { DashboardWrapper } from "./DashboardPage.style";
 import NavBarContainer from "../../containers/navBar/NavBarContainer";
 import SideBar from "../../components/sideBar/SideBar";
 import MyPagesSection from "./MyPagesSection";
@@ -19,7 +16,7 @@ class DashboardPage extends React.Component<Props> {
     return (
       <DashboardWrapper>
         <NavBarContainer />
-        <DashboardSidebarWrapper>{this.props.children}</DashboardSidebarWrapper>
+        {this.props.children}
       </DashboardWrapper>
     );
   }

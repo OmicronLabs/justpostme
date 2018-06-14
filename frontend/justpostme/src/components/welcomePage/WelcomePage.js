@@ -66,7 +66,10 @@ type Props = {
   posting: boolean,
   error: string,
   addUser: (user: User) => void,
-  logIn: () => void
+  logIn: () => void,
+  totalPages: number,
+  totalSubmissions: number,
+  fetchUsageStats: Function
 };
 
 const ErrorComponent = () => (
@@ -80,8 +83,17 @@ const ErrorComponent = () => (
 );
 
 class Welcome extends React.Component<Props> {
+  componentDidMount() {
+    this.props.fetchUsageStats();
+  }
   componentWillReceiveProps(newProps: Props) {
-    const { loggedIn, posting, history } = this.props;
+    const {
+      loggedIn,
+      posting,
+      history,
+      totalPages,
+      totalSubmissions
+    } = this.props;
     if (
       posting &&
       loggedIn &&
@@ -94,6 +106,7 @@ class Welcome extends React.Component<Props> {
   }
 
   _renderPageMeta() {
+    const { totalPages, totalSubmissions } = this.props;
     return (
       <PageMetaWrapper>
         <PageMetaBox>
@@ -102,7 +115,7 @@ class Welcome extends React.Component<Props> {
             <CountUp
               style={{ color: "rgb(76, 175, 80)", fontWeight: "bold" }}
               start={0}
-              end={1347}
+              end={totalSubmissions}
               duration={3.5}
               useEasing={true}
               useGrouping={true}
@@ -117,7 +130,7 @@ class Welcome extends React.Component<Props> {
             <CountUp
               style={{ color: "rgb(76, 175, 80)", fontWeight: "bold" }}
               start={0}
-              end={43}
+              end={totalPages}
               duration={3.5}
               useEasing={true}
               useGrouping={true}
