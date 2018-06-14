@@ -314,8 +314,8 @@ app.post("/backend/setemail", function(req, res) {
   var query =
     "UPDATE [posts] SET email = '" +
     escapeQuotations(req.param("email")) +
-    "' WHERE ID = '" +
-    escapeQuotations(req.param("postid")) +
+    "' WHERE posthash = '" +
+    escapeQuotations(req.param("posthash")) +
     "';";
   executeQuery(res, query);
 });
