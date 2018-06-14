@@ -310,6 +310,7 @@ app.post("/backend/schedulepost", function(req, res) {
     escapeQuotations(req.param("postid")) +
     "';";
   var email = "SELECT email from [posts] WHERE ID = '" + escapeQuotations(req.param("postid")) + "';";
+  console.log("Sending email: " + email);
   queryGet(response => sendEmail(response, "Your post has been scheduled"), email);
   queryGet(response => scheduleToFacebook(res, response), query);
   res.end('{"success" : "Posted Successfully", "status" : 200}');
