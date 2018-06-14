@@ -322,7 +322,6 @@ class SubmissionControl extends React.Component<Props> {
       editSubmission,
       postComment
     } = this.props;
-
     return (
       <Box
         style={{
@@ -376,7 +375,7 @@ class SubmissionControl extends React.Component<Props> {
               <Button onClick={() => this.setState({ editing: true })}>
                 <ButtonText>Edit</ButtonText>
               </Button>
-              {!this.state.moderation ? (
+              {!submission.moderation && !this.state.moderation ? (
                 <Button
                   warning
                   onClick={() => {
@@ -416,7 +415,7 @@ class SubmissionControl extends React.Component<Props> {
               </Button>
             </ButtonRow>
           )}
-          {this.state.moderation
+          {submission.moderation || this.state.moderation
             ? [
                 <SubTitle>Send (optional) message to the submitter: </SubTitle>,
                 <SenderBox

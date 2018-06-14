@@ -28,12 +28,11 @@ export function fetchComments(posthash: string) {
   return dispatch => {
     dispatch(fetchCommentsBegin());
 
-    return fetch(`${serverDomain}/backend/postcomments?posthash=${posthash}`)
+    return fetch(`${serverDomain}/backend/getcomments?posthash=${posthash}`)
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
         const records = json.recordset;
-        debugger;
         const comments = records.map(record => ({}));
         dispatch(fetchCommentsSuccess(comments));
         return comments;
