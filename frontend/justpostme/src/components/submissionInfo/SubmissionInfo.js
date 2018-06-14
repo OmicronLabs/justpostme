@@ -16,7 +16,11 @@ import {
 } from "../welcomePage/WelcomePage.style";
 import "font-awesome/css/font-awesome.min.css";
 import { Box, BoxWrapper } from "../common/Box";
-import { LargeThemedButton, TopMenuButton } from "../common/Buttons";
+import {
+  LargeThemedButton,
+  TopMenuButton,
+  RoundButton
+} from "../common/Buttons";
 import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
 import { fetchCurrentSubmission } from "../../actions/currentSubmission";
@@ -29,7 +33,7 @@ const ContentWrapper = styled.div`
 
 const PageInfoWrapper = styled.div`
   width: 100%;
-  border-bottom: 2px solid rgb(76, 175, 80);
+  border-bottom: 2px solid lightgray;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -80,16 +84,30 @@ const ButtonRow = styled.div`
 
 const InputField = styled.textarea`
   width: 100%;
+  padding: 5px;
+  outline: none;
+  box-shadow: inset 0 0 10px whitesmoke;
+  font-size: 16px;
+  border: 1px solid lightgray;
+  border-radius: 6px;
+  background: whitesmoke;
+  &:focus {
+    background: white;
+  }
 `;
 
 const DisplaySubmission = styled.div`
-  border: 1px solid grey;
+  box-shadow: inset 0 0 10px whitesmoke;
+  border: 1px solid lightgray;
+  border-radius: 6px;
   min-height: 150px;
   width: 100%;
   overflow: scroll;
 `;
 
 const SubmissionText = styled.p`
+  width: 100%;
+  font-size: 16px;
   margin: 7px;
   padding: 0;
   white-space: pre-wrap;
@@ -99,16 +117,25 @@ const ButtonText = styled.div`
   margin: 5px 10px;
 `;
 
-const Button = styled.div`
-  background: ${props =>
-    props.warning === true ? "orange" : "rgb(76, 175, 80)"};
-  color: white;
-  select: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin: 10px 10px 10px 0;
+const Button = RoundButton.extend`
+  margin: 5px;
+  margin-top: 1em;
+  border-radius: 6px;
+  padding: 0px;
+  color: ${props => (props.warning ? "orange" : "rgb(76,175, 80)")};
+  border: ${props =>
+    props.warning ? "1px solid orange" : "1px solid rgb(76,175, 80)"};
   &:hover {
-    background: ${props => (props.warning === true ? "darkorange" : "green")};
+    box-shadow: inset 0 0 10px whitesmoke;
+    border: 0px;
+    color: ${props =>
+      props.alert ? "darkred" : props.warning ? "darkorange" : "green"};
+    border: ${props =>
+      props.alert
+        ? "1px solid darkred"
+        : props.warning
+          ? "1px solid darkorange"
+          : "1px solid green"};
   }
 `;
 
@@ -193,7 +220,7 @@ class SubmissionForm extends React.Component<Props> {
 
     //remove submission
     if (removeLoading && !nextProps.removeLoading && !nextProps.removeError) {
-      snackbarNotify("The post has been removed.");
+      snackbarNotify("The post has been removed");
     }
 
     //post comment
@@ -254,7 +281,7 @@ class SubmissionForm extends React.Component<Props> {
     return [
       this.state.editing ? (
         <InputField
-          rows="11"
+          rows="8"
           value={this.state.tempSubmissionText}
           onChange={event =>
             this.setState({ tempSubmissionText: event.target.value })
@@ -281,7 +308,7 @@ class SubmissionForm extends React.Component<Props> {
     return submission.profanity !== null ? (
       <ContentWrapper>
         <PageInfoWrapper>
-          <Title>Submission tracking panel</Title>
+          <Title>Submission Tracking</Title>
         </PageInfoWrapper>
         {!submission.review ? (
           <SubmissionOk />
@@ -325,7 +352,7 @@ class SubmissionForm extends React.Component<Props> {
     ) : (
       <ContentWrapper>
         <PageInfoWrapper>
-          <Title>Submission tracking panel</Title>
+          <Title>Submission Tracking</Title>
         </PageInfoWrapper>
         <p> Your submission is being processed</p>
       </ContentWrapper>
