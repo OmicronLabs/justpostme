@@ -7,12 +7,23 @@ import Spinner from "../loadingSpinner/LoadingSpinner";
 import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
 import { Box, BoxWrapper } from "../common/Box";
-import { LargeThemedButton } from "../common/Buttons";
+import { RoundButton } from "../common/Buttons";
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Title = styled.p`
+  font-size: 18px;
+  margin-top: -10px;
+  padding-bottom: 20px;
+  font-weight: 800;
+  border-bottom: 2px solid lightgray;
+
+  color: rgb(76, 175, 80);
+  text-align: center;
 `;
 
 export const SubmissionsDisplayWrapper = styled.div`
@@ -69,13 +80,18 @@ const SettingsBoxWrapper = BoxWrapper.extend`
   position: relative;
 `;
 
-const SaveButton = LargeThemedButton.extend`
-  margin: 0px;
-  margin-top: 10px;
-  padding: 0px;
-  border: none;
+const SaveButton = RoundButton.extend`
+  margin: 5px;
+  padding: 8px;
+  margin-top: 1em;
+  border-radius: 6px;
+  color: rgb(76, 175, 80);
+  border: 1px solid rgb(76, 175, 80);
   &:hover {
-    border: none;
+    box-shadow: inset 0 0 10px whitesmoke;
+    border: 0px;
+    color: green;
+    border: 1px solid green;
   }
 `;
 
@@ -103,6 +119,7 @@ class PageSettings extends React.Component<Props> {
         <SubmissionsWrapper>
           <SettingsBoxWrapper>
             <SettingsBox>
+              <Title>Settings</Title>
               <SettingsRow>
                 <SettingName>Your annonymous submission link: </SettingName>
                 <Link

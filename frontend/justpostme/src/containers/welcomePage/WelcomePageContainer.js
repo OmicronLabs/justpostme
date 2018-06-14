@@ -28,6 +28,10 @@ const mapStateToProps = (state, ownProps) => ({
   posting: state.user.loading,
   error: state.user.error,
   loggedIn: state.userMeta.loggedIn
+  //TODO: add the values here
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WelcomePage);
