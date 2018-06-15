@@ -48,7 +48,7 @@ export function fetchCurrentSubmission(submissionHash: string) {
 }
 
 export const processText = (text: string) => {
-  return text.split(" ").map(word => {
+  return text.split(/\s+/).map(word => {
     if (word.startsWith("|p|") && word.endsWith("|/p|")) {
       return { word: cleanupText(word), profanity: true };
     } else if (word.startsWith("|i|") && word.endsWith("|/i|")) {
