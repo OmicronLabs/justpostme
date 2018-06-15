@@ -286,9 +286,9 @@ class SubmissionForm extends React.Component<Props> {
           <PageInfoFirstRow>
             <PageImage src={currentPage.backgroundImgURL} />
             <PageName>{currentPage.name}</PageName>
-            <PageInfoFirstRow>
-              <p>{currentPage.postText ? currentPage.postText : ""}</p>
-            </PageInfoFirstRow>
+          </PageInfoFirstRow>
+          <PageInfoFirstRow>
+            <p>{currentPage.postText ? currentPage.postText : ""}</p>
           </PageInfoFirstRow>
         </PageInfoWrapper>
         <SubTitle> Your form has been submitted successfully! </SubTitle>
