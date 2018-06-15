@@ -1,5 +1,5 @@
 import { serverDomain } from "../const/serverURL";
-import { cleanupText, processText } from "./currentSubmission";
+import { processText, cleanupText } from "../functions/util";
 
 export const FETCH_MODERATION_BEGIN = "FETCH_MODERATION_BEGIN";
 export const FETCH_MODERATION_SUCCESS = "FETCH_MODERATION_SUCCESS";

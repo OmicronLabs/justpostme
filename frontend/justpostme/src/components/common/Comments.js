@@ -59,7 +59,8 @@ const MyCommentBody = CommentBody.extend`
 
 const CommentsWrapper = styled.div`
   display: flex;
-  padding: 0 8px;
+  padding: 8px 8px;
+
   height: 130px;
   overflow: scroll;
   flex-direction: column;

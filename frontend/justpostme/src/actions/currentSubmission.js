@@ -1,5 +1,6 @@
 import { serverDomain } from "../const/serverURL";
 import altImage from "../media/page_alt_img.png";
+import { processText, cleanupText } from "../functions/util";
 
 export const FETCH_SUBMISSION_BEGIN = "FETCH_SUBMISSION_BEGIN";
 export const FETCH_SUBMISSION_SUCCESS = "FETCH_SUBMISSION_SUCCESS";
@@ -46,26 +47,6 @@ export function fetchCurrentSubmission(submissionHash: string) {
       .catch(error => dispatch(fetchSubmissionError(error)));
   };
 }
-
-export const processText = (text: string) => {
-  return text.split(/\s+/).map(word => {
-    if (word.startsWith("|p|") && word.endsWith("|/p|")) {
-      return { word: cleanupText(word), profanity: true };
-    } else if (word.startsWith("|i|") && word.endsWith("|/i|")) {
-      return { word: cleanupText(word), information: true };
-    } else {
-      return word;
-    }
-  });
-};
-
-export const cleanupText = (text: string) => {
-  return text
-    .replace(/\|p\|/g, ``)
-    .replace(/\|\/p\|/g, ``)
-    .replace(/\|i\|/g, ``)
-    .replace(/\|\/i\|/g, ``);
-};
 
 function handleErrors(response) {
   if (!response.ok) {

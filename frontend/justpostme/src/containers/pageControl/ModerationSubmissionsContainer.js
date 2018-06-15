@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import { fetchModerationSubmissions } from "../../actions/moderationSubmissions";
+
 import ModerationSubmissions from "../../components/pageControl/ModerationSubmissions";
 
 const mapStateToProps = state => ({

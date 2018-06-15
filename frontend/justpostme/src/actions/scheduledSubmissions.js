@@ -1,5 +1,5 @@
 import { serverDomain } from "../const/serverURL";
-import { cleanupText, processText } from "./currentSubmission";
+import { processText, cleanupText } from "../functions/util";
 
 export const FETCH_SCHEDULED_BEGIN = "FETCH_SCHEDULED_BEGIN";
 export const FETCH_SCHEDULED_SUCCESS = "FETCH_SCHEDULED_SUCCESS";
