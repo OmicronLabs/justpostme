@@ -776,7 +776,7 @@ app.post("/backend/settings", function(req, res) {
     query =
       query +
       "UPDATE [pages] SET queueTime = '" +
-      escapeQuotations(req.body.queueTime) +
+      req.body.queueTime +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
       "';\n";
@@ -786,7 +786,7 @@ app.post("/backend/settings", function(req, res) {
     query =
       query +
       "UPDATE [pages] SET countFrom = '" +
-      escapeQuotations(req.body.countFrom) +
+      req.body.countFrom +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
       "';\n";
