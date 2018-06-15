@@ -316,7 +316,7 @@ app.get("/backend/getmoderating", function(req, res) {
   var query =
     "SELECT * from [posts] WHERE pageId = '" +
     escapeQuotations(req.param("pageid")) +
-    "' AND pending = 1 AND underModeration = 1;";
+    "' AND underModeration = 1;";
   executeQuery(res, query);
 });
 
@@ -543,14 +543,6 @@ var postToFacebook = function(res, response) {
       }
     }
   );
-};
-
-var incrementPosts = function(res, pageId) {
-  var query =
-    "UPDATE [pages] SET pendingPosts = pendingPosts + 1 WHERE pageId = '" +
-    escapeQuotations(pageId) +
-    "';";
-  queryGet(response => console.log(response), query);
 };
 
 var countPosts = function(res, pageId) {
