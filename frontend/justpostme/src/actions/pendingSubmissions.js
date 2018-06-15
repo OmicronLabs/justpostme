@@ -1,5 +1,5 @@
 import { serverDomain } from "../const/serverURL";
-import { cleanupText, processText } from "./currentSubmission";
+import { processText, cleanupText } from "../functions/util";
 
 export const FETCH_PENDING_BEGIN = "FETCH_PENDING_BEGIN";
 export const FETCH_PENDING_SUCCESS = "FETCH_PENDING_SUCCESS";
