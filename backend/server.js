@@ -410,7 +410,7 @@ app.post("/backend/postit", function(req, res) {
 
 var scheduleToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText;
+  var postText = response.recordset[0].postText.replace(/|\/p|/g, "").replace(/|i|/g, "").replace(/|\/i|/g, "");;
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
@@ -517,7 +517,7 @@ var scheduleToFacebookQuery2 = function(
 
 var postToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText;
+  var postText = response.recordset[0].postText.replace(/|p|/g, "").replace(/|\/p|/g, "").replace(/|i|/g, "").replace(/|\/i|/g, "");
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
