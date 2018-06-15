@@ -326,9 +326,9 @@ app.post("/backend/setmoderating", function(req, res) {
     "UPDATE [posts] SET underModeration = 1, pending = 0 WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';\n" +
-    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    "UPDATE [pages] SET moderatingPosts = 1 + (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
     escapeQuotations(req.param("postid")) +
-    "' and underModeration = 1), pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    "' and underModeration = 1), pendingPosts = 1 + (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
     escapeQuotations(req.param("postid")) +
     "' and pending = 1) WHERE pageId = '" +
     escapeQuotations(req.param("postid")) +
