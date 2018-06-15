@@ -144,22 +144,82 @@ function openInNewTab(url) {
   win.focus();
 }
 
+const EmailWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const EmailInput = styled.input`
+  width: 150px;
+  height: 30px;
+`;
+
+const SentButton = styled.div`
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: green;
+  cursor: pointer;
+  &:hover {
+    background: darkgreen;
+  }
+`;
+
+const SentButtonText = styled.div`
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  margin: 3px 7px;
+`;
+
 type Props = {
   currentPage: any,
   currentPageLoading: boolean,
   submitForm: Function,
-  fetchCurrentPage: Function
+  fetchCurrentPage: Function,
+  snackbarNotify: Function,
+  postEmail: Function,
+  submitFormLoading: boolean,
+  submitFormError: boolean,
+  postEmailLoading: boolean,
+  postEmailError: boolean
 };
 
 class SubmissionForm extends React.Component<Props> {
   constructor(props) {
     super(props);
-    this.state = { submissionText: "" };
+    this.state = { submissionText: "", email: "" };
   }
 
   componentDidMount() {
     const { fetchCurrentPage, match } = this.props;
     fetchCurrentPage(match.params.id);
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { snackbarNotify, submitFormLoading, postEmailLoading } = this.props;
+
+    //form submitted
+    if (
+      submitFormLoading &&
+      !nextProps.submitFormLoading &&
+      !nextProps.submitFormError
+    ) {
+      snackbarNotify("Successfully submitted");
+    }
+
+    //email submitted
+
+    if (
+      postEmailLoading &&
+      !nextProps.postEmailLoading &&
+      !nextProps.postEmailError
+    ) {
+      snackbarNotify("Email successfully added");
+    }
   }
 
   _renderForm() {
@@ -209,7 +269,7 @@ class SubmissionForm extends React.Component<Props> {
   }
 
   _renderSubmissionSuccess() {
-    const { postHash, currentPage } = this.props;
+    const { postHash, currentPage, postEmail } = this.props;
     const trackingLink = `https://justpostme.tech/submission/${postHash}`;
     return (
       <Form>
@@ -228,6 +288,25 @@ class SubmissionForm extends React.Component<Props> {
         >
           {trackingLink}
         </Link>
+        <p>
+          If you want to subscribe to post status (e.g when it's published)
+          provide your email. Your email address will be used only by us, admin
+          doesn't have access to it:
+        </p>
+        <EmailWrapper>
+          <EmailInput
+            value={this.state.email}
+            onChange={event => this.setState({ email: event.target.value })}
+            placeholder="Enter email here..."
+          />
+          <SentButton>
+            <SentButtonText
+              onClick={() => postEmail(postHash, this.state.email)}
+            >
+              Subscribe to changes
+            </SentButtonText>
+          </SentButton>
+        </EmailWrapper>
       </Form>
     );
   }

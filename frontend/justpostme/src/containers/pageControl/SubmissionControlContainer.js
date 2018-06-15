@@ -13,6 +13,7 @@ import { editSubmission } from "../../actions/editSubmission";
 import { postComment } from "../../actions/postComment";
 import { fetchComments } from "../../actions/fetchComments";
 import { snackbarNotify } from "../../actions/snackbar";
+import { addComment } from "../../actions/fetchComments";
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
@@ -45,12 +46,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(postToFbInstant(postid, pageid)),
   schedulePostToFb: (postid, pageid) =>
     dispatch(schedulePostToFb(postid, pageid)),
-  addModerationSubmission: id => dispatch(addModerationSubmission(id)),
+  addModerationSubmission: (postid, pageid) =>
+    dispatch(addModerationSubmission(postid, pageid)),
   editSubmission: (postid, text) => dispatch(editSubmission(postid, text)),
   postComment: (postHash, text, admin) =>
     dispatch(postComment(postHash, text, admin)),
   fetchComments: postHash => dispatch(fetchComments(postHash)),
-  snackbarNotify: message => dispatch(snackbarNotify(message))
+  snackbarNotify: message => dispatch(snackbarNotify(message)),
+  addComment: comment => dispatch(addComment(comment))
 });
 
 export default withRouter(

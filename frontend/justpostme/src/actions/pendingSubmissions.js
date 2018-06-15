@@ -1,4 +1,5 @@
 import { serverDomain } from "../const/serverURL";
+import { cleanupText, processText } from "./currentSubmission";
 
 export const FETCH_PENDING_BEGIN = "FETCH_PENDING_BEGIN";
 export const FETCH_PENDING_SUCCESS = "FETCH_PENDING_SUCCESS";
@@ -34,7 +35,8 @@ export function fetchPendingSubmissions(pageid: string) {
       .then(json => {
         const records = json.recordset;
         const submissions = records.map(record => ({
-          postText: record.postText,
+          rawText: processText(record.postText),
+          postText: cleanupText(record.postText),
           databaseId: record.ID,
           pending: record.pending,
           pii: record.pii,

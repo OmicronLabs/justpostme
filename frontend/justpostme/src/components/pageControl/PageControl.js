@@ -139,8 +139,12 @@ class PageControl extends React.Component<Props> {
         name: `Scheduled (${currentPage ? currentPage.scheduledPosts : 0})`,
         number: managedPages ? managedPages : 0
       },
-      { to: `${path}/moderation`, name: `Moderation (${0})`, number: 0 },
-      { to: `${path}/insights`, name: "Insights" },
+      {
+        to: `${path}/moderation`,
+        name: `Moderation (${currentPage ? currentPage.moderatingPosts : 0})`,
+        number: 0
+      },
+      // { to: `${path}/insights`, name: "Insights" },
       { to: `${path}/settings`, name: "Settings" }
     ];
 

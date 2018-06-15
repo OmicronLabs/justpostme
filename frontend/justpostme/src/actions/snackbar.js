@@ -13,6 +13,7 @@ export const hideSnackbar = () => ({
 
 export function snackbarNotify(mesage: string) {
   return dispatch => {
+    hideSnackbar();
     dispatch(showSnackbar(mesage));
     setTimeout(() => dispatch(hideSnackbar()), 1700);
   };
