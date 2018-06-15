@@ -154,14 +154,23 @@ const EmailWrapper = styled.div`
 const EmailInput = styled.input`
   width: 150px;
   height: 30px;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+  background: whitesmoke;
+  &:focus {
+    outline: none;
+    background: white;
+  }
 `;
 
 const SentButton = styled.div`
-  height: 30px;
+  height: 36px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: green;
+  background: rgb(76, 175, 80);
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
   cursor: pointer;
   &:hover {
     background: darkgreen;
@@ -218,7 +227,7 @@ class SubmissionForm extends React.Component<Props> {
       !nextProps.postEmailLoading &&
       !nextProps.postEmailError
     ) {
-      snackbarNotify("Email successfully added");
+      snackbarNotify("Successfully subscribed to the changes");
     }
   }
 
@@ -233,7 +242,7 @@ class SubmissionForm extends React.Component<Props> {
             <PageName>{currentPage.name}</PageName>
           </PageInfoFirstRow>
           <PageInfoFirstRow>
-            <p>{currentPage.preFormText ? currentPage.preFormText : ""}</p>
+            <p>{currentPage.preText ? currentPage.preText : ""}</p>
           </PageInfoFirstRow>
         </PageInfoWrapper>
         <SubTitle> Your submissions content </SubTitle>
@@ -277,6 +286,9 @@ class SubmissionForm extends React.Component<Props> {
           <PageInfoFirstRow>
             <PageImage src={currentPage.backgroundImgURL} />
             <PageName>{currentPage.name}</PageName>
+            <PageInfoFirstRow>
+              <p>{currentPage.postText ? currentPage.postText : ""}</p>
+            </PageInfoFirstRow>
           </PageInfoFirstRow>
         </PageInfoWrapper>
         <SubTitle> Your form has been submitted successfully! </SubTitle>

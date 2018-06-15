@@ -35,6 +35,7 @@ type Props = {
   pageId: string,
   postToFbInstant: Function,
   deletePendingSubmission: Function,
+  deleteModerationSubmission: Function,
   removeSubmission: Function,
   schedulePostToFb: Function,
   displayId: string,
@@ -224,11 +225,13 @@ const SubmissionCard = (props: Props) => {
     submission,
     pageId,
     deletePendingSubmission,
+    deleteModerationSubmission,
     displayId,
     history,
     isPending,
     removeSubmission,
-    schedulePostToFb
+    schedulePostToFb,
+    isModeration
   } = props;
 
   const isGreen = displayId % 2 === 1;
@@ -241,28 +244,49 @@ const SubmissionCard = (props: Props) => {
           history.push(`/page/${pageId}/submission/${submission.postHash}`);
         }}
       >
-        {submission.postText}
+        {submission.rawText.map(elem => {
+          if (elem.profanity) {
+            return (
+              <span style={{ color: "red", fontWeight: "bold" }}>
+                {elem.word + " "}
+              </span>
+            );
+          } else if (elem.information) {
+            return (
+              <span style={{ color: "orange", fontWeight: "bold" }}>
+                {elem.word + " "}
+              </span>
+            );
+          } else {
+            return elem + " ";
+          }
+        })}
       </SubmissionBody>
       <Timestamp> {submission.timePosted} </Timestamp>
       <SubmissionControls>
         <PublishNowComponent
           publishNow={() => {
-            snackbarNotify("The post has been published on Facebook");
             postToFbInstant(submission.databaseId, pageId);
-            deletePendingSubmission(submission.databaseId);
+            !isModeration
+              ? deletePendingSubmission(submission.databaseId)
+              : deleteModerationSubmission(submission.databaseId);
           }}
         />
         <ScheduleComponent
           schedule={() => {
             schedulePostToFb(submission.databaseId, pageId);
-            deletePendingSubmission(submission.databaseId);
+            !isModeration
+              ? deletePendingSubmission(submission.databaseId)
+              : deleteModerationSubmission(submission.databaseId);
           }}
         />
 
         <DeleteComponent
           delete={() => {
             removeSubmission(submission.databaseId);
-            deletePendingSubmission(submission.databaseId);
+            !isModeration
+              ? deletePendingSubmission(submission.databaseId)
+              : deleteModerationSubmission(submission.databaseId);
           }}
         />
       </SubmissionControls>

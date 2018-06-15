@@ -5,6 +5,7 @@ import { Box, BoxWrapper } from "../common/Box";
 import styled from "styled-components";
 import "font-awesome/css/font-awesome.min.css";
 import { RoundButton } from "../common/Buttons";
+import { processText } from "../../functions/util";
 import Comments from "../common/Comments";
 import SubmissionDisplay from "./SubmissionsDisplay";
 
@@ -268,7 +269,8 @@ class SubmissionControl extends React.Component<Props> {
       editing: false,
       tempSubmissionText: "",
       currentMessage: "",
-      moderation: false
+      moderation: false,
+      wasEdited: false
     };
   }
 
@@ -370,6 +372,10 @@ class SubmissionControl extends React.Component<Props> {
       addComment
     } = this.props;
 
+    const displayedText = this.state.wasEdited
+      ? processText(this.state.submissionText)
+      : submission.rawText;
+
     return (
       <Box
         style={{
@@ -387,7 +393,7 @@ class SubmissionControl extends React.Component<Props> {
           <PageInfoWrapper>
             <Title>Submission Control</Title>
           </PageInfoWrapper>
-          {!submission.review ? (
+          {!submission.review && !submission.pii && !submission.profanity ? (
             <SubmissionOk />
           ) : (
             <div>
@@ -408,27 +414,25 @@ class SubmissionControl extends React.Component<Props> {
           <SubTitle>Submission:</SubTitle>
           {!this.state.editing ? (
             <DisplaySubmission>
-              {submission.rawText.map(elem => {
-                if (elem.profanity) {
-                  return (
-                    <SubmissionText
-                      style={{ color: "red", fontWeight: "bold" }}
-                    >
-                      {elem.word}
-                    </SubmissionText>
-                  );
-                } else if (elem.information) {
-                  return (
-                    <SubmissionText
-                      style={{ color: "orange", fontWeight: "bold" }}
-                    >
-                      {elem.word}
-                    </SubmissionText>
-                  );
-                } else {
-                  return <SubmissionText>{elem}</SubmissionText>;
-                }
-              })}
+              <SubmissionText>
+                {displayedText.map(elem => {
+                  if (elem.profanity) {
+                    return (
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        {elem.word + " "}
+                      </span>
+                    );
+                  } else if (elem.information) {
+                    return (
+                      <span style={{ color: "orange", fontWeight: "bold" }}>
+                        {elem.word + " "}
+                      </span>
+                    );
+                  } else {
+                    return elem + " ";
+                  }
+                })}
+              </SubmissionText>
               {/* <SubmissionText>{this.state.submissionText}</SubmissionText> */}
             </DisplaySubmission>
           ) : (
@@ -470,7 +474,8 @@ class SubmissionControl extends React.Component<Props> {
                   );
                   this.setState(state => ({
                     editing: false,
-                    submissionText: state.tempSubmissionText
+                    submissionText: state.tempSubmissionText,
+                    wasEdited: true
                   }));
                 }}
               >
