@@ -316,7 +316,7 @@ app.get("/backend/getmoderating", function(req, res) {
   var query =
     "SELECT * from [posts] WHERE pageId = '" +
     escapeQuotations(req.param("pageid")) +
-    "' AND pending = 1 AND underModeration = 1;";
+    "' AND underModeration = 1;";
   executeQuery(res, query);
 });
 
@@ -326,9 +326,9 @@ app.post("/backend/setmoderating", function(req, res) {
     "UPDATE [posts] SET underModeration = 1, pending = 0 WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';\n" +
-    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    "UPDATE [pages] SET moderatingPosts = 1 + (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
     escapeQuotations(req.param("postid")) +
-    "' and underModeration = 1), pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    "' and underModeration = 1), pendingPosts = 1 + (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
     escapeQuotations(req.param("postid")) +
     "' and pending = 1) WHERE pageId = '" +
     escapeQuotations(req.param("postid")) +
@@ -410,7 +410,7 @@ app.post("/backend/postit", function(req, res) {
 
 var scheduleToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText;
+  var postText = response.recordset[0].postText.replace(/|p|/g, "").replace(/|\/p|/g, "").replace(/|i|/g, "").replace(/|\/i|/g, "");
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
@@ -517,7 +517,7 @@ var scheduleToFacebookQuery2 = function(
 
 var postToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText;
+  var postText = response.recordset[0].postText.replace(/|p|/g, "").replace(/|\/p|/g, "").replace(/|i|/g, "").replace(/|\/i|/g, "");
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
@@ -545,12 +545,20 @@ var postToFacebook = function(res, response) {
   );
 };
 
-var incrementPosts = function(res, pageId) {
+var countPosts = function(res, pageId) {
+  if (pageId === undefined) {
+    pageId = res.recordset[0].pageId;
+  }
+  console.log(res);
   var query =
-    "UPDATE [pages] SET pendingPosts = pendingPosts + 1 WHERE pageId = '" +
+    "UPDATE [pages] SET pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    escapeQuotations(pageId) +
+    "' and pending = 1), moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    escapeQuotations(pageId) +
+    "' and underModeration = 1) WHERE pageId = '" +
     escapeQuotations(pageId) +
     "';";
-
+  console.log("Recounting posts, query: " + query);
   queryGet(response => console.log(response), query);
 };
 
@@ -684,7 +692,7 @@ app.post("/backend/createpost", function(req, res) {
     escapeQuotations(random) +
     "')";
 
-  queryGet(response => incrementPosts(res, req.body.pageid), query);
+  queryGet(response => countPosts(res, req.body.pageid), query);
   res.end(
     '{"success" : "Updated Successfully", "status" : 200, "posthash" : "' +
       random +
@@ -695,11 +703,18 @@ app.post("/backend/createpost", function(req, res) {
 //POST API
 app.post("/backend/removepost", function(req, res) {
   var query =
+    "SELECT * FROM [posts] WHERE ID = '" +
+    escapeQuotations(req.param("postid")) +
+    "';\n" +
     "DELETE FROM [posts] WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
-  console.log(query);
-  executeQuery(res, query);
+  queryGet(response => countPosts(response), query);
+  res.end(
+    '{"success" : "Deleted Successfully", "status" : 200, "postid" : "' +
+      req.param("postid") +
+      '"}'
+  );
 });
 
 //POST API
