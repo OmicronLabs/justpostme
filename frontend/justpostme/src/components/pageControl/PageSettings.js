@@ -8,6 +8,7 @@ import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
 import { Box, BoxWrapper } from "../common/Box";
 import { RoundButton } from "../common/Buttons";
+import { saveSettings } from "../../actions/saveSettings";
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
   display: flex;
@@ -79,6 +80,9 @@ const SettingsBox = Box.extend`
 const SettingsBoxWrapper = BoxWrapper.extend`
   position: relative;
 `;
+const Select = styled.select`
+  width: 350px;
+`;
 
 const SaveButton = RoundButton.extend`
   margin: 5px;
@@ -98,7 +102,20 @@ const SaveButton = RoundButton.extend`
 type Props = {
   fetchPageSettings: Function,
   postPageSettings: Function,
-  pageId: string
+  pageId: string,
+  saveSettings: Function,
+  saveSettingsLoading: boolean,
+  saveSettingsError: boolean,
+  getSettings: Function,
+  getSettingsLoading: boolean,
+  getSettingsError: boolean
+};
+
+type State = {
+  preText: string,
+  postText: string,
+  countFrom: number,
+  interval: number
 };
 
 function openInNewTab(url) {
@@ -106,14 +123,44 @@ function openInNewTab(url) {
   win.focus();
 }
 
-class PageSettings extends React.Component<Props> {
+class PageSettings extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      preText: "",
+      postText: "",
+      countFrom: 0,
+      interval: 10
+    };
+  }
+
   componentDidMount() {
-    // const { pageId, fetchPageSettings } = this.props;
-    // fetchPageSettings(pageId);
+    const { pageId, getSettings } = this.props;
+    getSettings(pageId);
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { getSettingsLoading } = this.props;
+    if (
+      getSettingsLoading &&
+      !nextProps.getSettingsLoading &&
+      !nextProps.getSettingsError
+    ) {
+      this.setState({
+        preText: nextProps.preText,
+        postText: nextProps.postText,
+        countFrom: nextProps.countFrom,
+        interval: nextProps.timeInterval
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    console.log(this);
   }
 
   _settingsDisplay = () => {
-    const { pageId } = this.props;
+    const { pageId, saveSettings } = this.props;
     return (
       <SubmissionsDisplayWrapper>
         <SubmissionsWrapper>
@@ -132,18 +179,62 @@ class PageSettings extends React.Component<Props> {
               </SettingsRow>
               <SettingsRow>
                 <SettingName>Pre-submission text: </SettingName>
-                <InputBox type="text" name="name" />
+                <InputBox
+                  type="text"
+                  name="name"
+                  value={this.state.preText}
+                  onChange={event =>
+                    this.setState({ preText: event.target.value })
+                  }
+                />
               </SettingsRow>
               <SettingsRow>
                 <SettingName>Post-submission text: </SettingName>
-                <InputBox type="text" name="name" />
+                <InputBox
+                  type="text"
+                  name="name"
+                  value={this.state.postText}
+                  onChange={event =>
+                    this.setState({ postText: event.target.value })
+                  }
+                />
               </SettingsRow>
               <SettingsRow>
                 <SettingName>Count from: </SettingName>
-                <InputBox type="text" name="name" />
+                <InputBox
+                  type="text"
+                  name="name"
+                  value={this.state.countFrom}
+                  onChange={event =>
+                    this.setState({ countFrom: event.target.value })
+                  }
+                />
               </SettingsRow>
               <SettingsRow>
-                <SaveButton onClick={() => alert("changes saved")}>
+                <SettingName>Post every: </SettingName>
+                <Select
+                  value={this.state.interval}
+                  onChange={event => {
+                    this.setState({ interval: event.target.value });
+                  }}
+                >
+                  {["10", "15", "20", "30", "45", "60", "90", "120"].map(
+                    num => <option value={num}>{num} minutes</option>
+                  )}
+                </Select>
+              </SettingsRow>
+              <SettingsRow>
+                <SaveButton
+                  onClick={() => {
+                    saveSettings(
+                      pageId,
+                      this.state.preText,
+                      this.state.postText,
+                      this.state.countFrom,
+                      this.state.interval
+                    );
+                  }}
+                >
                   Save settings
                 </SaveButton>
               </SettingsRow>

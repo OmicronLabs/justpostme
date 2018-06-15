@@ -89,6 +89,11 @@ const Timestamp = styled.div`
   align-items: center;
 `;
 
+const TimestampScheduled = Timestamp.extend`
+  width: 33%;
+  max-width: 33%;
+`;
+
 const SubmissionWarnings = styled.div`
   width: 10%;
   max-width: 10%;
@@ -149,6 +154,34 @@ const ControlButton = styled.div`
   }
 `;
 
+function convert(unixtimestamp) {
+  var months_arr = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
+  var date = new Date(unixtimestamp * 1000);
+  var year = date.getFullYear();
+  var month = months_arr[date.getMonth()];
+  var day = date.getDate();
+  var hours = date.getHours();
+  var minutes = "0" + date.getMinutes();
+  var seconds = "0" + date.getSeconds();
+  var convdataTime =
+    day + "-" + month + "-" + year + " " + hours + ":" + minutes.substr(-2);
+  return convdataTime;
+}
+
 const ControlButtonText = styled.a`
   margin: 4px 6px;
 `;
@@ -197,12 +230,13 @@ const SubmissionCard = (props: Props) => {
     history,
     isPending,
     removeSubmission,
-    schedulePostToFb
+    schedulePostToFb,
+    isModeration
   } = props;
 
   const isGreen = displayId % 2 === 1;
 
-  return (
+  return isPending ? (
     <Wrapper isGreen={isGreen}>
       <SubmissionId>{displayId}</SubmissionId>
       <SubmissionBody
@@ -229,36 +263,53 @@ const SubmissionCard = (props: Props) => {
         })}
       </SubmissionBody>
       <Timestamp> {submission.timePosted} </Timestamp>
-      {props.isPending ? (
-        <SubmissionControls>
-          <PublishNowComponent
-            publishNow={() => {
-              snackbarNotify("The post has been published on Facebook");
-              postToFbInstant(submission.databaseId, pageId);
-              isPending
-                ? deletePendingSubmission(submission.databaseId)
-                : deleteModerationSubmission(submission.databaseId);
-            }}
-          />
-          <ScheduleComponent
-            schedule={() => {
-              schedulePostToFb(submission.databaseId, pageId);
-              isPending
-                ? deletePendingSubmission(submission.databaseId)
-                : deleteModerationSubmission(submission.databaseId);
-            }}
-          />
+      <SubmissionControls>
+        <PublishNowComponent
+          publishNow={() => {
+            postToFbInstant(submission.databaseId, pageId);
+            !isModeration
+              ? deletePendingSubmission(submission.databaseId)
+              : deleteModerationSubmission(submission.databaseId);
+          }}
+        />
+        <ScheduleComponent
+          schedule={() => {
+            schedulePostToFb(submission.databaseId, pageId);
+            !isModeration
+              ? deletePendingSubmission(submission.databaseId)
+              : deleteModerationSubmission(submission.databaseId);
+          }}
+        />
 
-          <DeleteComponent
-            delete={() => {
-              removeSubmission(submission.databaseId);
-              isPending
-                ? deletePendingSubmission(submission.databaseId)
-                : deleteModerationSubmission(submission.databaseId);
-            }}
-          />
-        </SubmissionControls>
-      ) : null}
+        <DeleteComponent
+          delete={() => {
+            removeSubmission(submission.databaseId);
+            !isModeration
+              ? deletePendingSubmission(submission.databaseId)
+              : deleteModerationSubmission(submission.databaseId);
+          }}
+        />
+      </SubmissionControls>
+
+      <SubmissionWarnings>
+        {displayWarning(submission) ? (
+          <WarningComponent />
+        ) : (
+          <NoWarningComponent />
+        )}
+      </SubmissionWarnings>
+    </Wrapper>
+  ) : (
+    <Wrapper isGreen={isGreen}>
+      <SubmissionId>{displayId}</SubmissionId>
+      <SubmissionBody
+        onClick={() => {
+          history.push(`/page/${pageId}/submission/${submission.postHash}`);
+        }}
+      >
+        {submission.postText}
+      </SubmissionBody>
+      <TimestampScheduled>{convert(submission.timePosted)} </TimestampScheduled>
 
       <SubmissionWarnings>
         {displayWarning(submission) ? (

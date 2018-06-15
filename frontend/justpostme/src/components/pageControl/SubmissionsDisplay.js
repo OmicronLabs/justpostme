@@ -143,7 +143,8 @@ class SubmissionDisplay extends React.Component<Props> {
       errorToFb,
       schedulingToFb,
       errorSchedulingToFb,
-      snackbarNotify
+      snackbarNotify,
+      isModeration
     } = this.props;
 
     return submissions ? (
@@ -176,6 +177,7 @@ class SubmissionDisplay extends React.Component<Props> {
                 token={token}
                 displayId={index + 1}
                 isPending={isPending}
+                isModeration={isModeration}
               />
             ))
           )}
