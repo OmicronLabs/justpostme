@@ -23,6 +23,7 @@ const CommentWrapper = styled.div`
   width: 100%;
   flex-direction: row;
   min-height: 44px;
+  margin: 1px 0;
 `;
 
 const TheirCommentWrapper = CommentWrapper.extend`
@@ -58,14 +59,10 @@ const MyCommentBody = CommentBody.extend`
 
 const CommentsWrapper = styled.div`
   display: flex;
-  margin: 20px;
-  padding-top: 40px;
-  margin-top: 10px;
-  margin-bottom: 0px;
-  max-height: 200px;
+  padding: 0 8px;
+  height: 130px;
   overflow: scroll;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
 `;
 
@@ -120,18 +117,35 @@ type Props = {
   admin: boolean
 };
 
-const CommentsSection = (props: Props) => {
-  return props.loading ? (
-    <SpinnerWrapper>
-      <Spinner />
-    </SpinnerWrapper>
-  ) : (
-    <CommentsWrapper>
-      {props.comments.map(comment => {
-        return <Comment comment={comment} admin={props.admin} />;
-      })}
-    </CommentsWrapper>
-  );
-};
+class CommentsSection extends React.Component<Props> {
+  componentWillReceiveProps(nextProps: Props) {
+    if (this.props.comments !== nextProps.comments) {
+      this.scrollToBottom();
+    }
+  }
+
+  scrollToBottom() {
+    // this.comments && this.comments.scrollIntoView({ behavior: "smooth" });
+  }
+
+  render() {
+    const { loading, comments, admin } = this.props;
+    return loading ? (
+      <SpinnerWrapper>
+        <Spinner />
+      </SpinnerWrapper>
+    ) : (
+      <CommentsWrapper
+        ref={el => {
+          this.comments = comments;
+        }}
+      >
+        {comments.map(comment => {
+          return <Comment comment={comment} admin={admin} />;
+        })}
+      </CommentsWrapper>
+    );
+  }
+}
 
 export default CommentsSection;
