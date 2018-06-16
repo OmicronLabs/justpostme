@@ -201,7 +201,7 @@ type Props = {
 class SubmissionForm extends React.Component<Props> {
   constructor(props) {
     super(props);
-    this.state = { submissionText: "", email: "" };
+    this.state = { submissionText: "", email: "", authorText: "" };
   }
 
   componentDidMount() {
@@ -256,7 +256,11 @@ class SubmissionForm extends React.Component<Props> {
           }
         />
         <SubTitle>What year are you and what do you study</SubTitle>
-        <InputField placeholder="e.g 3rd year Computing" />
+        <InputField
+          placeholder="e.g 3rd year Computing"
+          value={this.state.authorText}
+          onChange={event => this.setState({ authorText: event.target.value })}
+        />
         <ButtonWrapper style={{ marginTop: "20px" }}>
           <ReCAPTCHA
             ref="recaptcha"
@@ -268,9 +272,12 @@ class SubmissionForm extends React.Component<Props> {
         </ButtonWrapper>
         <ButtonWrapper>
           <SubmitButton
-            onClick={() =>
-              submitForm(match.params.id, this.state.submissionText)
-            }
+            onClick={() => {
+              const submissionString = `[${this.state.authorText}]\n\n${
+                this.state.submissionText
+              }`;
+              submitForm(match.params.id, submissionString);
+            }}
           >
             Submit Form
           </SubmitButton>
