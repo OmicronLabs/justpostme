@@ -1,6 +1,7 @@
 //@flow
 import React from "react";
 import styled from "styled-components";
+import ReCAPTCHA from "react-google-recaptcha";
 import { submitForm } from "../../actions/submitForm";
 import {
   FrontDoorRelative,
@@ -256,6 +257,15 @@ class SubmissionForm extends React.Component<Props> {
         />
         <SubTitle>What year are you and what do you study</SubTitle>
         <InputField placeholder="e.g 3rd year Computing" />
+        <ButtonWrapper style={{ marginTop: "20px" }}>
+          <ReCAPTCHA
+            ref="recaptcha"
+            sitekey="6LfcSF8UAAAAAHKvZs5pbdwSvH4SEErmt0p7v0XC"
+            onChange={() => {
+              alert("success");
+            }}
+          />
+        </ButtonWrapper>
         <ButtonWrapper>
           <SubmitButton
             onClick={() =>
