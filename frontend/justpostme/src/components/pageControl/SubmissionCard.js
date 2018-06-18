@@ -203,7 +203,7 @@ const SubmissionCard = (props: Props) => {
   } = props;
 
   const isGreen = displayId % 2 === 1;
-  debugger;
+
   return isPending ? (
     <Wrapper isGreen={isGreen}>
       <SubmissionId>{displayId}</SubmissionId>
