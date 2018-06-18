@@ -345,6 +345,7 @@ app.post("/backend/setemail", function(req, res) {
     escapeQuotations(req.param("posthash")) +
     "';";
   executeQuery(res, query);
+  sendEmail(req.param("email"), "Your unique tracking link is: https://justpostme.tech/submission/" + req.param("posthash"));
 });
 
 //POST API
