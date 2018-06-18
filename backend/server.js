@@ -634,6 +634,19 @@ function submitForReview(text, hash) {
   });
 }
 
+var regp = /(cr\*p+)|(sh\*t+)|(f\*ck+)/g;
+var regi = /(password)|(p\*\*\*word)|(pwd)|(pswrd)|(username)/g;
+
+function extraLight(text) {
+  text = text.replace(regp, function(match, p) {
+    return "|p|" + match + "|/p|";
+  });
+  text = text.replace(regi, function(match, p) {
+    return "|i|" + match + "|/i|";
+  });
+  return text;
+}
+
 function highlight(response, terms) {
   var text = response.recordset[0].postText;
   for (var i = 0; i < terms.length; i++) {
@@ -653,6 +666,7 @@ function highlight(response, terms) {
         text.slice(terms[i].Index + terms[i].Term.length + i * 7);
     }
   }
+  text = extraLight(text);
   var update =
     "UPDATE [posts] SET postText = '" +
     text +
