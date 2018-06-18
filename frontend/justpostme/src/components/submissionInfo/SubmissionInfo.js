@@ -168,6 +168,16 @@ const SubTitle = styled.p`
   margin: 10px 0;
 `;
 
+const MessageWrapper = styled.div`
+  height: 100%;
+  width: 65%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 80px;
+`;
+
 const SubmissionOk = () => (
   <ButtonRow>
     <IconOk>
@@ -229,10 +239,10 @@ class SubmissionForm extends React.Component<Props> {
       postCommentLoading,
       snackbarNotify
     } = this.props;
-    const newLoading = nextProps.loading;
+
     const newSubmission = nextProps.submission;
 
-    if (loading && !newLoading) {
+    if (loading && !nextProps.loading && !nextProps.error && newSubmission) {
       this.setState({
         submissionText: newSubmission.postText,
         tempSubmissionText: newSubmission.postText
@@ -447,7 +457,13 @@ class SubmissionForm extends React.Component<Props> {
   }
 
   _renderError() {
-    return <ErrorText>Error, link is broken :( </ErrorText>;
+    return (
+      <MessageWrapper>
+        <ErrorText>
+          This submission has been deleted or the link is broken
+        </ErrorText>
+      </MessageWrapper>
+    );
   }
 
   render() {
