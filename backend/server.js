@@ -286,6 +286,24 @@ app.post("/backend/user", function(req, res) {
   );
 });
 
+app.get("/backend/authenticate", function(req, res) {
+  var query =
+    "SELECT * from [pages] WHERE userid = '" +
+    escapeQuotations(req.param("userid")) +
+    "' and pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "';";
+  queryGet(response => checkAuthentication(res, response), query);
+});
+
+var checkAuthentication = function(res, response) {
+  if (response.recordset[0] === undefined) {
+    res.end('{"failure" : "No authentication", "status" : 403}');
+  } else {
+    res.end('{"success" : "Authenticated", "status" : 200}');
+  }
+};
+
 //GET API
 app.get("/backend/getpending", function(req, res) {
   var query =
@@ -685,10 +703,8 @@ function highlight(response, terms) {
   var update =
     "UPDATE [posts] SET postText = '" +
     text[0] +
-    "', profanity = " +
-    +(text[1]) +
-    ", pii = " +
-    +(text[2]) +
+    "', profanity = CASE WHEN profanity = 1 THEN 1 ELSE " + +(text[1]) + " END" +
+    ", pii = CASE WHEN pii = 1 THEN 1 ELSE " + +(text[2]) + " END" +
     " WHERE jobID = '" +
     response.recordset[0].jobID +
     "';";
