@@ -32,10 +32,13 @@ export function fetchCurrentPage(pageid: string) {
           databaseId: record.ID,
           pageID: record.pageId,
           pendingPosts: record.pendingPosts,
+          moderatingPosts: record.moderatingPosts,
           scheduledPosts: record.scheduledPosts,
           backgroundImgURL: `https://graph.facebook.com/${
             record.pageId
-          }/picture?height=500`
+          }/picture?height=500`,
+          preText: record.preText,
+          postText: record.postText
         }))[0];
         dispatch(fetchPageSuccess(page));
         return page;

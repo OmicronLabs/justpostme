@@ -38,6 +38,7 @@ export function fetchComments(posthash: string) {
           byAdmin: record.byAdmin,
           timeCommented: record.timeCommented
         }));
+        comments.sort((a, b) => a.timeCommented.localeCompare(b.timeCommented));
         dispatch(fetchCommentsSuccess(comments));
         return comments;
       })

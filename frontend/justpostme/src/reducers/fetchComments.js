@@ -34,9 +34,11 @@ const fetchComments = (state = initialState, action) => {
         error: true
       };
     case ADD_COMMENT:
+      const newComments = state.comments;
+      newComments.push(action.payload.comment);
       return {
         ...state,
-        comments: state.comments.push(action.payload.comments)
+        comments: newComments
       };
     default:
       return state;

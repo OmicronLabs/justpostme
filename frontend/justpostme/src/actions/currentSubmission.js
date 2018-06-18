@@ -1,5 +1,6 @@
 import { serverDomain } from "../const/serverURL";
 import altImage from "../media/page_alt_img.png";
+import { processText, cleanupText } from "../functions/util";
 
 export const FETCH_SUBMISSION_BEGIN = "FETCH_SUBMISSION_BEGIN";
 export const FETCH_SUBMISSION_SUCCESS = "FETCH_SUBMISSION_SUCCESS";
@@ -30,7 +31,8 @@ export function fetchCurrentSubmission(submissionHash: string) {
         const submission = records.map(record => ({
           pending: record.pending,
           pii: record.pii,
-          postText: record.postText,
+          rawText: processText(record.postText),
+          postText: cleanupText(record.postText),
           profanity: record.profanity,
           review: record.review,
           sentiment: record.sentiment,

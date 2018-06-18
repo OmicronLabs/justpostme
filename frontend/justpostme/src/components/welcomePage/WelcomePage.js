@@ -137,7 +137,7 @@ class Welcome extends React.Component<Props> {
               separator=" "
             />
           </MetaCountupBox>
-          <PageMetaText> Facebook pages are using our site. </PageMetaText>
+          <PageMetaText> Facebook pages use our website. </PageMetaText>
         </PageMetaBox>
       </PageMetaWrapper>
     );

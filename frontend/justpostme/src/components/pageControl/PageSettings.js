@@ -8,7 +8,6 @@ import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
 import { Box, BoxWrapper } from "../common/Box";
 import { RoundButton } from "../common/Buttons";
-import { saveSettings } from "../../actions/saveSettings";
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
   display: flex;
@@ -108,7 +107,8 @@ type Props = {
   saveSettingsError: boolean,
   getSettings: Function,
   getSettingsLoading: boolean,
-  getSettingsError: boolean
+  getSettingsError: boolean,
+  snackbarNotify: Function
 };
 
 type State = {
@@ -140,7 +140,11 @@ class PageSettings extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { getSettingsLoading } = this.props;
+    const {
+      getSettingsLoading,
+      saveSettingsLoading,
+      snackbarNotify
+    } = this.props;
     if (
       getSettingsLoading &&
       !nextProps.getSettingsLoading &&
@@ -152,6 +156,14 @@ class PageSettings extends React.Component<Props, State> {
         countFrom: nextProps.countFrom,
         interval: nextProps.timeInterval
       });
+    }
+
+    if (
+      saveSettingsLoading &&
+      !nextProps.saveSettingsLoading &&
+      !nextProps.saveSettingsError
+    ) {
+      snackbarNotify("Settings saved");
     }
   }
 

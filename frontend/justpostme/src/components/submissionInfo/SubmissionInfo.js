@@ -24,6 +24,7 @@ import {
 import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
 import { SenderBox } from "../pageControl/SubmissionControl";
+import { addComment } from "../../actions/fetchComments";
 
 const ContentWrapper = styled.div`
   width: 85%;
@@ -192,7 +193,8 @@ type Props = {
   commentsError: boolean,
   fetchComments: Function,
   comments: any,
-  snackbarNotify: Function
+  snackbarNotify: Function,
+  addComment: Function
 };
 
 class SubmissionForm extends React.Component<Props> {
@@ -344,7 +346,8 @@ class SubmissionForm extends React.Component<Props> {
       comments,
       commentsLoading,
       postComment,
-      match
+      match,
+      addComment
     } = this.props;
 
     return submission.profanity !== null ? (
@@ -364,7 +367,7 @@ class SubmissionForm extends React.Component<Props> {
           </p>
         </ButtonRow>
         <SubTitle>
-          Your submission (you can edit or remove it while i's pending or under
+          Your submission (you can edit or remove it while it's pending or under
           moderation)
         </SubTitle>
         {submission.pending
@@ -380,13 +383,18 @@ class SubmissionForm extends React.Component<Props> {
                   loading={commentsLoading}
                 />
                 <SenderBox
-                  postComment={() =>
+                  postComment={() => {
+                    addComment({
+                      text: this.state.currentMessage,
+                      byAdmin: false
+                    });
                     postComment(
                       match.params.id,
                       this.state.currentMessage,
                       "false"
-                    )
-                  }
+                    );
+                    this.setState({ currentMessage: "" });
+                  }}
                   currentMessage={this.state.currentMessage}
                   onChange={event =>
                     this.setState({ currentMessage: event.target.value })
