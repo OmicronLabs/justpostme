@@ -410,7 +410,11 @@ app.post("/backend/postit", function(req, res) {
 
 var scheduleToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText.replace(/\|p\|/g, "").replace(/\|\/p\|/g, "").replace(/\|i\|/g, "").replace(/\|\/i\|/g, "");
+  var postText = response.recordset[0].postText
+    .replace(/\|p\|/g, "")
+    .replace(/\|\/p\|/g, "")
+    .replace(/\|i\|/g, "")
+    .replace(/\|\/i\|/g, "");
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
@@ -517,7 +521,11 @@ var scheduleToFacebookQuery2 = function(
 
 var postToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText.replace(/\|p\|/g, "").replace(/\|\/p\|/g, "").replace(/\|i\|/g, "").replace(/\|\/i\|/g, "");
+  var postText = response.recordset[0].postText
+    .replace(/\|p\|/g, "")
+    .replace(/\|\/p\|/g, "")
+    .replace(/\|i\|/g, "")
+    .replace(/\|\/i\|/g, "");
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
@@ -534,12 +542,22 @@ var postToFacebook = function(res, response) {
     "';";
   queryGet(response => console.log(response), query);
 
+  console.log(
+    `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`
+  );
   request.post(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
     function(error, response, body) {
       body = JSON.parse(body);
       if (!error && response.statusCode == 200) {
-        //console.log(body.data);
+        console.log("Post body data: " + body.id);
+        var queryLink =
+          "UPDATE [posts] SET link = 'https://facebook.com/" +
+          body.id +
+          "' WHERE ID = '" +
+          escapeQuotations(postId) +
+          "';";
+        queryGet(response => console.log(response), queryLink);
       }
     }
   );
@@ -563,13 +581,13 @@ var countPosts = function(res, pageId) {
 };
 
 function sendEmail(address, text) {
-  execSync(
-    "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
-      text +
-      "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
-      address +
-      '"'
-  );
+  // execSync(
+  //   "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
+  //     text +
+  //     "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
+  //     address +
+  //     '"'
+  // );
 }
 
 //sendEmail("ijh16@ic.ac.uk", "this is a testpost");
