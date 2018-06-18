@@ -325,18 +325,30 @@ app.get("/backend/getmoderating", function(req, res) {
 //POST API
 app.post("/backend/setmoderating", function(req, res) {
   var query =
-    "UPDATE [posts] SET underModeration = 1, pending = 0 WHERE ID = '" +
-    escapeQuotations(req.param("postid")) +
-    "';\n" +
-    "UPDATE [pages] SET moderatingPosts = 1 + (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
-    escapeQuotations(req.param("postid")) +
-    "' and underModeration = 1), pendingPosts = 1 + (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
-    escapeQuotations(req.param("postid")) +
-    "' and pending = 1) WHERE pageId = '" +
+    "SELECT pageId FROM [posts] WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
-  executeQuery(res, query);
+  queryGet(
+    response =>
+      updatePostNumbers(res, req.param("postid"), response.recordset[0].pageId),
+    query
+  );
 });
+
+var updatePostNumbers = function(res, postId, pageId) {
+  var query =
+    "UPDATE [posts] SET underModeration = 1, pending = 0 WHERE ID = '" +
+    postId +
+    "';\n" +
+    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    pageId +
+    "' and underModeration = 1), pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    pageId +
+    "' and pending = 1) WHERE pageId = '" +
+    pageId +
+    "';";
+  executeQuery(res, query);
+};
 
 //POST API
 app.post("/backend/setemail", function(req, res) {
