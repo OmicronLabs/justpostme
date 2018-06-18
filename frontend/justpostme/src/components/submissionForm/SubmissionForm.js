@@ -119,7 +119,6 @@ const ErrorText = styled.a`
 
 const SubmitButton = RoundButton.extend`
   font-size: 20px;
-
   margin: 5px;
   padding: 8px;
   margin-top: 1em;
@@ -132,6 +131,17 @@ const SubmitButton = RoundButton.extend`
     color: green;
     border: 2px solid green;
   }
+`;
+
+const GreySubmitButton = RoundButton.extend`
+  font-size: 20px;
+  margin: 5px;
+  padding: 8px;
+  margin-top: 1em;
+  border-radius: 6px;
+  color: grey;
+  border: 2px solid grey;
+  cursor: default;
 `;
 
 const Link = styled.a`
@@ -215,7 +225,8 @@ class SubmissionForm extends React.Component<Props> {
       submissionText: "",
       email: "",
       authorText: "",
-      subscribed: false
+      subscribed: false,
+      validated: false
     };
   }
 
@@ -281,21 +292,27 @@ class SubmissionForm extends React.Component<Props> {
             ref="recaptcha"
             sitekey="6LfcSF8UAAAAAHKvZs5pbdwSvH4SEErmt0p7v0XC"
             onChange={() => {
-              alert("success");
+              this.setState({ validated: true });
             }}
           />
         </ButtonWrapper>
         <ButtonWrapper>
-          <SubmitButton
-            onClick={() => {
-              const submissionString = `[${this.state.authorText}]\n\n${
-                this.state.submissionText
-              }`;
-              submitForm(match.params.id, submissionString);
-            }}
-          >
-            Submit Form
-          </SubmitButton>
+          {this.state.validated ? (
+            <SubmitButton
+              validated={this.state.validated}
+              onClick={() => {
+                const submissionString = `[${this.state.authorText}]\n\n${
+                  this.state.submissionText
+                }`;
+                this.state.validated &&
+                  submitForm(match.params.id, submissionString);
+              }}
+            >
+              Submit Form
+            </SubmitButton>
+          ) : (
+            <GreySubmitButton>Submit Form</GreySubmitButton>
+          )}
         </ButtonWrapper>
       </Form>
     );
