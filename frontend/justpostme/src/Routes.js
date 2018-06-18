@@ -13,47 +13,45 @@ class Routes extends React.Component {
   render() {
     const { loggedIn, showSnackbar, snackbarMessage } = this.props;
 
-    return (
-      <div>
-        <Snackbar showSnackbar={showSnackbar}>{snackbarMessage}</Snackbar>
-        <Switch>
-          <Route
-            path="/login"
-            component={props => {
-              return loggedIn ? <ManagePages /> : <WelcomePage />;
-            }}
-          />
-          <Route path="/about" component={AboutPage} />
-          <Route
-            path="/pages"
-            render={props => {
-              return loggedIn ? (
-                <ManagePages />
-              ) : (
-                <Redirect
-                  to={{ pathname: "/login", state: { from: props.location } }}
-                />
-              );
-            }}
-          />
-          <Route
-            path="/page/:id"
-            render={props => {
-              return loggedIn ? (
-                <PageControl />
-              ) : (
-                <Redirect
-                  to={{ pathname: "/login", state: { from: props.location } }}
-                />
-              );
-            }}
-          />
-          <Route path="/form/:id" render={() => <SubmissionForm />} />
-          <Route path="/submission/:id" render={() => <SubmissionInfo />} />
-          <Redirect to="/login" />
-        </Switch>
-      </div>
-    );
+    return [
+      <Snackbar showSnackbar={showSnackbar}>{snackbarMessage}</Snackbar>,
+      <Switch>
+        <Route
+          path="/login"
+          component={props => {
+            return loggedIn ? <ManagePages /> : <WelcomePage />;
+          }}
+        />
+        <Route path="/about" component={AboutPage} />
+        <Route
+          path="/pages"
+          render={props => {
+            return loggedIn ? (
+              <ManagePages />
+            ) : (
+              <Redirect
+                to={{ pathname: "/login", state: { from: props.location } }}
+              />
+            );
+          }}
+        />
+        <Route
+          path="/page/:id"
+          render={props => {
+            return loggedIn ? (
+              <PageControl />
+            ) : (
+              <Redirect
+                to={{ pathname: "/login", state: { from: props.location } }}
+              />
+            );
+          }}
+        />
+        <Route path="/form/:id" render={() => <SubmissionForm />} />
+        <Route path="/submission/:id" render={() => <SubmissionInfo />} />
+        <Redirect to="/login" />
+      </Switch>
+    ];
   }
 }
 
