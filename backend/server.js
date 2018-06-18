@@ -232,7 +232,9 @@ app.get("/backend/getsettings", function(req, res) {
 //GET API
 app.get("/backend/page", function(req, res) {
   var query =
-    "SELECT * from [pages] WHERE pageId = '" +
+    "SELECT *, (SELECT COUNT(ID) FROM dbo.posts WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "' AND timeposted > DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE())) AS numberScheduled FROM dbo.pages WHERE pageId = '" +
     escapeQuotations(req.param("pageid")) +
     "';";
   executeQuery(res, query);
