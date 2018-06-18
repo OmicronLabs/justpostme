@@ -596,13 +596,13 @@ var countPosts = function(res, pageId) {
 };
 
 function sendEmail(address, text) {
-  // execSync(
-  //   "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
-  //     text +
-  //     "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
-  //     address +
-  //     '"'
-  // );
+  execSync(
+    "ssh -o 'StrictHostKeyChecking no' mhutti1@mhutti1.eu \"echo '" +
+      text +
+      "' | mail -s 'Post Update' -r noreply@justpostme.tech " +
+      address +
+      '"'
+  );
 }
 
 //sendEmail("ijh16@ic.ac.uk", "this is a testpost");
