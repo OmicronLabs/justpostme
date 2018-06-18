@@ -203,8 +203,6 @@ class PageSettings extends React.Component<Props, State> {
     }
   }
 
-  componentDidUpdate() {}
-
   _settingsDisplay = () => {
     const { pageId, saveSettings } = this.props;
     return (

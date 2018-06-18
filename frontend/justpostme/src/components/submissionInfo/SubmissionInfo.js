@@ -148,6 +148,13 @@ const Button = RoundButton.extend`
   }
 `;
 
+const StatusText = styled.a`
+  margin: 0 10px;
+  font-weight: bold;
+  color: ${props =>
+    props.warning ? "orange" : props.error ? "red" : "rgb(76,175, 80)"};
+`;
+
 const SubTitle = styled.p`
   font-size: 20px;
   font-weight: bold;
@@ -358,13 +365,14 @@ class SubmissionForm extends React.Component<Props> {
         {submission.moderation ? this._renderContentModerationInfo() : null}
         <ButtonRow>
           <p> Submission status: </p>
-          <p>
-            {submission.moderation
-              ? "MODERATION "
-              : submission.pending
-                ? "PENDING"
-                : "ACCEPTED"}
-          </p>
+
+          {submission.moderation ? (
+            <StatusText warning>{"MODERATION"}</StatusText>
+          ) : submission.pending ? (
+            <StatusText warning>{"PENDING"}</StatusText>
+          ) : (
+            <StatusText>{"ACCEPTED"}</StatusText>
+          )}
         </ButtonRow>
         <SubTitle>
           Your submission (you can edit or remove it while it's pending or under
@@ -396,9 +404,9 @@ class SubmissionForm extends React.Component<Props> {
                     this.setState({ currentMessage: "" });
                   }}
                   currentMessage={this.state.currentMessage}
-                  onChange={event =>
-                    this.setState({ currentMessage: event.target.value })
-                  }
+                  onChange={event => {
+                    this.setState({ currentMessage: event.target.value });
+                  }}
                 />
               </CommentsContainer>
             ]
