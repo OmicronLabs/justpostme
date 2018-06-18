@@ -149,11 +149,13 @@ class Welcome extends React.Component<Props> {
     return (
       <FrontDoorRelative>
         <FrontDoorBackgroundTop>
-          <HeaderTopLeft>
-            <LogoWhite src={logo} />
+          <Link to="/login">
+            <HeaderTopLeft>
+              <LogoWhite src={logo} />
 
-            <HeaderLogoText>justpost.me</HeaderLogoText>
-          </HeaderTopLeft>
+              <HeaderLogoText>justpost.me</HeaderLogoText>
+            </HeaderTopLeft>
+          </Link>
           <HeaderTopRight>
             <Link to="/about">
               <TopMenuButton href="#">About</TopMenuButton>
