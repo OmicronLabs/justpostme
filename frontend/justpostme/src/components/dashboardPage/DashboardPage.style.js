@@ -7,5 +7,5 @@ export const DashboardWrapper = styled.div`
   width: 100%;
   display: flex: 
   flex-direction: column;
-  overflow: hidden;
+  /* overflow: hidden; */
 `;
