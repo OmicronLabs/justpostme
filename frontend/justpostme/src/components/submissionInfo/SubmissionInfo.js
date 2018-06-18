@@ -24,8 +24,7 @@ import {
 import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
 import { SenderBox } from "../pageControl/SubmissionControl";
-import { addComment } from "../../actions/fetchComments";
-import { Link, withRouter } from "react-router-dom";
+import { openInNewTab } from "../submissionForm/SubmissionForm";
 
 const ContentWrapper = styled.div`
   width: 85%;
@@ -127,6 +126,12 @@ const ButtonText = styled.div`
   margin: 5px 10px;
 `;
 
+const Link = styled.a`
+  color: green;
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
 const Button = RoundButton.extend`
   margin: 5px;
   margin-top: 1em;
@@ -147,6 +152,13 @@ const Button = RoundButton.extend`
           ? "1px solid darkorange"
           : "1px solid green"};
   }
+`;
+
+const StatusText = styled.a`
+  margin: 0 10px;
+  font-weight: bold;
+  color: ${props =>
+    props.warning ? "orange" : props.error ? "red" : "rgb(76,175, 80)"};
 `;
 
 const SubTitle = styled.p`
@@ -359,13 +371,14 @@ class SubmissionForm extends React.Component<Props> {
         {submission.moderation ? this._renderContentModerationInfo() : null}
         <ButtonRow>
           <p> Submission status: </p>
-          <p>
-            {submission.moderation
-              ? "MODERATION "
-              : submission.pending
-                ? "PENDING"
-                : "ACCEPTED"}
-          </p>
+
+          {submission.moderation ? (
+            <StatusText warning>{"MODERATION"}</StatusText>
+          ) : submission.pending ? (
+            <StatusText warning>{"PENDING"}</StatusText>
+          ) : (
+            <StatusText>{"ACCEPTED"}</StatusText>
+          )}
         </ButtonRow>
         <SubTitle>
           Your submission (you can edit or remove it while it's pending or under
@@ -374,7 +387,7 @@ class SubmissionForm extends React.Component<Props> {
         {submission.pending
           ? this._renderEditSubmission()
           : this._renderSubmission()}
-        {submission.moderation
+        {submission.moderation && submission.pending
           ? [
               <SubTitle>Moderation messages</SubTitle>,
               <CommentsContainer>
@@ -397,11 +410,25 @@ class SubmissionForm extends React.Component<Props> {
                     this.setState({ currentMessage: "" });
                   }}
                   currentMessage={this.state.currentMessage}
-                  onChange={event =>
-                    this.setState({ currentMessage: event.target.value })
-                  }
+                  onChange={event => {
+                    this.setState({ currentMessage: event.target.value });
+                  }}
                 />
               </CommentsContainer>
+            ]
+          : null}
+        {!submission.moderation && !submission.pending
+          ? [
+              <SubTitle style={{ marginTop: "40px" }}>
+                Link to your post on Facebook
+              </SubTitle>,
+              <Link
+                onClick={() => {
+                  openInNewTab(submission.link);
+                }}
+              >
+                {submission.link}
+              </Link>
             ]
           : null}
       </ContentWrapper>

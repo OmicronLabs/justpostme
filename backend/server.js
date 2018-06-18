@@ -668,10 +668,12 @@ var regp = /(cr\*p+)|(sh\*t+)|(f\*ck+)/g;
 var regi = /(password)|(p\*\*\*word)|(pwd)|(pswrd)|(username)/g;
 
 function extraLight(text) {
-  text = text.replace(regp, function(match, p) {
+  text[0] = text[0].replace(regp, function(match, p) {
+    text[1] = true;
     return "|p|" + match + "|/p|";
   });
-  text = text.replace(regi, function(match, p) {
+  text[0] = text[0].replace(regi, function(match, p) {
+    text[2] = true;
     return "|i|" + match + "|/i|";
   });
   return text;
@@ -696,11 +698,16 @@ function highlight(response, terms) {
         text.slice(terms[i].Index + terms[i].Term.length + i * 7);
     }
   }
-  text = extraLight(text);
+  text = extraLight([text, false, false]);
+
   var update =
     "UPDATE [posts] SET postText = '" +
-    text +
-    "' WHERE jobID = '" +
+    text[0] +
+    "', profanity = " +
+    +(text[1]) +
+    ", pii = " +
+    +(text[2]) +
+    " WHERE jobID = '" +
     response.recordset[0].jobID +
     "';";
   console.log(text);
@@ -728,7 +735,6 @@ app.post("/backend/newreview", function(req, res) {
     .concat(JSON.parse(req.body.Metadata["text.detectedphonenumber"]))
     .concat(JSON.parse(req.body.Metadata["text.detectedemail"]));
   var getquery = "SELECT * from [posts] WHERE jobID = '" + jobid + "';";
-  queryGet(response => highlight(response, termTerm), getquery);
 
   var query =
     "UPDATE [posts] SET sentiment = " +
@@ -744,7 +750,7 @@ app.post("/backend/newreview", function(req, res) {
     " WHERE jobID = '" +
     jobid +
     "';";
-  queryGet(response => console.log(response), query);
+  queryGet(response => queryGet(resp => highlight(resp, termTerm), getquery), query);
   res.end();
 });
 
