@@ -685,10 +685,8 @@ function highlight(response, terms) {
   var update =
     "UPDATE [posts] SET postText = '" +
     text[0] +
-    "', profanity = " +
-    +(text[1]) +
-    ", pii = " +
-    +(text[2]) +
+    "', profanity = CASE WHEN profanity = 1 THEN 1 ELSE " + +(text[1]) + " END" +
+    ", pii = CASE WHEN pii = 1 THEN 1 ELSE " + +(text[2]) + " END" +
     " WHERE jobID = '" +
     response.recordset[0].jobID +
     "';";
