@@ -25,6 +25,7 @@ import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
 import { SenderBox } from "../pageControl/SubmissionControl";
 import { openInNewTab } from "../submissionForm/SubmissionForm";
+import { Link, withRouter } from "react-router-dom";
 
 const ContentWrapper = styled.div`
   width: 85%;
@@ -461,9 +462,8 @@ class SubmissionForm extends React.Component<Props> {
 
             <HeaderLogoText>justpost.me</HeaderLogoText>
           </HeaderTopLeft>
-          <HeaderTopRight>
-            <TopMenuButton href="#">About</TopMenuButton>
-          </HeaderTopRight>
+
+          <HeaderTopRight />
         </FrontDoorBackgroundTop>
         <BackgroundShape src={background} className="" />
         <FrontDoorBackgroundBottom />

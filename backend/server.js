@@ -223,7 +223,7 @@ app.get("/backend/getcomments", function(req, res) {
 //GET API
 app.get("/backend/getsettings", function(req, res) {
   var query =
-    "SELECT preText, postText, queueTime, countFrom from [pages] WHERE pageId = '" +
+    "SELECT preText, postText, queueTime, countFrom, scheduleFrom, scheduleTo from [pages] WHERE pageId = '" +
     escapeQuotations(req.param("pageid")) +
     "';";
   executeQuery(res, query);
@@ -232,7 +232,9 @@ app.get("/backend/getsettings", function(req, res) {
 //GET API
 app.get("/backend/page", function(req, res) {
   var query =
-    "SELECT * from [pages] WHERE pageId = '" +
+    "SELECT *, (SELECT COUNT(ID) FROM dbo.posts WHERE pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "' AND timeposted > DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE())) AS numberScheduled FROM dbo.pages WHERE pageId = '" +
     escapeQuotations(req.param("pageid")) +
     "';";
   executeQuery(res, query);
@@ -323,18 +325,30 @@ app.get("/backend/getmoderating", function(req, res) {
 //POST API
 app.post("/backend/setmoderating", function(req, res) {
   var query =
-    "UPDATE [posts] SET underModeration = 1, pending = 0 WHERE ID = '" +
-    escapeQuotations(req.param("postid")) +
-    "';\n" +
-    "UPDATE [pages] SET moderatingPosts = 1 + (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
-    escapeQuotations(req.param("postid")) +
-    "' and underModeration = 1), pendingPosts = 1 + (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
-    escapeQuotations(req.param("postid")) +
-    "' and pending = 1) WHERE pageId = '" +
+    "SELECT pageId FROM [posts] WHERE ID = '" +
     escapeQuotations(req.param("postid")) +
     "';";
-  executeQuery(res, query);
+  queryGet(
+    response =>
+      updatePostNumbers(res, req.param("postid"), response.recordset[0].pageId),
+    query
+  );
 });
+
+var updatePostNumbers = function(res, postId, pageId) {
+  var query =
+    "UPDATE [posts] SET underModeration = 1, pending = 0 WHERE ID = '" +
+    postId +
+    "';\n" +
+    "UPDATE [pages] SET moderatingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    pageId +
+    "' and underModeration = 1), pendingPosts = (SELECT COUNT(ID) FROM [posts] WHERE pageId = '" +
+    pageId +
+    "' and pending = 1) WHERE pageId = '" +
+    pageId +
+    "';";
+  executeQuery(res, query);
+};
 
 //POST API
 app.post("/backend/setemail", function(req, res) {
@@ -345,6 +359,11 @@ app.post("/backend/setemail", function(req, res) {
     escapeQuotations(req.param("posthash")) +
     "';";
   executeQuery(res, query);
+  sendEmail(
+    req.param("email"),
+    "Your unique tracking link is: https://justpostme.tech/submission/" +
+      req.param("posthash")
+  );
 });
 
 //POST API
@@ -410,7 +429,11 @@ app.post("/backend/postit", function(req, res) {
 
 var scheduleToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText.replace(/\|p\|/g, "").replace(/\|\/p\|/g, "").replace(/\|i\|/g, "").replace(/\|\/i\|/g, "");
+  var postText = response.recordset[0].postText
+    .replace(/\|p\|/g, "")
+    .replace(/\|\/p\|/g, "")
+    .replace(/\|i\|/g, "")
+    .replace(/\|\/i\|/g, "");
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
@@ -479,7 +502,14 @@ var scheduleToFacebookQuery2 = function(
       function(error, response, body) {
         body = JSON.parse(body);
         if (!error && response.statusCode == 200) {
-          //console.log(body.data);
+          console.log("Post body data: " + body.id);
+          var queryLink =
+            "UPDATE [posts] SET link = 'https://facebook.com/" +
+            body.id +
+            "' WHERE ID = '" +
+            escapeQuotations(postId) +
+            "';";
+          queryGet(response => console.log(response), queryLink);
         }
       }
     );
@@ -508,7 +538,14 @@ var scheduleToFacebookQuery2 = function(
       function(error, response, body) {
         body = JSON.parse(body);
         if (!error && response.statusCode == 200) {
-          //console.log(body.data);
+          console.log("Post body data: " + body.id);
+          var queryLink =
+            "UPDATE [posts] SET link = 'https://facebook.com/" +
+            body.id +
+            "' WHERE ID = '" +
+            escapeQuotations(postId) +
+            "';";
+          queryGet(response => console.log(response), queryLink);
         }
       }
     );
@@ -517,7 +554,11 @@ var scheduleToFacebookQuery2 = function(
 
 var postToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText.replace(/\|p\|/g, "").replace(/\|\/p\|/g, "").replace(/\|i\|/g, "").replace(/\|\/i\|/g, "");
+  var postText = response.recordset[0].postText
+    .replace(/\|p\|/g, "")
+    .replace(/\|\/p\|/g, "")
+    .replace(/\|i\|/g, "")
+    .replace(/\|\/i\|/g, "");
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
@@ -534,12 +575,22 @@ var postToFacebook = function(res, response) {
     "';";
   queryGet(response => console.log(response), query);
 
+  console.log(
+    `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`
+  );
   request.post(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
     function(error, response, body) {
       body = JSON.parse(body);
       if (!error && response.statusCode == 200) {
-        //console.log(body.data);
+        console.log("Post body data: " + body.id);
+        var queryLink =
+          "UPDATE [posts] SET link = 'https://facebook.com/" +
+          body.id +
+          "' WHERE ID = '" +
+          escapeQuotations(postId) +
+          "';";
+        queryGet(response => console.log(response), queryLink);
       }
     }
   );
@@ -595,6 +646,19 @@ function submitForReview(text, hash) {
   });
 }
 
+var regp = /(cr\*p+)|(sh\*t+)|(f\*ck+)/g;
+var regi = /(password)|(p\*\*\*word)|(pwd)|(pswrd)|(username)/g;
+
+function extraLight(text) {
+  text = text.replace(regp, function(match, p) {
+    return "|p|" + match + "|/p|";
+  });
+  text = text.replace(regi, function(match, p) {
+    return "|i|" + match + "|/i|";
+  });
+  return text;
+}
+
 function highlight(response, terms) {
   var text = response.recordset[0].postText;
   for (var i = 0; i < terms.length; i++) {
@@ -614,6 +678,7 @@ function highlight(response, terms) {
         text.slice(terms[i].Index + terms[i].Term.length + i * 7);
     }
   }
+  text = extraLight(text);
   var update =
     "UPDATE [posts] SET postText = '" +
     text +
@@ -682,15 +747,18 @@ app.post("/backend/updatepost", function(req, res) {
 //POST API
 app.post("/backend/createpost", function(req, res) {
   var random = crypto.randomBytes(20).toString("hex");
+  var nowTime = new Date() / 1000;
   submitForReview(req.param("postText"), random);
   var query =
-    "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
+    "INSERT INTO [posts] (pageId, postText, pending, posthash, timeSubmitted) VALUES ('" +
     escapeQuotations(req.body.pageid) +
     "' , '" +
     escapeQuotations(req.body.postText) +
     "', 1, '" +
     escapeQuotations(random) +
-    "')";
+    "', " +
+    nowTime +
+    ")";
 
   queryGet(response => countPosts(res, req.body.pageid), query);
   res.end(
@@ -787,6 +855,26 @@ app.post("/backend/settings", function(req, res) {
       query +
       "UPDATE [pages] SET countFrom = '" +
       req.body.countFrom +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';\n";
+  }
+  if (req.body.scheduleFrom) {
+    console.log("Schedule from change to: " + req.body.scheduleFrom);
+    query =
+      query +
+      "UPDATE [pages] SET scheduleFrom = '" +
+      req.body.scheduleFrom +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';\n";
+  }
+  if (req.body.scheduleTo) {
+    console.log("Schedule to change to: " + req.body.scheduleTo);
+    query =
+      query +
+      "UPDATE [pages] SET scheduleTo = '" +
+      req.body.scheduleTo +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
       "';\n";
