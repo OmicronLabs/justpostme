@@ -223,7 +223,7 @@ app.get("/backend/getcomments", function(req, res) {
 //GET API
 app.get("/backend/getsettings", function(req, res) {
   var query =
-    "SELECT preText, postText, queueTime, countFrom from [pages] WHERE pageId = '" +
+    "SELECT preText, postText, queueTime, countFrom, scheduleFrom, scheduleTo from [pages] WHERE pageId = '" +
     escapeQuotations(req.param("pageid")) +
     "';";
   executeQuery(res, query);
@@ -345,7 +345,11 @@ app.post("/backend/setemail", function(req, res) {
     escapeQuotations(req.param("posthash")) +
     "';";
   executeQuery(res, query);
-  sendEmail(req.param("email"), "Your unique tracking link is: https://justpostme.tech/submission/" + req.param("posthash"));
+  sendEmail(
+    req.param("email"),
+    "Your unique tracking link is: https://justpostme.tech/submission/" +
+      req.param("posthash")
+  );
 });
 
 //POST API
@@ -411,7 +415,11 @@ app.post("/backend/postit", function(req, res) {
 
 var scheduleToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText.replace(/\|p\|/g, "").replace(/\|\/p\|/g, "").replace(/\|i\|/g, "").replace(/\|\/i\|/g, "");
+  var postText = response.recordset[0].postText
+    .replace(/\|p\|/g, "")
+    .replace(/\|\/p\|/g, "")
+    .replace(/\|i\|/g, "")
+    .replace(/\|\/i\|/g, "");
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
@@ -480,7 +488,14 @@ var scheduleToFacebookQuery2 = function(
       function(error, response, body) {
         body = JSON.parse(body);
         if (!error && response.statusCode == 200) {
-          //console.log(body.data);
+          console.log("Post body data: " + body.id);
+          var queryLink =
+            "UPDATE [posts] SET link = 'https://facebook.com/" +
+            body.id +
+            "' WHERE ID = '" +
+            escapeQuotations(postId) +
+            "';";
+          queryGet(response => console.log(response), queryLink);
         }
       }
     );
@@ -509,7 +524,14 @@ var scheduleToFacebookQuery2 = function(
       function(error, response, body) {
         body = JSON.parse(body);
         if (!error && response.statusCode == 200) {
-          //console.log(body.data);
+          console.log("Post body data: " + body.id);
+          var queryLink =
+            "UPDATE [posts] SET link = 'https://facebook.com/" +
+            body.id +
+            "' WHERE ID = '" +
+            escapeQuotations(postId) +
+            "';";
+          queryGet(response => console.log(response), queryLink);
         }
       }
     );
@@ -518,7 +540,11 @@ var scheduleToFacebookQuery2 = function(
 
 var postToFacebook = function(res, response) {
   var pageId = response.recordset[0].pageId[0];
-  var postText = response.recordset[0].postText.replace(/\|p\|/g, "").replace(/\|\/p\|/g, "").replace(/\|i\|/g, "").replace(/\|\/i\|/g, "");
+  var postText = response.recordset[0].postText
+    .replace(/\|p\|/g, "")
+    .replace(/\|\/p\|/g, "")
+    .replace(/\|i\|/g, "")
+    .replace(/\|\/i\|/g, "");
   var postId = response.recordset[0].ID[1] + "";
   var pageAccessToken = response.recordset[0].pageAccessToken;
 
@@ -535,12 +561,22 @@ var postToFacebook = function(res, response) {
     "';";
   queryGet(response => console.log(response), query);
 
+  console.log(
+    `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`
+  );
   request.post(
     `https://graph.facebook.com/${pageId}/feed?access_token=${pageAccessToken}&message=${postText}`,
     function(error, response, body) {
       body = JSON.parse(body);
       if (!error && response.statusCode == 200) {
-        //console.log(body.data);
+        console.log("Post body data: " + body.id);
+        var queryLink =
+          "UPDATE [posts] SET link = 'https://facebook.com/" +
+          body.id +
+          "' WHERE ID = '" +
+          escapeQuotations(postId) +
+          "';";
+        queryGet(response => console.log(response), queryLink);
       }
     }
   );
@@ -697,15 +733,18 @@ app.post("/backend/updatepost", function(req, res) {
 //POST API
 app.post("/backend/createpost", function(req, res) {
   var random = crypto.randomBytes(20).toString("hex");
+  var nowTime = new Date() / 1000;
   submitForReview(req.param("postText"), random);
   var query =
-    "INSERT INTO [posts] (pageId, postText, pending, posthash) VALUES ('" +
+    "INSERT INTO [posts] (pageId, postText, pending, posthash, timeSubmitted) VALUES ('" +
     escapeQuotations(req.body.pageid) +
     "' , '" +
     escapeQuotations(req.body.postText) +
     "', 1, '" +
     escapeQuotations(random) +
-    "')";
+    "', " +
+    nowTime +
+    ")";
 
   queryGet(response => countPosts(res, req.body.pageid), query);
   res.end(
@@ -802,6 +841,26 @@ app.post("/backend/settings", function(req, res) {
       query +
       "UPDATE [pages] SET countFrom = '" +
       req.body.countFrom +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';\n";
+  }
+  if (req.body.scheduleFrom) {
+    console.log("Schedule from change to: " + req.body.scheduleFrom);
+    query =
+      query +
+      "UPDATE [pages] SET scheduleFrom = '" +
+      req.body.scheduleFrom +
+      "' WHERE pageId = '" +
+      escapeQuotations(req.body.pageid) +
+      "';\n";
+  }
+  if (req.body.scheduleTo) {
+    console.log("Schedule to change to: " + req.body.scheduleTo);
+    query =
+      query +
+      "UPDATE [pages] SET scheduleTo = '" +
+      req.body.scheduleTo +
       "' WHERE pageId = '" +
       escapeQuotations(req.body.pageid) +
       "';\n";

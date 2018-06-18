@@ -26,6 +26,7 @@ const LogoWrapper = styled.div`
 
 const HeaderLogoText = styled.h2`
   color: white;
+  text-decoration: none;
 `;
 
 export const NavBarOuter = styled.div`
@@ -105,14 +106,18 @@ class NavBar extends React.Component<Props> {
     return (
       <NavBarOuter>
         <NavBarInner>
-          <NavBarHomeButton>
-            <NavBarLogoContainer>
-              <LogoWrapper>
-                <LogoWhite className="logo" src={logoWhite} />
-              </LogoWrapper>
-              <HeaderLogoText className="logoText">justpost.me</HeaderLogoText>
-            </NavBarLogoContainer>
-          </NavBarHomeButton>
+          <Link style={{ textDecoration: "none" }} to="/login">
+            <NavBarHomeButton>
+              <NavBarLogoContainer>
+                <LogoWrapper>
+                  <LogoWhite className="logo" src={logoWhite} />
+                </LogoWrapper>
+                <HeaderLogoText className="logoText">
+                  justpost.me
+                </HeaderLogoText>
+              </NavBarLogoContainer>
+            </NavBarHomeButton>
+          </Link>
           <NavBarMenuContainer className="navBarMenu">
             <TopMenuButton onClick={() => history.push("/pages")}>
               Home
