@@ -483,7 +483,14 @@ var scheduleToFacebookQuery2 = function(
       function(error, response, body) {
         body = JSON.parse(body);
         if (!error && response.statusCode == 200) {
-          //console.log(body.data);
+          console.log("Post body data: " + body.id);
+          var queryLink =
+            "UPDATE [posts] SET link = 'https://facebook.com/" +
+            body.id +
+            "' WHERE ID = '" +
+            escapeQuotations(postId) +
+            "';";
+          queryGet(response => console.log(response), queryLink);
         }
       }
     );
@@ -512,7 +519,14 @@ var scheduleToFacebookQuery2 = function(
       function(error, response, body) {
         body = JSON.parse(body);
         if (!error && response.statusCode == 200) {
-          //console.log(body.data);
+          console.log("Post body data: " + body.id);
+          var queryLink =
+            "UPDATE [posts] SET link = 'https://facebook.com/" +
+            body.id +
+            "' WHERE ID = '" +
+            escapeQuotations(postId) +
+            "';";
+          queryGet(response => console.log(response), queryLink);
         }
       }
     );
