@@ -12,6 +12,7 @@ const initialState = {
 const scheduleSubmission = (state = initialState, action) => {
   switch (action.type) {
     case SCHEDULE_TO_FB_BEGIN:
+      debugger;
       return {
         ...state,
         loading: true,

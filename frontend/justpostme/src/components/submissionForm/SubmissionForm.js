@@ -164,6 +164,16 @@ const EmailInput = styled.input`
   }
 `;
 
+const SentButtonDisabled = styled.div`
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: grey;
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+`;
+
 const SentButton = styled.div`
   height: 36px;
   display: flex;
@@ -201,7 +211,12 @@ type Props = {
 class SubmissionForm extends React.Component<Props> {
   constructor(props) {
     super(props);
-    this.state = { submissionText: "", email: "", authorText: "" };
+    this.state = {
+      submissionText: "",
+      email: "",
+      authorText: "",
+      subscribed: false
+    };
   }
 
   componentDidMount() {
@@ -328,13 +343,20 @@ class SubmissionForm extends React.Component<Props> {
             onChange={event => this.setState({ email: event.target.value })}
             placeholder="Enter email here..."
           />
-          <SentButton>
-            <SentButtonText
-              onClick={() => postEmail(postHash, this.state.email)}
+          {this.state.subscribed ? (
+            <SentButtonDisabled>
+              <SentButtonText>Success</SentButtonText>
+            </SentButtonDisabled>
+          ) : (
+            <SentButton
+              onClick={() => {
+                postEmail(postHash, this.state.email);
+                this.setState({ subscribed: true });
+              }}
             >
-              Subscribe to changes
-            </SentButtonText>
-          </SentButton>
+              <SentButtonText>Subscribe to changes</SentButtonText>
+            </SentButton>
+          )}
         </EmailWrapper>
       </Form>
     );
