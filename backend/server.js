@@ -286,6 +286,24 @@ app.post("/backend/user", function(req, res) {
   );
 });
 
+app.get("/backend/authenticate", function(req, res) {
+  var query =
+    "SELECT * from [pages] WHERE userid = '" +
+    escapeQuotations(req.param("userid")) +
+    "' and pageId = '" +
+    escapeQuotations(req.param("pageid")) +
+    "';";
+  queryGet(response => checkAuthentication(res, response), query);
+});
+
+var checkAuthentication = function(res, response) {
+  if (response.recordset[0] === undefined) {
+    res.end('{"failure" : "No authentication", "status" : 403}');
+  } else {
+    res.end('{"success" : "Authenticated", "status" : 200}');
+  }
+};
+
 //GET API
 app.get("/backend/getpending", function(req, res) {
   var query =
