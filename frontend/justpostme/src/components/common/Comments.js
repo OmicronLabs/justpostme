@@ -120,13 +120,11 @@ type Props = {
 
 class CommentsSection extends React.Component<Props> {
   componentWillReceiveProps(nextProps: Props) {
-    if (this.props.comments !== nextProps.comments) {
-      this.scrollToBottom();
-    }
+    this.scrollToBottom();
   }
 
   scrollToBottom() {
-    // this.comments && this.comments.scrollIntoView({ behavior: "smooth" });
+    this.commentsEnd && this.commentsEnd.scrollIntoView({ behavior: "smooth" });
   }
 
   render() {
@@ -136,14 +134,15 @@ class CommentsSection extends React.Component<Props> {
         <Spinner />
       </SpinnerWrapper>
     ) : (
-      <CommentsWrapper
-        ref={el => {
-          this.comments = comments;
-        }}
-      >
+      <CommentsWrapper>
         {comments.map(comment => {
           return <Comment comment={comment} admin={admin} />;
         })}
+        <div
+          ref={el => {
+            this.commentsEnd = el;
+          }}
+        />
       </CommentsWrapper>
     );
   }

@@ -8,6 +8,7 @@ import { PagesDisplayWrapper } from "../dashboardPage/PagesDisplay.style";
 
 import { Box, BoxWrapper } from "../common/Box";
 import { RoundButton } from "../common/Buttons";
+import { ENGINE_METHOD_DIGESTS } from "constants";
 
 const SpinnerWrapper = PagesDisplayWrapper.extend`
   display: flex;
@@ -59,6 +60,16 @@ const InputBox = styled.input`
   height: 20px;
 `;
 
+const SettingsWrapper = styled.div`
+  width: 350px;
+  max-width: 350px;
+  height: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const SettingName = styled.p`
   color: gray;
 `;
@@ -83,6 +94,10 @@ const Select = styled.select`
   width: 350px;
 `;
 
+const SmallSelect = styled.select`
+  width: 100px;
+`;
+
 const SaveButton = RoundButton.extend`
   margin: 5px;
   padding: 8px;
@@ -97,6 +112,23 @@ const SaveButton = RoundButton.extend`
     border: 1px solid green;
   }
 `;
+
+const generateOptions = () =>
+  [...Array(49).keys()].map(num => {
+    let value = "none";
+    if (num !== 0) {
+      let hours = Math.floor(num / 2).toString();
+      if (hours.length === 1) {
+        hours = "0" + hours;
+      }
+      let minutes = ((num % 2) * 30).toString();
+      if (minutes.length === 1) {
+        minutes = "0" + minutes;
+      }
+      value = `${hours}:${minutes}`;
+    }
+    return <option value={value}>{value}</option>;
+  });
 
 type Props = {
   fetchPageSettings: Function,
@@ -115,7 +147,9 @@ type State = {
   preText: string,
   postText: string,
   countFrom: number,
-  interval: number
+  interval: number,
+  dontPostFrom: string,
+  dontPostTo: string
 };
 
 function openInNewTab(url) {
@@ -130,7 +164,9 @@ class PageSettings extends React.Component<Props, State> {
       preText: "",
       postText: "",
       countFrom: 0,
-      interval: 10
+      interval: 10,
+      dontPostFrom: "none",
+      dontPostTo: "none"
     };
   }
 
@@ -165,10 +201,6 @@ class PageSettings extends React.Component<Props, State> {
     ) {
       snackbarNotify("Settings saved");
     }
-  }
-
-  componentDidUpdate() {
-    console.log(this);
   }
 
   _settingsDisplay = () => {
@@ -236,6 +268,28 @@ class PageSettings extends React.Component<Props, State> {
                 </Select>
               </SettingsRow>
               <SettingsRow>
+                <SettingName>Don't post between: </SettingName>
+                <SettingsWrapper>
+                  <SmallSelect
+                    value={this.state.dontPostFrom}
+                    onChange={event => {
+                      this.setState({ dontPostFrom: event.target.value });
+                    }}
+                  >
+                    {generateOptions()}
+                  </SmallSelect>
+                  <SettingName>and</SettingName>
+                  <SmallSelect
+                    value={this.state.dontPostTo}
+                    onChange={event => {
+                      this.setState({ dontPostTo: event.target.value });
+                    }}
+                  >
+                    {generateOptions()}
+                  </SmallSelect>
+                </SettingsWrapper>
+              </SettingsRow>
+              <SettingsRow>
                 <SaveButton
                   onClick={() => {
                     saveSettings(
@@ -243,7 +297,9 @@ class PageSettings extends React.Component<Props, State> {
                       this.state.preText,
                       this.state.postText,
                       this.state.countFrom,
-                      this.state.interval
+                      this.state.interval,
+                      this.state.dontPostFrom,
+                      this.state.dontPostTo
                     );
                   }}
                 >
