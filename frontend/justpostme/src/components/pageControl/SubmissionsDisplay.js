@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import SubmissionCardContainer from "../../containers/pageControl/SubmissionCardContainer";
 import { ErrorDisplay } from "../dashboardPage/PagesDisplay";
-import { removeSubmission } from "../../actions/removeSubmission";
 
 export const SubmissionsDisplayWrapper = styled.div`
   width: 1024px;

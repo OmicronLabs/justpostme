@@ -39,7 +39,8 @@ export function fetchCurrentSubmission(submissionHash: string) {
           timePosted: record.timePosted,
           databaseId: record.ID,
           pageId: record.pageId,
-          moderation: record.underModeration
+          moderation: record.underModeration,
+          link: record.link
         }))[0];
         dispatch(fetchSubmissionSuccess(submission));
         return submission;

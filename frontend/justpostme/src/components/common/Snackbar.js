@@ -12,9 +12,9 @@ export const Snackbar = styled.div`
   text-align: center;
   border-radius: 3px;
   padding: 16px;
-  position: absolute;
+  position: fixed;
   z-index: 1;
   left: 50%;
-  bottom: 30px;
+  top: 90%;
   transition: 0.2s;
 `;

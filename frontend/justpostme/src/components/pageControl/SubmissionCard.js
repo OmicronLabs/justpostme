@@ -3,11 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 import "font-awesome/css/font-awesome.min.css";
-
-import { serverDomain } from "../../const/serverURL";
-import { postToFbInstant } from "../../actions/postSubmission";
-import { removeSubmission } from "../../actions/removeSubmission";
-import { snackbarNotify } from "../../actions/snackbar";
+import { convertSecondsToDate } from "../../functions/util";
 
 const Wrapper = styled.div`
   height: 50px;
@@ -154,34 +150,6 @@ const ControlButton = styled.div`
   }
 `;
 
-function convert(unixtimestamp) {
-  var months_arr = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
-  ];
-
-  var date = new Date(unixtimestamp * 1000);
-  var year = date.getFullYear();
-  var month = months_arr[date.getMonth()];
-  var day = date.getDate();
-  var hours = date.getHours();
-  var minutes = "0" + date.getMinutes();
-  var seconds = "0" + date.getSeconds();
-  var convdataTime =
-    day + "-" + month + "-" + year + " " + hours + ":" + minutes.substr(-2);
-  return convdataTime;
-}
-
 const ControlButtonText = styled.a`
   margin: 4px 6px;
 `;
@@ -235,7 +203,7 @@ const SubmissionCard = (props: Props) => {
   } = props;
 
   const isGreen = displayId % 2 === 1;
-
+  debugger;
   return isPending ? (
     <Wrapper isGreen={isGreen}>
       <SubmissionId>{displayId}</SubmissionId>
@@ -262,7 +230,7 @@ const SubmissionCard = (props: Props) => {
           }
         })}
       </SubmissionBody>
-      <Timestamp> {submission.timePosted} </Timestamp>
+      <Timestamp>{convertSecondsToDate(submission.timeSubmitted)}</Timestamp>
       <SubmissionControls>
         <PublishNowComponent
           publishNow={() => {
@@ -309,7 +277,9 @@ const SubmissionCard = (props: Props) => {
       >
         {submission.postText}
       </SubmissionBody>
-      <TimestampScheduled>{convert(submission.timePosted)} </TimestampScheduled>
+      <TimestampScheduled>
+        {convertSecondsToDate(submission.timePosted)}{" "}
+      </TimestampScheduled>
 
       <SubmissionWarnings>
         {displayWarning(submission) ? (
