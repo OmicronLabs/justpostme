@@ -33,7 +33,7 @@ export function fetchCurrentPage(pageid: string) {
           pageID: record.pageId,
           pendingPosts: record.pendingPosts,
           moderatingPosts: record.moderatingPosts,
-          scheduledPosts: record.scheduledPosts,
+          scheduledPosts: record.numberScheduled,
           backgroundImgURL: `https://graph.facebook.com/${
             record.pageId
           }/picture?height=500`,

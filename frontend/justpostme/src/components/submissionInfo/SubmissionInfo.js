@@ -24,7 +24,7 @@ import {
 import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
 import { SenderBox } from "../pageControl/SubmissionControl";
-import { addComment } from "../../actions/fetchComments";
+import { openInNewTab } from "../submissionForm/SubmissionForm";
 
 const ContentWrapper = styled.div`
   width: 85%;
@@ -124,6 +124,12 @@ const SubmissionText = styled.p`
 
 const ButtonText = styled.div`
   margin: 5px 10px;
+`;
+
+const Link = styled.a`
+  color: green;
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 const Button = RoundButton.extend`
@@ -381,7 +387,7 @@ class SubmissionForm extends React.Component<Props> {
         {submission.pending
           ? this._renderEditSubmission()
           : this._renderSubmission()}
-        {submission.moderation
+        {submission.moderation && submission.pending
           ? [
               <SubTitle>Moderation messages</SubTitle>,
               <CommentsContainer>
@@ -409,6 +415,20 @@ class SubmissionForm extends React.Component<Props> {
                   }}
                 />
               </CommentsContainer>
+            ]
+          : null}
+        {!submission.moderation && !submission.pending
+          ? [
+              <SubTitle style={{ marginTop: "40px" }}>
+                Link to your post on Facebook
+              </SubTitle>,
+              <Link
+                onClick={() => {
+                  openInNewTab(submission.link);
+                }}
+              >
+                {submission.link}
+              </Link>
             ]
           : null}
       </ContentWrapper>

@@ -140,7 +140,7 @@ const Link = styled.a`
   cursor: pointer;
 `;
 
-function openInNewTab(url) {
+export function openInNewTab(url) {
   var win = window.open(url, "_blank");
   win.focus();
 }
