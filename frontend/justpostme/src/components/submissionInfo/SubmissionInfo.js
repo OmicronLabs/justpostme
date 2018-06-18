@@ -25,7 +25,6 @@ import logo from "../../media/logo-white.png";
 import background from "../../media/LoginBackground.svg";
 import { SenderBox } from "../pageControl/SubmissionControl";
 import { openInNewTab } from "../submissionForm/SubmissionForm";
-import { Link, withRouter } from "react-router-dom";
 
 const ContentWrapper = styled.div`
   width: 85%;
