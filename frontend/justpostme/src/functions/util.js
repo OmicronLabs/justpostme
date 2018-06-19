@@ -1,5 +1,8 @@
 // @flow
 export const processText = (text: string) => {
+  if (!text) {
+    return [];
+  }
   return text.split(/\040+/).map(word => {
     if (word.startsWith("|p|") && word.endsWith("|/p|")) {
       return { word: cleanupText(word), profanity: true };
@@ -12,6 +15,9 @@ export const processText = (text: string) => {
 };
 
 export const cleanupText = (text: string) => {
+  if (!text) {
+    return text;
+  }
   return text
     .replace(/\|p\|/g, ``)
     .replace(/\|\/p\|/g, ``)

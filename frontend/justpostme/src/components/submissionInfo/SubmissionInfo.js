@@ -394,10 +394,10 @@ class SubmissionForm extends React.Component<Props> {
           Your submission (you can edit or remove it while it's pending or under
           moderation)
         </SubTitle>
-        {submission.pending
+        {submission.pending || submission.moderation
           ? this._renderEditSubmission()
           : this._renderSubmission()}
-        {submission.moderation && submission.pending
+        {submission.moderation
           ? [
               <SubTitle>Moderation messages</SubTitle>,
               <CommentsContainer>
@@ -498,7 +498,7 @@ class SubmissionForm extends React.Component<Props> {
               position: "relative",
               display: "flex",
               justifyContent: "flex-start",
-              minHeight: "650px"
+              minHeight: "850px"
             }}
           >
             {loading
