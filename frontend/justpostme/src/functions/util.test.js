@@ -46,9 +46,3 @@ describe("processText", () => {
     ]);
   });
 });
-
-describe("convertSecondsToDate", () => {
-  it("correctyl converts epoche seconds to date", () => {
-    expect(convertSecondsToDate(1529393865)).toEqual("19-Jun-2018 8:37");
-  });
-});
